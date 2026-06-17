@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Maroon Commerce - The Wild Nutrition Variant</title>
+<title>Maroon Commerce - Design Variants</title>
 <style>
     body {
         margin: 0;
@@ -18,51 +18,83 @@
         max-width: 100%;
         height: auto;
         display: block;
-        margin-bottom: -1px; /* Remove gaps between perfectly stacked images if any, though box shadow might be nice */
+        margin-bottom: -1px;
     }
     .image-wrapper {
         width: 100%;
-        max-width: 1400px; /* Limit width on very large screens */
+        max-width: 1400px;
         box-shadow: 0 10px 30px rgba(0,0,0,0.05);
         margin-bottom: 40px;
     }
     .header {
         text-align: center;
-        padding: 60px 20px;
+        padding: 80px 20px 40px 20px;
         color: #7A3E3E; /* Deep maroon */
+    }
+    .variant-header {
+        text-align: center;
+        padding: 60px 20px;
+        width: 100%;
+        background-color: #fff;
+        border-top: 2px solid #eaeaea;
+        border-bottom: 2px solid #eaeaea;
+        margin-bottom: 40px;
+        margin-top: 40px;
     }
     h1 {
         margin: 0 0 15px 0;
-        font-size: 36px;
+        font-size: 42px;
         font-weight: 300;
+    }
+    h2 {
+        margin: 0 0 10px 0;
+        font-size: 36px;
+        font-weight: 400;
     }
     p {
         margin: 0;
         color: #666;
         font-size: 18px;
+        max-width: 800px;
+        margin-left: auto;
+        margin-right: auto;
+        line-height: 1.6;
     }
 </style>
 </head>
 <body>
     <div class="header">
         <h1>Maroon Commerce</h1>
-        <p>A unified presentation of the design direction</p>
+        <p>Please review the two distinct design variants below. Let us know whether you prefer Variant A or Variant B, and we will begin building out your chosen direction.</p>
+    </div>
+
+    <!-- Variant A -->
+    <div class="variant-header" id="variant-a">
+        <h2 style="color: #7A3E3E;">Variant A: Clinical Wellness</h2>
+        <p>A clean, science-backed layout with ample whitespace, natural textures, and a highly trustworthy, clinical-yet-natural feel.</p>
     </div>
     
-    <div class="image-wrapper">
-        <img src="maroon_wellness_home_1781699871651.png" alt="Maroon Wellness Homepage">
+    <div class="image-wrapper"><img src="maroon_wellness_home_1781699871651.png" alt="Variant A Homepage"></div>
+    <div class="image-wrapper"><img src="maroon_grid_layout_1781699892428.png" alt="Variant A Grid"></div>
+    <div class="image-wrapper"><img src="maroon_product_page_1781699881653.png" alt="Variant A Product"></div>
+    <div class="image-wrapper"><img src="maroon_lifestyle_ui_1781699904173.png" alt="Variant A Lifestyle"></div>
+    <div class="image-wrapper"><img src="maroon_clinical_ui_1781699915447.png" alt="Variant A Clinical"></div>
+
+    <!-- Variant B -->
+    <div class="variant-header" id="variant-b">
+        <h2 style="color: #2c3e2e;">Variant B: Modern Apothecary</h2>
+        <p>An earthy, premium herbalist atmosphere leaning into deep forest greens, amber glass bottles, and vintage-inspired typography.</p>
     </div>
-    <div class="image-wrapper">
-        <img src="maroon_grid_layout_1781699892428.png" alt="Shop All Grid Layout">
-    </div>
-    <div class="image-wrapper">
-        <img src="maroon_product_page_1781699881653.png" alt="Product Detail Page">
-    </div>
-    <div class="image-wrapper">
-        <img src="maroon_lifestyle_ui_1781699904173.png" alt="Editorial Lifestyle UI">
-    </div>
-    <div class="image-wrapper">
-        <img src="maroon_clinical_ui_1781699915447.png" alt="Clinical Trustworthy UI">
+
+    <div class="image-wrapper"><img src="maroon_herbal_home_1781700954358.png" alt="Variant B Homepage"></div>
+    <div class="image-wrapper"><img src="maroon_herbal_grid_1781700976769.png" alt="Variant B Grid"></div>
+    <div class="image-wrapper"><img src="maroon_herbal_product_1781700965436.png" alt="Variant B Product"></div>
+    <div class="image-wrapper"><img src="maroon_herbal_lifestyle_1781700989129.png" alt="Variant B Lifestyle"></div>
+    <div class="image-wrapper"><img src="maroon_herbal_clinical_1781701001987.png" alt="Variant B Clinical"></div>
+    
+    <div class="header" style="margin-top: 60px; padding-bottom: 100px;">
+        <h2>Ready to decide?</h2>
+        <p>Let us know your choice and we'll start development.</p>
     </div>
 </body>
 </html>
