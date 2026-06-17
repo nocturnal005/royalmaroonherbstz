@@ -1,0 +1,1255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Variant D Preview - Herbal Authority</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+:root {
+    --green-900: #00382e;
+    --green-800: #00594c;
+    --green-700: #007a68;
+    --green-600: #009b84;
+    --green-500: #00bc9f;
+    --green-100: #e6f9f5;
+    --green-50: #f0fdf9;
+    --amber-600: #d97706;
+    --amber-100: #fef3c7;
+    --red-600: #dc2626;
+    --red-50: #fef2f2;
+    --white: #ffffff;
+    --gray-50: #f8fafb;
+    --gray-100: #f1f5f4;
+    --gray-200: #e2e8e6;
+    --gray-300: #c5d0cd;
+    --gray-500: #6b7c78;
+    --gray-700: #374744;
+    --gray-900: #1a2421;
+    --font: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+    --radius-sm: 6px;
+    --radius-md: 10px;
+    --radius-lg: 16px;
+    --radius-xl: 24px;
+    --shadow-sm: 0 1px 3px rgba(0,56,46,0.06);
+    --shadow-md: 0 4px 12px rgba(0,56,46,0.08);
+    --shadow-lg: 0 12px 32px rgba(0,56,46,0.10);
+    --shadow-xl: 0 20px 50px rgba(0,56,46,0.12);
+    --transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+body {
+    font-family: var(--font);
+    color: var(--gray-900);
+    background: var(--white);
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+}
+
+/* ===== TOP BAR ===== */
+.hb-topbar {
+    background: var(--green-800);
+    color: var(--white);
+    text-align: center;
+    padding: 10px 20px;
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.3px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+.hb-topbar a {
+    color: var(--green-100);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+}
+.hb-topbar-badge {
+    background: var(--amber-600);
+    color: var(--white);
+    font-size: 10px;
+    font-weight: 800;
+    padding: 2px 8px;
+    border-radius: 20px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* ===== HEADER / NAV ===== */
+.hb-header {
+    background: var(--white);
+    border-bottom: 1px solid var(--gray-200);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+.hb-header-inner {
+    max-width: 1320px;
+    margin: 0 auto;
+    padding: 14px 30px;
+    display: flex;
+    align-items: center;
+    gap: 30px;
+}
+.hb-logo {
+    font-size: 22px;
+    font-weight: 800;
+    color: var(--green-800);
+    text-decoration: none;
+    white-space: nowrap;
+    letter-spacing: -0.5px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.hb-logo-icon {
+    width: 32px;
+    height: 32px;
+    background: var(--green-800);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--white);
+    font-size: 16px;
+}
+.hb-search {
+    flex: 1;
+    position: relative;
+    max-width: 560px;
+}
+.hb-search input {
+    width: 100%;
+    padding: 12px 20px 12px 44px;
+    border: 2px solid var(--gray-200);
+    border-radius: 40px;
+    font-size: 14px;
+    font-family: var(--font);
+    color: var(--gray-900);
+    background: var(--gray-50);
+    transition: var(--transition);
+}
+.hb-search input:focus {
+    outline: none;
+    border-color: var(--green-700);
+    background: var(--white);
+    box-shadow: 0 0 0 4px rgba(0,122,104,0.1);
+}
+.hb-search input::placeholder { color: var(--gray-500); }
+.hb-search-icon {
+    position: absolute;
+    left: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--gray-500);
+    font-size: 16px;
+}
+.hb-nav-actions {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+.hb-nav-btn {
+    background: transparent;
+    border: none;
+    color: var(--gray-700);
+    font-size: 13px;
+    font-weight: 600;
+    font-family: var(--font);
+    padding: 8px 14px;
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    transition: var(--transition);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    white-space: nowrap;
+}
+.hb-nav-btn:hover { background: var(--green-100); color: var(--green-800); }
+.hb-nav-btn .icon { font-size: 18px; }
+.hb-cart-btn {
+    background: var(--green-800);
+    color: var(--white);
+    position: relative;
+}
+.hb-cart-btn:hover { background: var(--green-700); color: var(--white); }
+.hb-cart-badge {
+    position: absolute;
+    top: -4px;
+    right: -4px;
+    background: var(--red-600);
+    color: var(--white);
+    font-size: 10px;
+    font-weight: 800;
+    min-width: 18px;
+    height: 18px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid var(--white);
+}
+
+/* ===== CATEGORY NAV ===== */
+.hb-catnav {
+    background: var(--white);
+    border-bottom: 1px solid var(--gray-200);
+    overflow-x: auto;
+    scrollbar-width: none;
+}
+.hb-catnav::-webkit-scrollbar { display: none; }
+.hb-catnav-inner {
+    max-width: 1320px;
+    margin: 0 auto;
+    padding: 0 30px;
+    display: flex;
+    gap: 4px;
+}
+.hb-catnav a {
+    padding: 12px 18px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--gray-700);
+    text-decoration: none;
+    white-space: nowrap;
+    border-bottom: 3px solid transparent;
+    transition: var(--transition);
+}
+.hb-catnav a:hover, .hb-catnav a.active {
+    color: var(--green-800);
+    border-bottom-color: var(--green-800);
+}
+
+/* ===== HERO ===== */
+.hb-hero {
+    background: linear-gradient(135deg, var(--green-800) 0%, var(--green-900) 60%, #001a14 100%);
+    color: var(--white);
+    padding: 70px 40px;
+    position: relative;
+    overflow: hidden;
+}
+.hb-hero::before {
+    content: '';
+    position: absolute;
+    top: -100px;
+    right: -100px;
+    width: 500px;
+    height: 500px;
+    background: radial-gradient(circle, rgba(0,188,159,0.15) 0%, transparent 70%);
+    pointer-events: none;
+}
+.hb-hero::after {
+    content: '';
+    position: absolute;
+    bottom: -150px;
+    left: -100px;
+    width: 400px;
+    height: 400px;
+    background: radial-gradient(circle, rgba(217,119,6,0.08) 0%, transparent 70%);
+    pointer-events: none;
+}
+.hb-hero-inner {
+    max-width: 1320px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    gap: 60px;
+    position: relative;
+    z-index: 2;
+}
+.hb-hero-text {
+    flex: 1;
+}
+.hb-hero-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(255,255,255,0.12);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 30px;
+    padding: 6px 16px;
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 24px;
+    color: var(--green-100);
+}
+.hb-hero h1 {
+    font-size: 52px;
+    font-weight: 800;
+    line-height: 1.08;
+    margin-bottom: 20px;
+    letter-spacing: -1.5px;
+}
+.hb-hero h1 em {
+    font-style: normal;
+    color: var(--green-500);
+}
+.hb-hero p {
+    font-size: 18px;
+    line-height: 1.6;
+    color: rgba(255,255,255,0.75);
+    max-width: 500px;
+    margin-bottom: 36px;
+}
+.hb-hero-actions {
+    display: flex;
+    gap: 14px;
+    flex-wrap: wrap;
+}
+.hb-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 14px 28px;
+    border-radius: 40px;
+    font-size: 15px;
+    font-weight: 700;
+    font-family: var(--font);
+    cursor: pointer;
+    transition: var(--transition);
+    border: 2px solid transparent;
+    text-decoration: none;
+}
+.hb-btn-primary {
+    background: var(--white);
+    color: var(--green-800);
+}
+.hb-btn-primary:hover { background: var(--green-100); transform: translateY(-2px); box-shadow: var(--shadow-lg); }
+.hb-btn-outline {
+    background: transparent;
+    color: var(--white);
+    border-color: rgba(255,255,255,0.3);
+}
+.hb-btn-outline:hover { background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.5); }
+.hb-btn-green {
+    background: var(--green-800);
+    color: var(--white);
+    border-color: var(--green-800);
+}
+.hb-btn-green:hover { background: var(--green-700); border-color: var(--green-700); transform: translateY(-2px); }
+.hb-btn-sm { padding: 10px 20px; font-size: 13px; }
+
+.hb-hero-visual {
+    flex: 0 0 420px;
+    position: relative;
+}
+.hb-hero-card {
+    background: rgba(255,255,255,0.08);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: var(--radius-xl);
+    padding: 30px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+.hb-hero-product {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+}
+.hb-hero-product-img {
+    width: 100px;
+    height: 130px;
+    background: linear-gradient(135deg, var(--green-700) 0%, var(--green-900) 100%);
+    border-radius: var(--radius-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 42px;
+    flex-shrink: 0;
+    box-shadow: var(--shadow-md);
+    overflow: hidden;
+}
+.hb-hero-product-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+.hb-hero-product-info h3 {
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 4px;
+    color: var(--white);
+}
+.hb-hero-product-info p {
+    font-size: 13px;
+    color: rgba(255,255,255,0.6);
+    margin-bottom: 8px;
+}
+.hb-hero-stars { color: var(--amber-600); font-size: 14px; letter-spacing: 1px; }
+.hb-hero-price {
+    font-size: 26px;
+    font-weight: 800;
+    color: var(--green-500);
+    margin-top: 6px;
+}
+.hb-hero-card-stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+}
+.hb-stat-item {
+    text-align: center;
+    padding: 14px 8px;
+    background: rgba(255,255,255,0.06);
+    border-radius: var(--radius-md);
+    border: 1px solid rgba(255,255,255,0.08);
+}
+.hb-stat-num {
+    font-size: 22px;
+    font-weight: 800;
+    color: var(--green-500);
+    display: block;
+}
+.hb-stat-label {
+    font-size: 11px;
+    color: rgba(255,255,255,0.5);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-weight: 600;
+}
+
+/* ===== TRENDING PILLS ===== */
+.hb-trending {
+    background: var(--white);
+    padding: 24px 40px;
+    border-bottom: 1px solid var(--gray-200);
+}
+.hb-trending-inner {
+    max-width: 1320px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    overflow-x: auto;
+    scrollbar-width: none;
+}
+.hb-trending-inner::-webkit-scrollbar { display: none; }
+.hb-trending-label {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--gray-500);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    white-space: nowrap;
+}
+.hb-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 18px;
+    background: var(--gray-100);
+    border: 1px solid var(--gray-200);
+    border-radius: 30px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--gray-700);
+    text-decoration: none;
+    white-space: nowrap;
+    transition: var(--transition);
+    cursor: pointer;
+}
+.hb-pill:hover {
+    background: var(--green-100);
+    border-color: var(--green-700);
+    color: var(--green-800);
+    transform: translateY(-1px);
+}
+
+/* ===== SECTION LAYOUT ===== */
+.hb-section {
+    max-width: 1320px;
+    margin: 0 auto;
+    padding: 50px 30px;
+}
+.hb-section-header {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    margin-bottom: 30px;
+    gap: 20px;
+}
+.hb-section-header h2 {
+    font-size: 28px;
+    font-weight: 800;
+    color: var(--gray-900);
+    letter-spacing: -0.5px;
+}
+.hb-section-header p {
+    font-size: 15px;
+    color: var(--gray-500);
+    margin-top: 4px;
+}
+.hb-link {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--green-800);
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    white-space: nowrap;
+    transition: var(--transition);
+}
+.hb-link:hover { color: var(--green-700); gap: 8px; }
+
+/* ===== FLASH SALE ===== */
+.hb-flash {
+    background: var(--green-900);
+    border-radius: var(--radius-lg);
+    padding: 30px 40px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 30px;
+    margin-bottom: 50px;
+    position: relative;
+    overflow: hidden;
+}
+.hb-flash::before {
+    content: '';
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 300px;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(0,188,159,0.1));
+}
+.hb-flash-text h3 {
+    font-size: 24px;
+    font-weight: 800;
+    color: var(--white);
+    margin-bottom: 6px;
+}
+.hb-flash-text h3 em { font-style: normal; color: var(--green-500); }
+.hb-flash-text p { color: rgba(255,255,255,0.6); font-size: 14px; }
+.hb-flash-timer {
+    display: flex;
+    gap: 10px;
+    z-index: 2;
+}
+.hb-timer-unit {
+    text-align: center;
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: var(--radius-md);
+    padding: 10px 14px;
+    min-width: 60px;
+}
+.hb-timer-num {
+    font-size: 26px;
+    font-weight: 800;
+    color: var(--white);
+    display: block;
+    line-height: 1;
+}
+.hb-timer-label {
+    font-size: 10px;
+    color: rgba(255,255,255,0.5);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-weight: 600;
+}
+
+/* ===== PRODUCT CARDS ===== */
+.hb-products-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 20px;
+}
+.hb-product-card {
+    background: var(--white);
+    border: 1px solid var(--gray-200);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    transition: var(--transition);
+    position: relative;
+    display: flex;
+    flex-direction: column;
+}
+.hb-product-card:hover {
+    border-color: var(--green-700);
+    box-shadow: var(--shadow-lg);
+    transform: translateY(-4px);
+}
+.hb-product-badge {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    z-index: 5;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+.hb-badge {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+}
+.hb-badge-sale { background: var(--red-600); color: var(--white); }
+.hb-badge-new { background: var(--green-800); color: var(--white); }
+.hb-badge-best { background: var(--amber-100); color: var(--amber-600); }
+.hb-product-fav {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    z-index: 5;
+    width: 36px;
+    height: 36px;
+    background: var(--white);
+    border: 1px solid var(--gray-200);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 16px;
+    transition: var(--transition);
+}
+.hb-product-fav:hover { border-color: var(--red-600); background: var(--red-50); }
+.hb-product-img {
+    height: 220px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 64px;
+    padding: 0;
+    position: relative;
+    overflow: hidden;
+}
+.hb-product-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.4s ease;
+}
+.hb-product-card:hover .hb-product-img img {
+    transform: scale(1.05);
+}
+.hb-product-body {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}
+.hb-product-cat {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    color: var(--green-700);
+    margin-bottom: 6px;
+}
+.hb-product-name {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--gray-900);
+    margin-bottom: 8px;
+    line-height: 1.3;
+    cursor: pointer;
+    transition: var(--transition);
+}
+.hb-product-name:hover { color: var(--green-800); }
+.hb-product-meta {
+    font-size: 12px;
+    color: var(--gray-500);
+    margin-bottom: 10px;
+}
+.hb-product-rating {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 14px;
+    font-size: 13px;
+}
+.hb-product-rating .stars { color: var(--amber-600); font-size: 14px; }
+.hb-product-rating .count { color: var(--gray-500); }
+.hb-product-pricing {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    margin-bottom: 6px;
+    margin-top: auto;
+}
+.hb-price-current {
+    font-size: 22px;
+    font-weight: 800;
+    color: var(--gray-900);
+}
+.hb-price-original {
+    font-size: 14px;
+    color: var(--gray-500);
+    text-decoration: line-through;
+}
+.hb-price-member {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--green-800);
+    background: var(--green-100);
+    padding: 3px 8px;
+    border-radius: 4px;
+    margin-bottom: 14px;
+}
+.hb-product-atb {
+    width: 100%;
+    padding: 12px;
+    border-radius: var(--radius-md);
+    background: var(--green-800);
+    color: var(--white);
+    font-size: 14px;
+    font-weight: 700;
+    font-family: var(--font);
+    border: none;
+    cursor: pointer;
+    transition: var(--transition);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+}
+.hb-product-atb:hover { background: var(--green-700); }
+.hb-product-atb.added { background: var(--green-600); }
+
+/* ===== CATEGORY CARDS ===== */
+.hb-cats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 16px;
+}
+.hb-cat-card {
+    background: var(--gray-50);
+    border: 1px solid var(--gray-200);
+    border-radius: var(--radius-lg);
+    padding: 28px 22px;
+    text-align: center;
+    text-decoration: none;
+    transition: var(--transition);
+    cursor: pointer;
+}
+.hb-cat-card:hover {
+    background: var(--green-100);
+    border-color: var(--green-700);
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-md);
+}
+.hb-cat-icon {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    margin: 0 auto 14px auto;
+    display: block;
+    overflow: hidden;
+    border: 3px solid var(--green-100);
+    transition: var(--transition);
+}
+.hb-cat-card:hover .hb-cat-icon {
+    border-color: var(--green-700);
+    transform: scale(1.05);
+}
+.hb-cat-icon img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+.hb-cat-name {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--gray-900);
+    margin-bottom: 4px;
+}
+.hb-cat-count {
+    font-size: 12px;
+    color: var(--gray-500);
+}
+
+/* ===== TRUST BAR ===== */
+.hb-trust-bar {
+    background: var(--gray-50);
+    border-top: 1px solid var(--gray-200);
+    border-bottom: 1px solid var(--gray-200);
+}
+.hb-trust-inner {
+    max-width: 1320px;
+    margin: 0 auto;
+    padding: 30px;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+}
+.hb-trust-item {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 10px;
+}
+.hb-trust-icon {
+    width: 50px;
+    height: 50px;
+    background: var(--green-100);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    flex-shrink: 0;
+    border: 1px solid rgba(0,122,104,0.1);
+}
+.hb-trust-text strong {
+    display: block;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--gray-900);
+    margin-bottom: 2px;
+}
+.hb-trust-text span {
+    font-size: 12px;
+    color: var(--gray-500);
+}
+
+/* ===== NEWSLETTER ===== */
+.hb-newsletter {
+    background: var(--green-800);
+    color: var(--white);
+}
+.hb-newsletter-inner {
+    max-width: 1320px;
+    margin: 0 auto;
+    padding: 60px 30px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 40px;
+}
+.hb-newsletter h2 {
+    font-size: 28px;
+    font-weight: 800;
+    margin-bottom: 8px;
+}
+.hb-newsletter p {
+    color: rgba(255,255,255,0.6);
+    font-size: 15px;
+}
+.hb-newsletter-form {
+    display: flex;
+    gap: 10px;
+    flex: 0 0 auto;
+}
+.hb-newsletter-form input {
+    padding: 14px 22px;
+    border-radius: 40px;
+    border: 2px solid rgba(255,255,255,0.2);
+    background: rgba(255,255,255,0.08);
+    color: var(--white);
+    font-size: 14px;
+    font-family: var(--font);
+    width: 300px;
+}
+.hb-newsletter-form input:focus {
+    outline: none;
+    border-color: var(--green-500);
+    background: rgba(255,255,255,0.12);
+}
+.hb-newsletter-form input::placeholder { color: rgba(255,255,255,0.4); }
+.hb-newsletter-form button {
+    padding: 14px 28px;
+    border-radius: 40px;
+    border: none;
+    background: var(--white);
+    color: var(--green-800);
+    font-size: 14px;
+    font-weight: 700;
+    font-family: var(--font);
+    cursor: pointer;
+    transition: var(--transition);
+}
+.hb-newsletter-form button:hover { background: var(--green-100); }
+
+/* ===== FOOTER ===== */
+.hb-footer {
+    background: var(--green-900);
+    color: rgba(255,255,255,0.5);
+    padding: 40px 30px;
+    text-align: center;
+    font-size: 13px;
+}
+.hb-footer p { color: rgba(255,255,255,0.5); margin-bottom: 8px; }
+.hb-footer a { color: rgba(255,255,255,0.7); text-decoration: underline; }
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 991px) {
+    .hb-hero-inner { flex-direction: column; text-align: center; }
+    .hb-hero h1 { font-size: 36px; }
+    .hb-hero p { margin: 0 auto 30px auto; }
+    .hb-hero-actions { justify-content: center; }
+    .hb-hero-visual { flex: none; width: 100%; max-width: 400px; }
+    .hb-trust-inner { grid-template-columns: repeat(2, 1fr); }
+    .hb-newsletter-inner { flex-direction: column; text-align: center; }
+    .hb-newsletter-form { flex-direction: column; width: 100%; max-width: 400px; }
+    .hb-newsletter-form input { width: 100%; }
+    .hb-flash { flex-direction: column; text-align: center; }
+}
+@media (max-width: 600px) {
+    .hb-hero { padding: 50px 20px; }
+    .hb-header-inner { padding: 10px 16px; gap: 10px; }
+    .hb-section { padding: 30px 16px; }
+    .hb-trust-inner { grid-template-columns: 1fr; }
+    .hb-cats-grid { grid-template-columns: repeat(2, 1fr); }
+}
+</style>
+</head>
+<body>
+
+<!-- Top Promo Bar -->
+<div class="hb-topbar">
+    <span class="hb-topbar-badge">Sale</span>
+    <span>Summer Wellness Sale — Up to 50% off selected herbal supplements. <a href="#">Shop Now →</a></span>
+</div>
+
+<!-- Header -->
+<header class="hb-header">
+    <div class="hb-header-inner">
+        <a href="#" class="hb-logo">
+            <span class="hb-logo-icon">🌿</span>
+            Maroon Herbs
+        </a>
+        <div class="hb-search">
+            <span class="hb-search-icon">🔍</span>
+            <input type="text" placeholder="Search herbal teas, supplements, remedies...">
+        </div>
+        <div class="hb-nav-actions">
+            <button class="hb-nav-btn"><span class="icon">👤</span> Sign In</button>
+            <button class="hb-nav-btn"><span class="icon">♡</span></button>
+            <button class="hb-nav-btn hb-cart-btn" id="hb-cart-btn">
+                <span class="icon">🛒</span> Basket
+                <span class="hb-cart-badge" id="hb-cart-count">0</span>
+            </button>
+        </div>
+    </div>
+</header>
+
+<!-- Category Nav -->
+<nav class="hb-catnav">
+    <div class="hb-catnav-inner">
+        <a href="#" class="active">Home</a>
+        <a href="#">Herbal Teas</a>
+        <a href="#">Supplements</a>
+        <a href="#">Essential Oils</a>
+        <a href="#">Tinctures</a>
+        <a href="#">Immunity</a>
+        <a href="#">Gut Health</a>
+        <a href="#">Sleep & Calm</a>
+        <a href="#">Women's Health</a>
+        <a href="#">New In</a>
+        <a href="#">Offers</a>
+    </div>
+</nav>
+
+<!-- Hero -->
+<section class="hb-hero">
+    <div class="hb-hero-inner">
+        <div class="hb-hero-text">
+            <div class="hb-hero-label">🌿 100% Organic & Ethically Sourced</div>
+            <h1>Back your body with <em>nature's intelligence</em></h1>
+            <p>Discover premium organic herbal teas, targeted supplements, and traditional remedies — all backed by science, sourced with integrity.</p>
+            <div class="hb-hero-actions">
+                <a class="hb-btn hb-btn-primary" href="#">Shop Bestsellers</a>
+                <a class="hb-btn hb-btn-outline" href="#">Take Our Wellness Quiz →</a>
+            </div>
+        </div>
+        <div class="hb-hero-visual">
+            <div class="hb-hero-card">
+                <div class="hb-hero-product">
+                    <div class="hb-hero-product-img"><img src="https://images.unsplash.com/photo-1564890369478-c89ca6d9cde9?w=200&h=260&fit=crop&crop=center" alt="Immunity Shield Tea"></div>
+                    <div class="hb-hero-product-info">
+                        <h3>Immunity Shield Tea</h3>
+                        <p>Elderberry, Echinacea & Acerola Blend</p>
+                        <div class="hb-hero-stars">★★★★★</div>
+                        <div class="hb-hero-price">£9.50</div>
+                    </div>
+                </div>
+                <div class="hb-hero-card-stats">
+                    <div class="hb-stat-item">
+                        <span class="hb-stat-num">200+</span>
+                        <span class="hb-stat-label">Products</span>
+                    </div>
+                    <div class="hb-stat-item">
+                        <span class="hb-stat-num">50k+</span>
+                        <span class="hb-stat-label">Reviews</span>
+                    </div>
+                    <div class="hb-stat-item">
+                        <span class="hb-stat-num">100%</span>
+                        <span class="hb-stat-label">Organic</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Trending Pills -->
+<div class="hb-trending">
+    <div class="hb-trending-inner">
+        <span class="hb-trending-label">🔥 Trending:</span>
+        <a class="hb-pill">Ashwagandha</a>
+        <a class="hb-pill">Turmeric Capsules</a>
+        <a class="hb-pill">Sleep Support</a>
+        <a class="hb-pill">Elderberry Syrup</a>
+        <a class="hb-pill">Gut Health Kit</a>
+        <a class="hb-pill">Lion's Mane</a>
+        <a class="hb-pill">Chamomile Tea</a>
+    </div>
+</div>
+
+<!-- Flash Sale Banner -->
+<div class="hb-section" style="padding-bottom: 0;">
+    <div class="hb-flash">
+        <div class="hb-flash-text">
+            <h3>⚡ Flash Sale — <em>40% Off</em> Immunity Range</h3>
+            <p>Limited time only. While stocks last.</p>
+        </div>
+        <div class="hb-flash-timer">
+            <div class="hb-timer-unit"><span class="hb-timer-num" id="hb-hrs">06</span><span class="hb-timer-label">Hours</span></div>
+            <div class="hb-timer-unit"><span class="hb-timer-num" id="hb-mins">42</span><span class="hb-timer-label">Mins</span></div>
+            <div class="hb-timer-unit"><span class="hb-timer-num" id="hb-secs">18</span><span class="hb-timer-label">Secs</span></div>
+        </div>
+    </div>
+</div>
+
+<!-- Product Grid: Bestsellers -->
+<section class="hb-section">
+    <div class="hb-section-header">
+        <div>
+            <h2>Bestsellers This Week</h2>
+            <p>Our most-loved organic remedies, chosen by thousands of customers.</p>
+        </div>
+        <a class="hb-link" href="#">View All Bestsellers →</a>
+    </div>
+    <div class="hb-products-grid">
+        <!-- Product 1 -->
+        <div class="hb-product-card">
+            <div class="hb-product-badge"><span class="hb-badge hb-badge-best">Bestseller</span></div>
+            <div class="hb-product-fav">♡</div>
+            <div class="hb-product-img" style="background: linear-gradient(135deg, #fef2f2, #fce7e7);"><img src="https://images.unsplash.com/photo-1615485500704-8e990f9900f7?w=520&h=440&fit=crop&crop=center" alt="Organic Elderberry & Echinacea Complex"></div>
+            <div class="hb-product-body">
+                <span class="hb-product-cat">Immunity</span>
+                <h3 class="hb-product-name">Organic Elderberry & Echinacea Complex</h3>
+                <p class="hb-product-meta">60 Capsules · 2 Month Supply</p>
+                <div class="hb-product-rating">
+                    <span class="stars">★★★★★</span>
+                    <span class="count">(2,847)</span>
+                </div>
+                <div class="hb-product-pricing">
+                    <span class="hb-price-current">£14.99</span>
+                    <span class="hb-price-original">£19.99</span>
+                </div>
+                <div class="hb-price-member">🏷️ Member price: £12.74</div>
+                <button class="hb-product-atb" data-name="Elderberry Complex" onclick="addToCart(this)">🛒 Add to Basket</button>
+            </div>
+        </div>
+        <!-- Product 2 -->
+        <div class="hb-product-card">
+            <div class="hb-product-badge"><span class="hb-badge hb-badge-sale">25% Off</span></div>
+            <div class="hb-product-fav">♡</div>
+            <div class="hb-product-img" style="background: linear-gradient(135deg, #fef9ef, #fdf0d5);"><img src="https://images.unsplash.com/photo-1615485500834-2c4a3f0a8a5f?w=520&h=440&fit=crop&crop=center" alt="Turmeric Curcumin Capsules" onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1596040033229-a9821ebd058d?w=520&h=440&fit=crop&crop=center'"></div>
+            <div class="hb-product-body">
+                <span class="hb-product-cat">Joints & Energy</span>
+                <h3 class="hb-product-name">Turmeric Curcumin with BioPerine® 1500mg</h3>
+                <p class="hb-product-meta">90 Capsules · 3 Month Supply</p>
+                <div class="hb-product-rating">
+                    <span class="stars">★★★★☆</span>
+                    <span class="count">(1,523)</span>
+                </div>
+                <div class="hb-product-pricing">
+                    <span class="hb-price-current">£16.99</span>
+                    <span class="hb-price-original">£22.99</span>
+                </div>
+                <div class="hb-price-member">🏷️ Member price: £14.44</div>
+                <button class="hb-product-atb" data-name="Turmeric Curcumin" onclick="addToCart(this)">🛒 Add to Basket</button>
+            </div>
+        </div>
+        <!-- Product 3 -->
+        <div class="hb-product-card">
+            <div class="hb-product-badge"><span class="hb-badge hb-badge-new">New</span></div>
+            <div class="hb-product-fav">♡</div>
+            <div class="hb-product-img" style="background: linear-gradient(135deg, #f0fdf4, #dcfce7);"><img src="https://images.unsplash.com/photo-1556228578-0d85b1a4d571?w=520&h=440&fit=crop&crop=center" alt="Ashwagandha Root Extract" onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1587854692152-cbe660dbde88?w=520&h=440&fit=crop&crop=center'"></div>
+            <div class="hb-product-body">
+                <span class="hb-product-cat">Adaptogens</span>
+                <h3 class="hb-product-name">KSM-66® Ashwagandha Root Extract 600mg</h3>
+                <p class="hb-product-meta">120 Capsules · 4 Month Supply</p>
+                <div class="hb-product-rating">
+                    <span class="stars">★★★★★</span>
+                    <span class="count">(3,214)</span>
+                </div>
+                <div class="hb-product-pricing">
+                    <span class="hb-price-current">£18.99</span>
+                </div>
+                <div class="hb-price-member">🏷️ Member price: £16.14</div>
+                <button class="hb-product-atb" data-name="Ashwagandha 600mg" onclick="addToCart(this)">🛒 Add to Basket</button>
+            </div>
+        </div>
+        <!-- Product 4 -->
+        <div class="hb-product-card">
+            <div class="hb-product-badge"><span class="hb-badge hb-badge-best">Bestseller</span></div>
+            <div class="hb-product-fav">♡</div>
+            <div class="hb-product-img" style="background: linear-gradient(135deg, #eff6ff, #dbeafe);"><img src="https://images.unsplash.com/photo-1563822249366-3efb23b8e0c9?w=520&h=440&fit=crop&crop=center" alt="Chamomile & Valerian Night Tea"></div>
+            <div class="hb-product-body">
+                <span class="hb-product-cat">Sleep & Calm</span>
+                <h3 class="hb-product-name">Night Time Botanical Blend — Chamomile & Valerian</h3>
+                <p class="hb-product-meta">20 Enveloped Tea Bags</p>
+                <div class="hb-product-rating">
+                    <span class="stars">★★★★★</span>
+                    <span class="count">(987)</span>
+                </div>
+                <div class="hb-product-pricing">
+                    <span class="hb-price-current">£8.50</span>
+                </div>
+                <div class="hb-price-member">🏷️ Member price: £7.23</div>
+                <button class="hb-product-atb" data-name="Night Time Blend" onclick="addToCart(this)">🛒 Add to Basket</button>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Shop by Category -->
+<section class="hb-section" style="padding-top: 0;">
+    <div class="hb-section-header">
+        <div>
+            <h2>Shop by Wellness Goal</h2>
+            <p>Find exactly what your body needs.</p>
+        </div>
+    </div>
+    <div class="hb-cats-grid">
+        <div class="hb-cat-card">
+            <span class="hb-cat-icon"><img src="https://images.unsplash.com/photo-1505751172876-fa1923c5c528?w=160&h=160&fit=crop&crop=center" alt="Immunity"></span>
+            <div class="hb-cat-name">Immunity</div>
+            <div class="hb-cat-count">42 products</div>
+        </div>
+        <div class="hb-cat-card">
+            <span class="hb-cat-icon"><img src="https://images.unsplash.com/photo-1531353826977-0941b4779a1c?w=160&h=160&fit=crop&crop=center" alt="Sleep & Calm"></span>
+            <div class="hb-cat-name">Sleep & Calm</div>
+            <div class="hb-cat-count">38 products</div>
+        </div>
+        <div class="hb-cat-card">
+            <span class="hb-cat-icon"><img src="https://images.unsplash.com/photo-1506126613408-eca07ce68773?w=160&h=160&fit=crop&crop=center" alt="Energy & Focus"></span>
+            <div class="hb-cat-name">Energy & Focus</div>
+            <div class="hb-cat-count">35 products</div>
+        </div>
+        <div class="hb-cat-card">
+            <span class="hb-cat-icon"><img src="https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=160&h=160&fit=crop&crop=center" alt="Joints & Bones"></span>
+            <div class="hb-cat-name">Joints & Bones</div>
+            <div class="hb-cat-count">28 products</div>
+        </div>
+        <div class="hb-cat-card">
+            <span class="hb-cat-icon"><img src="https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=160&h=160&fit=crop&crop=center" alt="Gut & Digestion"></span>
+            <div class="hb-cat-name">Gut & Digestion</div>
+            <div class="hb-cat-count">31 products</div>
+        </div>
+        <div class="hb-cat-card">
+            <span class="hb-cat-icon"><img src="https://images.unsplash.com/photo-1596755389378-c31d21fd1273?w=160&h=160&fit=crop&crop=center" alt="Skin & Glow"></span>
+            <div class="hb-cat-name">Skin & Glow</div>
+            <div class="hb-cat-count">26 products</div>
+        </div>
+    </div>
+</section>
+
+<!-- Trust Bar -->
+<div class="hb-trust-bar">
+    <div class="hb-trust-inner">
+        <div class="hb-trust-item">
+            <div class="hb-trust-icon">🚚</div>
+            <div class="hb-trust-text"><strong>Free Delivery</strong><span>On orders over £35</span></div>
+        </div>
+        <div class="hb-trust-item">
+            <div class="hb-trust-icon">🔄</div>
+            <div class="hb-trust-text"><strong>90-Day Returns</strong><span>No-questions-asked refunds</span></div>
+        </div>
+        <div class="hb-trust-item">
+            <div class="hb-trust-icon">🌱</div>
+            <div class="hb-trust-text"><strong>Certified Organic</strong><span>Soil Association approved</span></div>
+        </div>
+        <div class="hb-trust-item">
+            <div class="hb-trust-icon">🔬</div>
+            <div class="hb-trust-text"><strong>Lab Tested</strong><span>Third-party verified purity</span></div>
+        </div>
+    </div>
+</div>
+
+<!-- Newsletter -->
+<section class="hb-newsletter">
+    <div class="hb-newsletter-inner">
+        <div>
+            <h2>Join the Maroon Herbs community</h2>
+            <p>15% off your first order, plus expert herbal guides and exclusive deals.</p>
+        </div>
+        <div class="hb-newsletter-form">
+            <input type="email" placeholder="Enter your email address">
+            <button>Subscribe</button>
+        </div>
+    </div>
+</section>
+
+<!-- Footer -->
+<footer class="hb-footer">
+    <p>© 2026 Maroon Herbs Ltd. All rights reserved. Registered Organic Producer.</p>
+    <p>Statements have not been evaluated by regulatory authorities. Products are not intended to diagnose, treat, cure or prevent any health condition.</p>
+</footer>
+
+<script>
+// Cart counter
+let cartCount = 0;
+function addToCart(btn) {
+    cartCount++;
+    document.getElementById('hb-cart-count').textContent = cartCount;
+    const original = btn.innerHTML;
+    btn.innerHTML = '✓ Added';
+    btn.classList.add('added');
+    setTimeout(() => {
+        btn.innerHTML = original;
+        btn.classList.remove('added');
+    }, 1500);
+}
+
+// Flash sale countdown timer
+(function() {
+    let totalSeconds = 6 * 3600 + 42 * 60 + 18;
+    function tick() {
+        if (totalSeconds <= 0) return;
+        totalSeconds--;
+        const h = Math.floor(totalSeconds / 3600);
+        const m = Math.floor((totalSeconds % 3600) / 60);
+        const s = totalSeconds % 60;
+        document.getElementById('hb-hrs').textContent = String(h).padStart(2, '0');
+        document.getElementById('hb-mins').textContent = String(m).padStart(2, '0');
+        document.getElementById('hb-secs').textContent = String(s).padStart(2, '0');
+    }
+    setInterval(tick, 1000);
+})();
+
+// Favourite hearts
+document.querySelectorAll('.hb-product-fav').forEach(fav => {
+    fav.addEventListener('click', function() {
+        this.textContent = this.textContent === '♡' ? '❤️' : '♡';
+        this.style.borderColor = this.textContent === '❤️' ? '#dc2626' : '';
+        this.style.background = this.textContent === '❤️' ? '#fef2f2' : '';
+    });
+});
+</script>
+
+</body>
+</html>
