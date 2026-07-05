@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+
+<html class="scroll-smooth" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Nature's Alchemy | The Collection</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Libre+Caslon+Text:wght@400;700&amp;family=Work+Sans:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind Configuration -->
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface": "#fff8f5",
+                        "surface-container-lowest": "#ffffff",
+                        "secondary-fixed-dim": "#c9c6c2",
+                        "on-primary-container": "#819986",
+                        "on-background": "#1e1b18",
+                        "on-primary": "#ffffff",
+                        "tertiary-fixed-dim": "#ffb77b",
+                        "surface-container-high": "#efe6e2",
+                        "on-error-container": "#93000a",
+                        "primary-container": "#1b3022",
+                        "inverse-surface": "#34302c",
+                        "on-error": "#ffffff",
+                        "on-tertiary-fixed-variant": "#6d3a00",
+                        "background": "#fff8f5",
+                        "on-secondary-fixed-variant": "#474743",
+                        "primary": "#061b0e",
+                        "tertiary-container": "#462300",
+                        "secondary-fixed": "#e5e2dd",
+                        "primary-fixed": "#d0e9d4",
+                        "on-primary-fixed": "#0b2013",
+                        "surface-variant": "#e9e1dc",
+                        "on-surface": "#1e1b18",
+                        "tertiary": "#281200",
+                        "surface-container-highest": "#e9e1dc",
+                        "on-secondary-container": "#656461",
+                        "secondary-container": "#e5e2dd",
+                        "primary-fixed-dim": "#b4cdb8",
+                        "on-secondary-fixed": "#1c1c19",
+                        "inverse-on-surface": "#f8efea",
+                        "inverse-primary": "#b4cdb8",
+                        "on-secondary": "#ffffff",
+                        "error": "#ba1a1a",
+                        "on-tertiary-fixed": "#2e1500",
+                        "surface-container": "#f5ece7",
+                        "on-surface-variant": "#434843",
+                        "error-container": "#ffdad6",
+                        "on-tertiary-container": "#cb8341",
+                        "on-primary-fixed-variant": "#364c3c",
+                        "surface-tint": "#4d6453",
+                        "surface-bright": "#fff8f5",
+                        "outline": "#737973",
+                        "surface-dim": "#e1d8d4",
+                        "tertiary-fixed": "#ffdcc2",
+                        "outline-variant": "#c3c8c1",
+                        "surface-container-low": "#fbf2ed",
+                        "secondary": "#5f5e5b",
+                        "on-tertiary": "#ffffff"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem",
+                        "xl": "0.5rem",
+                        "full": "0.75rem"
+                    },
+                    "spacing": {
+                        "margin-mobile": "20px",
+                        "gutter": "24px",
+                        "container-max": "1280px",
+                        "unit": "8px",
+                        "margin-desktop": "64px"
+                    },
+                    "fontFamily": {
+                        "label-sm": ["Work Sans"],
+                        "label-md": ["Work Sans"],
+                        "body-lg": ["Work Sans"],
+                        "headline-xl-mobile": ["Libre Caslon Text"],
+                        "headline-lg": ["Libre Caslon Text"],
+                        "body-md": ["Work Sans"],
+                        "headline-md": ["Libre Caslon Text"],
+                        "headline-xl": ["Libre Caslon Text"]
+                    },
+                    "fontSize": {
+                        "label-sm": ["12px", {"lineHeight": "1.2", "letterSpacing": "0.03em", "fontWeight": "500"}],
+                        "label-md": ["14px", {"lineHeight": "1.2", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                        "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                        "headline-xl-mobile": ["32px", {"lineHeight": "1.2", "fontWeight": "400"}],
+                        "headline-lg": ["32px", {"lineHeight": "1.2", "fontWeight": "400"}],
+                        "body-md": ["16px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                        "headline-md": ["24px", {"lineHeight": "1.3", "fontWeight": "400"}],
+                        "headline-xl": ["48px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "400"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        .parchment-texture {
+            background-image: url("https://www.transparenttextures.com/patterns/natural-paper.png");
+            opacity: 0.05;
+        }
+        .grain-overlay {
+            position: relative;
+        }
+        .grain-overlay::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background-image: url("https://www.transparenttextures.com/patterns/stardust.png");
+            opacity: 0.03;
+            pointer-events: none;
+            z-index: 10;
+        }
+        .botanical-card:hover .quick-add {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .botanical-card:hover .ingredient-reveal {
+            opacity: 1;
+        }
+        .product-image-container {
+            overflow: hidden;
+        }
+        .product-image-container img {
+            transition: transform 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .botanical-card:hover .product-image-container img {
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+<body class="bg-surface text-on-surface font-body-md selection:bg-on-primary-container selection:text-surface">
+<!-- Announcement Bar -->
+<div class="w-full bg-primary py-2 px-margin-desktop text-center border-b border-primary-container z-50">
+<span class="font-label-sm text-label-sm text-tertiary-fixed-dim uppercase tracking-widest">
+            Artisanal Batches Available: Winter Harvest Rituals
+        </span>
+</div>
+<!-- Navigation Header -->
+<header class="fixed top-0 w-full z-50 flex justify-between items-center px-margin-desktop h-20 max-w-container-max mx-auto bg-surface dark:bg-surface-container border-b border-secondary-container mt-10">
+<div class="flex items-center gap-8">
+<h1 class="font-headline-md text-headline-md text-primary dark:text-primary-fixed uppercase tracking-widest">
+                Nature's Alchemy
+            </h1>
+<nav class="hidden md:flex items-center gap-6">
+<a class="font-label-md text-label-md text-primary font-bold border-b-2 border-tertiary-fixed-dim pb-1" href="#">Shop</a>
+<a class="font-label-md text-label-md text-secondary hover:text-primary transition-colors duration-200" href="#">Botanicals</a>
+<a class="font-label-md text-label-md text-secondary hover:text-primary transition-colors duration-200" href="#">Our Story</a>
+<a class="font-label-md text-label-md text-secondary hover:text-primary transition-colors duration-200" href="#">Rituals</a>
+</nav>
+</div>
+<div class="flex items-center gap-6">
+<button class="text-primary hover:text-tertiary-fixed-variant transition-colors">
+<span class="material-symbols-outlined" data-icon="search">search</span>
+</button>
+<button class="text-primary hover:text-tertiary-fixed-variant transition-colors">
+<span class="material-symbols-outlined" data-icon="person">person</span>
+</button>
+<button class="text-primary hover:text-tertiary-fixed-variant transition-colors relative">
+<span class="material-symbols-outlined" data-icon="shopping_cart">shopping_cart</span>
+<span class="absolute -top-2 -right-2 bg-tertiary-container text-on-tertiary-container text-[10px] w-4 h-4 flex items-center justify-center rounded-full">2</span>
+</button>
+</div>
+</header>
+<main class="pt-20">
+<!-- Hero Section -->
+<section class="relative h-[819px] w-full overflow-hidden grain-overlay flex items-center justify-center">
+<div class="absolute inset-0 z-0">
+<img class="w-full h-full object-cover" data-alt="A cinematic, shallow depth-of-field lifestyle photograph of a professional herbalist meticulously grinding dried herbs in a stone mortar and pestle. Soft, morning sunlight streams through a rustic window, illuminating the dust motes and highlighting the rich textures of dried lavender and eucalyptus branches on the wooden table. The aesthetic is warm, botanical, and artisanal, evoking a sense of calm wisdom and premium luxury." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAUM1JPbvMK2mLpFDjvyv99FwWnfbWaiZsZiTDZSZsMcfSfes8IzI6u4Fv9t2GqUOcUb9oTV0J9MMJMIxy71Xmo2gVWwOsRuexUMYhfe8PmlxOBejg_Ph1xbiUJ03VIn9muH_2cz2rbAhZR6uXshRfphTlZsLFshLGaUDpbslZVxu5zvY7IhcoebRYyQINWcUT5ISJa71GQVICkkj4xsDeEqdcFf392BT6mK-_lrAiJIgB5tCE19Kg-_nyVrUYmRKywkFSQJc78dVW0"/>
+<div class="absolute inset-0 bg-primary/20 backdrop-brightness-75"></div>
+</div>
+<div class="relative z-10 text-center text-on-primary px-margin-mobile md:px-0 max-w-3xl">
+<span class="font-label-md text-label-md text-primary-fixed uppercase tracking-[0.2em] block mb-4">Apothecary Collection</span>
+<h2 class="font-headline-xl text-headline-xl-mobile md:text-headline-xl mb-6">Ancient Wisdom, Modern Science</h2>
+<p class="font-body-lg text-body-lg text-surface-container-lowest opacity-90 mb-10 max-w-xl mx-auto">
+                    A curated selection of plant-based remedies handcrafted for holistic healing and ritualistic wellness.
+                </p>
+<div class="flex flex-col items-center gap-4">
+<a class="bg-primary text-surface font-label-md text-label-md px-10 py-5 rounded-none hover:bg-on-primary-container transition-all duration-300 uppercase tracking-widest" href="#collection">
+                        Explore Our Roots
+                    </a>
+<div class="mt-12 animate-bounce flex flex-col items-center gap-2 opacity-60">
+<span class="font-label-sm text-label-sm uppercase">Scroll to Explore</span>
+<span class="material-symbols-outlined">expand_more</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Product Listing Layout -->
+<section class="px-margin-desktop py-24 flex flex-col md:flex-row gap-12 max-w-container-max mx-auto" id="collection">
+<!-- Minimalist Sidebar Filter -->
+<aside class="w-full md:w-64 flex-shrink-0 space-y-10">
+<div>
+<h3 class="font-label-md text-label-md uppercase tracking-wider text-primary border-b border-secondary-container pb-4 mb-6">Concerns</h3>
+<ul class="space-y-3">
+<li><label class="flex items-center gap-3 cursor-pointer group"><input class="form-checkbox text-primary-container rounded-none border-secondary focus:ring-0" type="checkbox"/> <span class="font-label-md text-label-md text-secondary group-hover:text-primary transition-colors">Sleep &amp; Rest</span></label></li>
+<li><label class="flex items-center gap-3 cursor-pointer group"><input class="form-checkbox text-primary-container rounded-none border-secondary focus:ring-0" type="checkbox"/> <span class="font-label-md text-label-md text-secondary group-hover:text-primary transition-colors">Stress Relief</span></label></li>
+<li><label class="flex items-center gap-3 cursor-pointer group"><input class="form-checkbox text-primary-container rounded-none border-secondary focus:ring-0" type="checkbox"/> <span class="font-label-md text-label-md text-secondary group-hover:text-primary transition-colors">Digestive Health</span></label></li>
+<li><label class="flex items-center gap-3 cursor-pointer group"><input class="form-checkbox text-primary-container rounded-none border-secondary focus:ring-0" type="checkbox"/> <span class="font-label-md text-label-md text-secondary group-hover:text-primary transition-colors">Immunity</span></label></li>
+</ul>
+</div>
+<div>
+<h3 class="font-label-md text-label-md uppercase tracking-wider text-primary border-b border-secondary-container pb-4 mb-6">Format</h3>
+<ul class="space-y-3">
+<li><label class="flex items-center gap-3 cursor-pointer group"><input class="form-radio text-primary-container border-secondary focus:ring-0" name="format" type="radio"/> <span class="font-label-md text-label-md text-secondary group-hover:text-primary transition-colors">Tinctures</span></label></li>
+<li><label class="flex items-center gap-3 cursor-pointer group"><input class="form-radio text-primary-container border-secondary focus:ring-0" name="format" type="radio"/> <span class="font-label-md text-label-md text-secondary group-hover:text-primary transition-colors">Herbal Teas</span></label></li>
+<li><label class="flex items-center gap-3 cursor-pointer group"><input class="form-radio text-primary-container border-secondary focus:ring-0" name="format" type="radio"/> <span class="font-label-md text-label-md text-secondary group-hover:text-primary transition-colors">Healing Balms</span></label></li>
+</ul>
+</div>
+<div class="pt-8">
+<div class="bg-primary-container p-6">
+<span class="font-label-sm text-label-sm text-tertiary-fixed block mb-2 uppercase">New Arrival</span>
+<h4 class="font-headline-md text-headline-md text-on-primary-container mb-4">Winter Solstice Oil</h4>
+<a class="text-surface font-label-md text-label-md underline underline-offset-4" href="#">Discover Now</a>
+</div>
+</div>
+</aside>
+<!-- Product Grid -->
+<div class="flex-grow">
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-gutter gap-y-16">
+<!-- Product Card 1 -->
+<div class="botanical-card group">
+<div class="product-image-container relative aspect-[4/5] bg-secondary-container mb-6 overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="A clean, minimalist studio shot of an amber glass tincture bottle with a white minimalist label reading 'Calmness Tincture'. The bottle is placed on a rough, natural stone slab against a warm beige background. A single stem of dried chamomile leans against the bottle. The lighting is soft and high-end, highlighting the glass texture and the copper-tinted label details." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAQB1sIc8Oy4L46MKEdwQYbAi0B9BumtX_bVzlGMwiZ_SK6rlW8QV7DJrEr1gglsguS71FYlotHXy--FVmAEKv2sRbpa5zS_xPAHZFBPC13mD4M0Z3COUAuz8Iuu0UBHLrKdShYQnzWMyOtMBN0DSchLwOtGCBOKJ7SkXuuYbg9cUgy3Eefb98XKrSroNUWfsoHZQ9QP5ar6ryvhIiQs1cpaTY0kaS9caOSQFfzbnXNg1AXFfyABMW9Z6S5I38w3sYZmJGUND1gWKsr"/>
+<div class="absolute inset-x-0 bottom-0 p-4 translate-y-full group-hover:translate-y-0 transition-transform duration-500">
+<button class="w-full bg-primary text-surface py-4 font-label-md text-label-md uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-opacity">Quick Add — $32.00</button>
+</div>
+<div class="ingredient-reveal absolute inset-0 bg-primary/80 flex items-center justify-center p-8 opacity-0 transition-opacity duration-300 pointer-events-none">
+<div class="text-center">
+<h5 class="font-label-md text-label-md text-tertiary-fixed-dim mb-4 uppercase">Key Ingredients</h5>
+<p class="text-on-primary text-body-md italic">Passionflower, Lemon Balm, Ashwagandha Root, Fresh Valerian.</p>
+</div>
+</div>
+</div>
+<div class="text-center">
+<h4 class="font-headline-md text-headline-md text-primary mb-1">Calmness Tincture</h4>
+<span class="font-label-sm text-label-sm text-secondary uppercase tracking-widest">Stress &amp; Sleep Support</span>
+</div>
+</div>
+<!-- Product Card 2 -->
+<div class="botanical-card group">
+<div class="product-image-container relative aspect-[4/5] bg-secondary-container mb-6 overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="High-fidelity product photography of a premium eco-friendly paper canister for 'Immunity Boost' herbal tea. The packaging features botanical etchings of elderberry and echinacea in deep green ink. The canister is set on a dark oak wooden surface with scattered loose herbs around the base. Soft side-lighting creates deep shadows and elegant highlights." src="https://lh3.googleusercontent.com/aida-public/AB6AXuARyZDpLVK16j794UBeOzmL_bf27o9sIJgQzPxFr71FzDdBldXsIwEp5fFT7uu5rKQiGmpQtipXaotiRGatJ1c2P_0uHHcVfmIOwkqC8WIjWyw9GTn57bmP9C4vhfZ0myhwjQWgonwO4nMql8gbv9nUFj59xxbCTtFnu5-5ZeNXbi9_S7FMoreyufxJccJEEhINB5GrkCwRFs6feCn2NvynNHWLVGU3qyrULjAZM0HvP4EX7LUoOnRZ_nvBBtZu93XEvOBdzk3J1rwH"/>
+<div class="absolute inset-x-0 bottom-0 p-4 translate-y-full group-hover:translate-y-0 transition-transform duration-500">
+<button class="w-full bg-primary text-surface py-4 font-label-md text-label-md uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-opacity">Quick Add — $28.00</button>
+</div>
+<div class="ingredient-reveal absolute inset-0 bg-primary/80 flex items-center justify-center p-8 opacity-0 transition-opacity duration-300 pointer-events-none">
+<div class="text-center">
+<h5 class="font-label-md text-label-md text-tertiary-fixed-dim mb-4 uppercase">Key Ingredients</h5>
+<p class="text-on-primary text-body-md italic">Elderberry, Rosehips, Wild Harvested Echinacea, Ginger Root.</p>
+</div>
+</div>
+</div>
+<div class="text-center">
+<h4 class="font-headline-md text-headline-md text-primary mb-1">Immunity Boost</h4>
+<span class="font-label-sm text-label-sm text-secondary uppercase tracking-widest">Seasonal Defense Tea</span>
+</div>
+</div>
+<!-- Product Card 3 -->
+<div class="botanical-card group">
+<div class="product-image-container relative aspect-[4/5] bg-secondary-container mb-6 overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="Minimalist luxury shot of an amber glass dropper bottle named 'Digestive Blend' alongside a vintage mortar and pestle filled with peppercorns and fennel seeds. The background is a textured sage green wall. The overall mood is medical yet organic, bridging ancient remedies with modern clinical precision." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAJvISpfWaO-4CtHsj5yEBzgsO0BYJQvQ3XkcLMOHB_ZMAxXHAV9f1RabIBJ5HNPaX-pjFfJrJz8NVhFunvcTsaa5TRLOpuz9UYzIDY5JON94l1x4gPbTFlW5LXRCxqrlF-luctLpJvo7_hBU_HrhIVSS4O7RPbEqirswGlrvWiOUoFUqWJuqpe5riJE4KgGt4tVlENwDmS2Dr2ecqS17Kty2_b4DufmFpwcdrpbrcgETfTK3PDEjJgI05Acl9bb5aG638y0KWR9NHF"/>
+<div class="absolute inset-x-0 bottom-0 p-4 translate-y-full group-hover:translate-y-0 transition-transform duration-500">
+<button class="w-full bg-primary text-surface py-4 font-label-md text-label-md uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-opacity">Quick Add — $36.00</button>
+</div>
+<div class="ingredient-reveal absolute inset-0 bg-primary/80 flex items-center justify-center p-8 opacity-0 transition-opacity duration-300 pointer-events-none">
+<div class="text-center">
+<h5 class="font-label-md text-label-md text-tertiary-fixed-dim mb-4 uppercase">Key Ingredients</h5>
+<p class="text-on-primary text-body-md italic">Gentian Root, Peppermint Leaf, Fennel Seed, Artichoke Leaf Extract.</p>
+</div>
+</div>
+</div>
+<div class="text-center">
+<h4 class="font-headline-md text-headline-md text-primary mb-1">Digestive Blend</h4>
+<span class="font-label-sm text-label-sm text-secondary uppercase tracking-widest">Gut Health Vitality</span>
+</div>
+</div>
+<!-- Product Card 4 -->
+<div class="botanical-card group">
+<div class="product-image-container relative aspect-[4/5] bg-secondary-container mb-6 overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="A macro photograph of an open silver aluminum tin of 'Botanical Balm'. The balm has a soft, greenish-yellow herbal texture. A small wooden spatula rests in the balm. The background is a soft-focus garden with hints of blooming calendula. Elegant, high-contrast typography is reflected in the tin's rim." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAziNRTWTy72HqzYokMvwng7s__onaNumvM5gaiFqOjvUFGCH_ijsg3ohwC0odCz7RKFpmqDLANiIBgT4r8yJ6RgvlpHbszl20erFXLAfE-Oqu6b2jtLSXvwUIXPnlUiKvxp_-oG3BItZI0S3-s5twcIaS3vaZFlghXH5Dibch4_oGc6V39gfFXeuGjSHHUwuTcQaiG_t74J6BsTz5rT7CXhqUuQjeNjUfgccnEWP56NmxTaL91u-w89_oC_0Zy1XhtUw1PIoHxU_Pc"/>
+<div class="absolute inset-x-0 bottom-0 p-4 translate-y-full group-hover:translate-y-0 transition-transform duration-500">
+<button class="w-full bg-primary text-surface py-4 font-label-md text-label-md uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-opacity">Quick Add — $24.00</button>
+</div>
+<div class="ingredient-reveal absolute inset-0 bg-primary/80 flex items-center justify-center p-8 opacity-0 transition-opacity duration-300 pointer-events-none">
+<div class="text-center">
+<h5 class="font-label-md text-label-md text-tertiary-fixed-dim mb-4 uppercase">Key Ingredients</h5>
+<p class="text-on-primary text-body-md italic">Calendula-Infused Oil, Beeswax, Comfrey, Lavender Essential Oil.</p>
+</div>
+</div>
+</div>
+<div class="text-center">
+<h4 class="font-headline-md text-headline-md text-primary mb-1">Botanical Balm</h4>
+<span class="font-label-sm text-label-sm text-secondary uppercase tracking-widest">Soothing Topical Relief</span>
+</div>
+</div>
+<!-- Product Card 5 -->
+<div class="botanical-card group">
+<div class="product-image-container relative aspect-[4/5] bg-secondary-container mb-6 overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="Cinematic still-life of three amber glass bottles in varying sizes: a tincture, an elixir, and an oil. They are arranged on a dark green velvet cloth. The lighting is focused, casting long dramatic shadows. A single dried eucalyptus branch arching over the composition adds a botanical artisanal touch." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBUn4YLxQ5-4uKSAs_cCIW3snCwTtxi7RVpcoThDZFkySdbMR9jIZszEQrEK4cLn4lR23wRg9p0RVSrp7pl08g6RM7jz4pIOTzv03cOgzEJTDw35uAL6Teb0CmGhmxQhVOMLVwQ5X3eyYSWi-ZFpk3H7439F-qvcK2cQ30xT59niARxGkj0KCU8G2ttDjbizrkgie82CbrkziUag4CoLzm8dcvs0AdKPc9IeX7d9NyZTPzW0gxOKPva7U1paceezpnshqy_IsaacquX"/>
+<div class="absolute inset-x-0 bottom-0 p-4 translate-y-full group-hover:translate-y-0 transition-transform duration-500">
+<button class="w-full bg-primary text-surface py-4 font-label-md text-label-md uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-opacity">Quick Add — $45.00</button>
+</div>
+<div class="ingredient-reveal absolute inset-0 bg-primary/80 flex items-center justify-center p-8 opacity-0 transition-opacity duration-300 pointer-events-none">
+<div class="text-center">
+<h5 class="font-label-md text-label-md text-tertiary-fixed-dim mb-4 uppercase">Key Ingredients</h5>
+<p class="text-on-primary text-body-md italic">Proprietary Wildflower Extracts, Raw Forest Honey, Distilled Essence.</p>
+</div>
+</div>
+</div>
+<div class="text-center">
+<h4 class="font-headline-md text-headline-md text-primary mb-1">Forest Elixir</h4>
+<span class="font-label-sm text-label-sm text-secondary uppercase tracking-widest">Spiritual &amp; Mental Clarity</span>
+</div>
+</div>
+<!-- Product Card 6 -->
+<div class="botanical-card group">
+<div class="product-image-container relative aspect-[4/5] bg-secondary-container mb-6 overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="A stylized product shot of a dark brown glass jar of 'Root Vitality' salts. The jar has a copper screw-top lid. It sits on a bed of dry moss and river stones. The lighting is moody and organic, emphasizing the natural textures of the ingredients." src="https://lh3.googleusercontent.com/aida-public/AB6AXuD4ZK1la5veXKlx5LVP9UmPLEJ543abyZEcdBs1u5UlpQ6gSWOhemqQX46P9zqNVzJQqy2E5Te7C5KVWJoAnwL39SVQ6KxFujd-lqjBjlwhY781CN0h1_m1iff86uM9aLjeAkOM2sT1clzW8GqrQ-enSsZhroovKLlRO14_oIHkGj7sTXgjUTBQy3Vm9blubK8EJkaYoYd_f4caVy5rl7-vk8IbGtn6C7nOHL2zhbCDlIrsIjIx1rdALh-qtQOroBc5nzYGenO7uvbJ"/>
+<div class="absolute inset-x-0 bottom-0 p-4 translate-y-full group-hover:translate-y-0 transition-transform duration-500">
+<button class="w-full bg-primary text-surface py-4 font-label-md text-label-md uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-opacity">Quick Add — $30.00</button>
+</div>
+<div class="ingredient-reveal absolute inset-0 bg-primary/80 flex items-center justify-center p-8 opacity-0 transition-opacity duration-300 pointer-events-none">
+<div class="text-center">
+<h5 class="font-label-md text-label-md text-tertiary-fixed-dim mb-4 uppercase">Key Ingredients</h5>
+<p class="text-on-primary text-body-md italic">Epsom Salts, Pink Himalayan Sea Salt, Dried Rosemary, Juniper Berry Oil.</p>
+</div>
+</div>
+</div>
+<div class="text-center">
+<h4 class="font-headline-md text-headline-md text-primary mb-1">Root Vitality Salts</h4>
+<span class="font-label-sm text-label-sm text-secondary uppercase tracking-widest">Grounding Ritual Bath</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Brand Storytelling: Farm to Bottle -->
+<section class="w-full py-32 bg-primary-container relative overflow-hidden grain-overlay">
+<div class="absolute top-0 right-0 w-1/3 h-full opacity-10 pointer-events-none">
+<svg class="w-full h-full text-surface-container-low fill-current" viewbox="0 0 100 100">
+<path d="M50,0 C65,10 85,25 90,50 C95,75 75,90 50,100 C25,90 5,75 10,50 C15,25 35,10 50,0 Z"></path>
+</svg>
+</div>
+<div class="px-margin-desktop max-w-container-max mx-auto flex flex-col md:flex-row items-center gap-16 relative z-10">
+<div class="w-full md:w-1/2">
+<img class="w-full aspect-video object-cover rounded-none border border-on-primary-fixed-variant shadow-2xl" data-alt="A cinematic medium shot of a modern herbalist's hands carefully pruning a vibrant green medicinal herb in a lush, sun-drenched organic greenhouse. The background shows rows of diverse botanicals and artisanal wooden shelves filled with drying bundles. The image captures the 'farm-to-bottle' commitment with a grainy, film-like texture and rich, deep greens." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDMv-RKyn5jmem1fYaTDl2XkAmdhIFC5LHlTgcKuQ9-psJKheflU2-1TdWBXiQjRjNmfaV8Xo9LjXso0NfkuM-ik0JALpDaI-Uu0246N-msM6ruZDoHX4oV9H0OkqHhQaADQEZkQo_Ie3Zhu03QRIW8K0e4xd4dg-9m_EIRBjA5BhqPn1t4UDHOr4S4qPrZcBZR1pJuTYO9qbYLE3y6AWv3KMIl3h1cMmYcWR2voBlt7Pmm7Tofl_dREN5zjUhGWpTPWEIcYmvSBf2_"/>
+</div>
+<div class="w-full md:w-1/2 text-on-primary">
+<span class="font-label-md text-label-md text-tertiary-fixed-dim uppercase tracking-[0.3em] mb-4 block">Our Commitment</span>
+<h2 class="font-headline-xl text-headline-xl mb-8">The Farm-to-Bottle Journey</h2>
+<p class="font-body-lg text-body-lg text-on-primary-container opacity-90 mb-8 leading-relaxed">
+                        Every extract and essence in our alchemy begins its journey in the rich, volcanic soil of our regenerative organic farm. We harvest each plant at the precise peak of its potency, following moon cycles and seasonal rhythms as practiced for centuries.
+                    </p>
+<ul class="space-y-4 mb-10">
+<li class="flex items-center gap-4">
+<span class="material-symbols-outlined text-tertiary-fixed-dim" data-icon="eco">eco</span>
+<span class="font-label-md text-label-md uppercase tracking-wider">100% Certified Organic &amp; Wildcrafted</span>
+</li>
+<li class="flex items-center gap-4">
+<span class="material-symbols-outlined text-tertiary-fixed-dim" data-icon="science">science</span>
+<span class="font-label-md text-label-md uppercase tracking-wider">Third-Party Lab Tested for Purity</span>
+</li>
+<li class="flex items-center gap-4">
+<span class="material-symbols-outlined text-tertiary-fixed-dim" data-icon="history_edu">history_edu</span>
+<span class="font-label-md text-label-md uppercase tracking-wider">Ancient Extraction Methodologies</span>
+</li>
+</ul>
+<a class="inline-block border border-tertiary-fixed-dim text-tertiary-fixed-dim px-8 py-4 font-label-md text-label-md uppercase tracking-widest hover:bg-tertiary-fixed-dim hover:text-primary transition-all" href="#">
+                        Our Full Story
+                    </a>
+</div>
+</div>
+</section>
+<!-- Newsletter / Ritual Sign Up -->
+<section class="py-24 px-margin-desktop bg-surface text-center">
+<div class="max-w-2xl mx-auto">
+<span class="material-symbols-outlined text-primary text-4xl mb-6" data-icon="auto_awesome">auto_awesome</span>
+<h2 class="font-headline-lg text-headline-lg text-primary mb-4">Join the Alchemist's Circle</h2>
+<p class="font-body-md text-body-md text-secondary mb-10">
+                    Receive seasonal ritual guides, early access to artisanal releases, and invitations to our herbalism workshops.
+                </p>
+<form class="flex flex-col md:flex-row gap-0 max-w-lg mx-auto">
+<input class="flex-grow bg-surface-container-low border-secondary-container text-primary font-label-md text-label-md focus:ring-0 focus:border-primary px-6 py-4 placeholder:text-secondary-fixed-dim" placeholder="Email Address" type="email"/>
+<button class="bg-primary text-surface px-10 py-4 font-label-md text-label-md uppercase tracking-widest hover:bg-on-primary-container transition-all">Subscribe</button>
+</form>
+</div>
+</section>
+</main>
+<!-- Footer -->
+<footer class="w-full py-16 px-margin-desktop grid grid-cols-1 md:grid-cols-4 gap-gutter bg-primary-container border-t border-on-primary-fixed-variant">
+<div class="col-span-1 md:col-span-1">
+<h3 class="font-headline-md text-headline-md text-on-primary dark:text-primary-fixed uppercase tracking-widest mb-6">Nature's Alchemy</h3>
+<p class="font-body-md text-body-md text-on-primary-container opacity-80 mb-6">
+                Bridging the gap between ancestral plant wisdom and modern apothecary precision. 
+            </p>
+<div class="flex gap-4">
+<a class="text-on-primary-container hover:text-tertiary-fixed transition-colors" href="#"><span class="material-symbols-outlined">camera</span></a>
+<a class="text-on-primary-container hover:text-tertiary-fixed transition-colors" href="#"><span class="material-symbols-outlined">mail</span></a>
+<a class="text-on-primary-container hover:text-tertiary-fixed transition-colors" href="#"><span class="material-symbols-outlined">pin_drop</span></a>
+</div>
+</div>
+<div>
+<h4 class="font-label-md text-label-md text-tertiary-fixed uppercase mb-6">Collection</h4>
+<ul class="space-y-4">
+<li><a class="text-on-primary-container opacity-80 hover:opacity-100 hover:text-tertiary-fixed transition-all font-body-md text-body-md" href="#">Shop All</a></li>
+<li><a class="text-on-primary-container opacity-80 hover:opacity-100 hover:text-tertiary-fixed transition-all font-body-md text-body-md" href="#">Tinctures</a></li>
+<li><a class="text-on-primary-container opacity-80 hover:opacity-100 hover:text-tertiary-fixed transition-all font-body-md text-body-md" href="#">Botanical Rituals</a></li>
+<li><a class="text-on-primary-container opacity-80 hover:opacity-100 hover:text-tertiary-fixed transition-all font-body-md text-body-md" href="#">Limited Batches</a></li>
+</ul>
+</div>
+<div>
+<h4 class="font-label-md text-label-md text-tertiary-fixed uppercase mb-6">Customer Care</h4>
+<ul class="space-y-4">
+<li><a class="text-on-primary-container opacity-80 hover:opacity-100 hover:text-tertiary-fixed transition-all font-body-md text-body-md" href="#">Shipping &amp; Returns</a></li>
+<li><a class="text-on-primary-container opacity-80 hover:opacity-100 hover:text-tertiary-fixed transition-all font-body-md text-body-md" href="#">Wholesale</a></li>
+<li><a class="text-on-primary-container opacity-80 hover:opacity-100 hover:text-tertiary-fixed transition-all font-body-md text-body-md" href="#">Contact Us</a></li>
+<li><a class="text-on-primary-container opacity-80 hover:opacity-100 hover:text-tertiary-fixed transition-all font-body-md text-body-md" href="#">Privacy Policy</a></li>
+</ul>
+</div>
+<div>
+<h4 class="font-label-md text-label-md text-tertiary-fixed uppercase mb-6">Alchemy Journal</h4>
+<p class="font-body-md text-body-md text-on-primary-container opacity-80 mb-6">
+                Receive our monthly digest on herbal rituals and seasonal wellness.
+            </p>
+<div class="bg-surface/10 p-1 flex">
+<input class="bg-transparent border-none text-on-primary placeholder:text-on-primary-container/50 font-label-md text-label-md w-full focus:ring-0" placeholder="Join Rituals" type="text"/>
+<button class="text-tertiary-fixed px-2"><span class="material-symbols-outlined">arrow_forward</span></button>
+</div>
+</div>
+<div class="col-span-1 md:col-span-4 mt-16 pt-8 border-t border-on-primary-fixed-variant/20 text-center">
+<span class="font-body-md text-body-md text-on-primary-container opacity-60">
+                © 2024 Nature's Alchemy. Crafted with ancient wisdom and modern science.
+            </span>
+</div>
+</footer>
+<!-- Micro-interaction for page scroll -->
+<script>
+        window.addEventListener('scroll', () => {
+            const header = document.querySelector('header');
+            if (window.scrollY > 50) {
+                header.classList.add('shadow-md');
+                header.classList.add('bg-surface/95');
+                header.classList.remove('bg-surface');
+            } else {
+                header.classList.remove('shadow-md');
+                header.classList.remove('bg-surface/95');
+                header.classList.add('bg-surface');
+            }
+        });
+    </script>
+</body></html>

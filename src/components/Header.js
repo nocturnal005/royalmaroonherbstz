@@ -1,0 +1,154 @@
+import { concernFilters } from './FilterSidebar.js';
+
+export function Header() {
+  return `
+    <header class="sticky top-0 left-0 right-0 w-full z-50 flex justify-between items-center px-margin-desktop h-20 max-w-container-max mx-auto bg-surface dark:bg-surface-container border-b border-secondary-container transition-all duration-300">
+      <div class="flex items-center gap-8">
+        <a href="#" class="flex items-center focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 rounded" aria-label="Royal Maroon Herbs Home">
+          <img src="/images/brand/logo.png" alt="Royal Maroon Herbs Logo" class="h-20 w-auto object-contain" />
+        </a>
+        <nav class="hidden md:flex items-center gap-6" aria-label="Main Navigation">
+          <a class="font-label-md text-label-md text-primary font-bold border-b-2 border-tertiary-fixed-dim pb-1 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 rounded" href="/">Shop</a>
+          
+          <div class="relative">
+            <button id="desktop-wellness-btn" class="flex items-center gap-1 font-label-md text-label-md text-secondary hover:text-primary transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 rounded" aria-expanded="false" aria-haspopup="true">
+              Health and Wellness
+              <span class="material-symbols-outlined text-sm transition-transform duration-200" id="desktop-wellness-icon">expand_more</span>
+            </button>
+            <div id="desktop-wellness-menu" class="absolute left-0 top-full mt-2 w-56 bg-surface/95 backdrop-blur-md border border-surface/20 shadow-lg rounded-xl flex-col hidden z-50 overflow-hidden">
+              ${concernFilters.filter(f => f[0] !== 'all').map(([value, label]) => `
+                <a href="/?need=${value}#collection" class="block px-4 py-3 font-label-sm text-label-sm text-secondary hover:text-primary hover:bg-surface-variant transition-colors">${label}</a>
+              `).join('')}
+            </div>
+          </div>
+
+          <a class="font-label-md text-label-md text-secondary hover:text-primary transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 rounded" href="#">Learn</a>
+          <a class="font-label-md text-label-md text-secondary hover:text-primary transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 rounded" href="#">About Us</a>
+          <a class="font-label-md text-label-md text-secondary hover:text-primary transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 rounded" href="#">Contact</a>
+        </nav>
+      </div>
+      <div class="flex items-center gap-6">
+        <button class="text-primary hover:text-tertiary-fixed-variant transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 rounded p-1" aria-label="Search">
+          <span class="material-symbols-outlined" data-icon="search">search</span>
+        </button>
+        <button class="text-primary hover:text-tertiary-fixed-variant transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 rounded p-1" aria-label="Account">
+          <span class="material-symbols-outlined" data-icon="person">person</span>
+        </button>
+        <button id="cart-btn" class="text-primary hover:text-tertiary-fixed-variant transition-colors relative focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 rounded p-1" aria-label="Shopping Cart">
+          <span class="material-symbols-outlined" data-icon="shopping_cart">shopping_cart</span>
+          <span id="cart-badge" class="absolute -top-2 -right-2 bg-tertiary-container text-on-tertiary-container text-[10px] w-4 h-4 flex items-center justify-center rounded-full font-bold">0</span>
+        </button>
+        <!-- Mobile Hamburger Menu Button -->
+        <button id="mobile-menu-toggle" class="md:hidden text-primary hover:text-tertiary-fixed-variant transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 rounded p-1" aria-label="Open Navigation Menu" aria-expanded="false">
+          <span class="material-symbols-outlined">menu</span>
+        </button>
+      </div>
+
+      <!-- Mobile Navigation Drawer -->
+      <div id="mobile-menu" class="hidden absolute top-20 left-0 right-0 bg-surface border-b border-secondary-container p-6 flex flex-col gap-4 shadow-lg z-40 transition-all duration-300">
+        <nav class="flex flex-col gap-4" aria-label="Mobile Navigation">
+          <a class="font-label-md text-label-md text-primary font-bold focus:outline-none focus:ring-2 focus:ring-primary p-2" href="/">Shop</a>
+          
+          <div>
+            <button id="mobile-wellness-btn" class="w-full flex items-center justify-between font-label-md text-label-md text-secondary hover:text-primary transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-primary p-2">
+              Health and Wellness
+              <span class="material-symbols-outlined text-sm transition-transform duration-200" id="mobile-wellness-icon">expand_more</span>
+            </button>
+            <div id="mobile-wellness-menu" class="hidden flex-col pl-4 mt-2 border-l-2 border-surface-variant">
+              ${concernFilters.filter(f => f[0] !== 'all').map(([value, label]) => `
+                <a href="/?need=${value}#collection" class="block p-2 font-label-sm text-label-sm text-secondary hover:text-primary transition-colors">${label}</a>
+              `).join('')}
+            </div>
+          </div>
+
+          <a class="font-label-md text-label-md text-secondary hover:text-primary transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-primary p-2" href="#">Learn</a>
+          <a class="font-label-md text-label-md text-secondary hover:text-primary transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-primary p-2" href="#">About Us</a>
+          <a class="font-label-md text-label-md text-secondary hover:text-primary transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-primary p-2" href="#">Contact</a>
+        </nav>
+      </div>
+    </header>
+  `;
+}
+
+export function setupHeaderScrollListener() {
+  const header = document.querySelector('header');
+  if (!header) return;
+
+  // Visual feedback: Add shadow/opacity on scroll
+  window.addEventListener('scroll', () => {
+    if (window.scrollY > 20) {
+      header.classList.add('shadow-md');
+      header.classList.add('bg-surface/95');
+      header.classList.remove('bg-surface');
+    } else {
+      header.classList.remove('shadow-md');
+      header.classList.remove('bg-surface/95');
+      header.classList.add('bg-surface');
+    }
+  });
+
+  // Mobile menu toggle logic
+  const toggleBtn = document.getElementById('mobile-menu-toggle');
+  const mobileMenu = document.getElementById('mobile-menu');
+  if (toggleBtn && mobileMenu) {
+    toggleBtn.addEventListener('click', () => {
+      const isExpanded = toggleBtn.getAttribute('aria-expanded') === 'true';
+      toggleBtn.setAttribute('aria-expanded', !isExpanded);
+      toggleBtn.innerHTML = isExpanded 
+        ? '<span class="material-symbols-outlined">menu</span>' 
+        : '<span class="material-symbols-outlined">close</span>';
+      
+      if (isExpanded) {
+        mobileMenu.classList.add('hidden');
+      } else {
+        mobileMenu.classList.remove('hidden');
+      }
+    });
+
+    // Close mobile menu on window resize if switching to desktop
+    window.addEventListener('resize', () => {
+      if (window.innerWidth >= 768) { // md breakpoint matches Tailwind
+        if (!mobileMenu.classList.contains('hidden')) {
+          mobileMenu.classList.add('hidden');
+          toggleBtn.setAttribute('aria-expanded', 'false');
+          toggleBtn.innerHTML = '<span class="material-symbols-outlined">menu</span>';
+        }
+      }
+    });
+  }
+
+  // Desktop Wellness Dropdown Logic
+  const desktopBtn = document.getElementById('desktop-wellness-btn');
+  const desktopMenu = document.getElementById('desktop-wellness-menu');
+  const desktopIcon = document.getElementById('desktop-wellness-icon');
+
+  if (desktopBtn && desktopMenu) {
+    desktopBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      desktopMenu.classList.toggle('hidden');
+      desktopMenu.classList.toggle('flex');
+      desktopIcon.classList.toggle('rotate-180');
+    });
+
+    document.addEventListener('click', (e) => {
+      if (!desktopBtn.contains(e.target) && !desktopMenu.contains(e.target)) {
+        desktopMenu.classList.add('hidden');
+        desktopMenu.classList.remove('flex');
+        desktopIcon.classList.remove('rotate-180');
+      }
+    });
+  }
+
+  // Mobile Wellness Dropdown Logic
+  const mobileWellnessBtn = document.getElementById('mobile-wellness-btn');
+  const mobileWellnessMenu = document.getElementById('mobile-wellness-menu');
+  const mobileWellnessIcon = document.getElementById('mobile-wellness-icon');
+
+  if (mobileWellnessBtn && mobileWellnessMenu) {
+    mobileWellnessBtn.addEventListener('click', () => {
+      mobileWellnessMenu.classList.toggle('hidden');
+      mobileWellnessMenu.classList.toggle('flex');
+      mobileWellnessIcon.classList.toggle('rotate-180');
+    });
+  }
+}

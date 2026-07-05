@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Royal Maroon Herbs - Storefront & Admin Previews</title>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0c0f0a;
+      --surface: #141912;
+      --primary: #8cb885;
+      --text: #e2e8e0;
+      --text-muted: #9ba796;
+      --border: #232d1e;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      font-family: 'Outfit', sans-serif;
+      padding: 3rem 1.5rem;
+      line-height: 1.6;
+    }
+
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 4rem;
+    }
+
+    header h1 {
+      font-size: 3rem;
+      font-weight: 800;
+      color: var(--primary);
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      margin-bottom: 0.5rem;
+    }
+
+    header p {
+      color: var(--text-muted);
+      font-size: 1.2rem;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .section-title {
+      font-size: 1.8rem;
+      font-weight: 600;
+      color: var(--primary);
+      margin: 3rem 0 1.5rem;
+      border-bottom: 2px solid var(--border);
+      padding-bottom: 0.5rem;
+      letter-spacing: 0.05em;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+      gap: 2rem;
+    }
+
+    @media (max-width: 768px) {
+      .grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      cursor: pointer;
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 20px rgba(0,0,0,0.4);
+    }
+
+    .card-img-wrapper {
+      position: relative;
+      width: 100%;
+      height: 280px;
+      background: #191f16;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    .card img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: top center;
+      transition: transform 0.5s ease;
+    }
+
+    .card:hover img {
+      transform: scale(1.03);
+    }
+
+    .card-info {
+      padding: 1.25rem;
+      border-top: 1px solid var(--border);
+    }
+
+    .card-info h3 {
+      font-size: 1.15rem;
+      font-weight: 600;
+      margin-bottom: 0.25rem;
+    }
+
+    .card-info p {
+      color: var(--text-muted);
+      font-size: 0.9rem;
+    }
+
+    /* Modal Lightbox */
+    .lightbox {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(5, 7, 4, 0.95);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+    }
+
+    .lightbox.active {
+      display: flex;
+    }
+
+    .lightbox-content {
+      position: relative;
+      max-width: 90%;
+      max-height: 90%;
+      border-radius: 8px;
+      overflow: auto;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    }
+
+    .lightbox img {
+      display: block;
+      width: 100%;
+      height: auto;
+      max-height: 85vh;
+      object-fit: contain;
+    }
+
+    .lightbox-close {
+      position: absolute;
+      top: 1rem;
+      right: 1.5rem;
+      font-size: 2.5rem;
+      color: var(--text-muted);
+      cursor: pointer;
+      font-weight: 300;
+      transition: color 0.2s;
+    }
+
+    .lightbox-close:hover {
+      color: var(--primary);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <header>
+      <h1>Royal Maroon Herbs</h1>
+      <p>Visual previews of the storefront and administrative portals. Click on any card to view the full resolution capture.</p>
+    </header>
+
+    <div class="section-title">Storefront Customer Views</div>
+    <div class="grid">
+      
+      <div class="card" onclick="openLightbox('./previews/1_homepage_desktop.png')">
+        <div class="card-img-wrapper">
+          <img src="./previews/1_homepage_desktop.png" alt="Homepage Desktop View">
+        </div>
+        <div class="card-info">
+          <h3>1. Homepage Desktop</h3>
+          <p>Full width storefront view for desktop browsers.</p>
+        </div>
+      </div>
+
+      <div class="card" onclick="openLightbox('./previews/2_homepage_mobile.png')">
+        <div class="card-img-wrapper">
+          <img src="./previews/2_homepage_mobile.png" alt="Homepage Mobile View">
+        </div>
+        <div class="card-info">
+          <h3>2. Homepage Mobile</h3>
+          <p>Optimized viewport sizing for mobile handsets.</p>
+        </div>
+      </div>
+
+      <div class="card" onclick="openLightbox('./previews/3_product_listing.png')">
+        <div class="card-img-wrapper">
+          <img src="./previews/3_product_listing.png" alt="Product Grid">
+        </div>
+        <div class="card-info">
+          <h3>3. Product Grid</h3>
+          <p>Dynamic filter settings and wellness category cards.</p>
+        </div>
+      </div>
+
+      <div class="card" onclick="openLightbox('./previews/4_product_detail_modal.png')">
+        <div class="card-img-wrapper">
+          <img src="./previews/4_product_detail_modal.png" alt="Product Detail Modal">
+        </div>
+        <div class="card-info">
+          <h3>4. Product Detail Modal</h3>
+          <p>Compliance fields details and warning notices.</p>
+        </div>
+      </div>
+
+      <div class="card" onclick="openLightbox('./previews/5_cart_drawer.png')">
+        <div class="card-img-wrapper">
+          <img src="./previews/5_cart_drawer.png" alt="Cart Drawer">
+        </div>
+        <div class="card-info">
+          <h3>5. Cart Drawer</h3>
+          <p>Interactive item modifications and calculation summaries.</p>
+        </div>
+      </div>
+
+      <div class="card" onclick="openLightbox('./previews/6_checkout_flow.png')">
+        <div class="card-img-wrapper">
+          <img src="./previews/6_checkout_flow.png" alt="Checkout Wizard">
+        </div>
+        <div class="card-info">
+          <h3>6. Checkout Wizard</h3>
+          <p>Tanzanian phone format checks and regional delivery fees.</p>
+        </div>
+      </div>
+
+      <div class="card" onclick="openLightbox('./previews/7_payment_waiting.png')">
+        <div class="card-img-wrapper">
+          <img src="./previews/7_payment_waiting.png" alt="USSD Payment Waiting">
+        </div>
+        <div class="card-info">
+          <h3>7. Payment Waiting</h3>
+          <p>USSD PIN prompts and payment status checks.</p>
+        </div>
+      </div>
+
+      <div class="card" onclick="openLightbox('./previews/11_mobile_navigation.png')">
+        <div class="card-img-wrapper">
+          <img src="./previews/11_mobile_navigation.png" alt="Mobile Navigation Menu">
+        </div>
+        <div class="card-info">
+          <h3>8. Mobile Navigation Drawer</h3>
+          <p>Slide-down hamburger mobile menu navigation links.</p>
+        </div>
+      </div>
+
+      <div class="card" onclick="openLightbox('./previews/12_tablet_view.png')">
+        <div class="card-img-wrapper">
+          <img src="./previews/12_tablet_view.png" alt="Tablet View">
+        </div>
+        <div class="card-info">
+          <h3>9. Responsive Tablet View</h3>
+          <p>Fluid adaptive layouts for medium device screens.</p>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="section-title">Admin Dashboard Views</div>
+    <div class="grid">
+
+      <div class="card" onclick="openLightbox('./previews/8_admin_login.png')">
+        <div class="card-img-wrapper">
+          <img src="./previews/8_admin_login.png" alt="Admin Login Page">
+        </div>
+        <div class="card-info">
+          <h3>10. Admin Login Page</h3>
+          <p>Secure login with CSRF token authentication inputs.</p>
+        </div>
+      </div>
+
+      <div class="card" onclick="openLightbox('./previews/9_admin_dashboard_products.png')">
+        <div class="card-img-wrapper">
+          <img src="./previews/9_admin_dashboard_products.png" alt="Admin Products Page">
+        </div>
+        <div class="card-info">
+          <h3>11. Admin Products Dashboard</h3>
+          <p>Product creation form, state controls, and compliance scans.</p>
+        </div>
+      </div>
+
+      <div class="card" onclick="openLightbox('./previews/10_admin_orders.png')">
+        <div class="card-img-wrapper">
+          <img src="./previews/10_admin_orders.png" alt="Admin Orders Page">
+        </div>
+        <div class="card-info">
+          <h3>12. Admin Orders Log</h3>
+          <p>Order status indicators and payment reference records.</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Lightbox Lightbox Modal -->
+  <div id="lightbox" class="lightbox" onclick="closeLightbox()">
+    <span class="lightbox-close">&times;</span>
+    <div class="lightbox-content" onclick="event.stopPropagation()">
+      <img id="lightbox-img" src="" alt="Full resolution preview">
+    </div>
+  </div>
+
+  <script>
+    function openLightbox(src) {
+      document.getElementById('lightbox-img').src = src;
+      document.getElementById('lightbox').classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeLightbox() {
+      document.getElementById('lightbox').classList.remove('active');
+      document.body.style.overflow = 'auto';
+    }
+
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') {
+        closeLightbox();
+      }
+    });
+  </script>
+</body>
+</html>

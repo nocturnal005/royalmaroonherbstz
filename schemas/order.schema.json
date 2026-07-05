@@ -1,0 +1,116 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Order",
+  "description": "Validation representation of an Order resource. Money values are represented as integer TZS.",
+  "type": "object",
+  "required": [
+    "orderId",
+    "customer",
+    "deliveryRegion",
+    "shippingFee",
+    "total",
+    "paymentMethod",
+    "orderStatus",
+    "paymentStatus",
+    "fulfilmentStatus",
+    "items",
+    "createdAt",
+    "updatedAt"
+  ],
+  "properties": {
+    "orderId": {
+      "type": "string",
+      "pattern": "^ord_[a-zA-Z0-9_-]+$"
+    },
+    "customer": {
+      "type": "object",
+      "required": ["name", "phone", "email"],
+      "properties": {
+        "name": { "type": "string" },
+        "phone": { "type": "string", "pattern": "^\\+255[67][0-9]{8}$" },
+        "email": { "type": "string", "format": "email" }
+      }
+    },
+    "deliveryRegion": {
+      "type": "string",
+      "enum": ["dar", "arusha", "dodoma", "mwanza", "kilimanjaro", "mbeya", "morogoro", "tanga", "zanzibar"]
+    },
+    "deliveryNotes": {
+      "type": "string"
+    },
+    "shippingFee": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Integer Tanzanian Shilling shipping fee."
+    },
+    "total": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Integer Tanzanian Shilling grand total calculated by backend."
+    },
+    "paymentMethod": {
+      "type": "string",
+      "enum": ["mpesa", "tigo", "airtel", "card"]
+    },
+    "orderStatus": {
+      "type": "string",
+      "enum": [
+        "Draft",
+        "AwaitingPayment",
+        "Paid",
+        "PaymentFailed",
+        "Cancelled",
+        "FulfilmentPending",
+        "Dispatched",
+        "Delivered",
+        "Refunded"
+      ]
+    },
+    "paymentStatus": {
+      "type": "string",
+      "enum": [
+        "Draft",
+        "AwaitingPayment",
+        "Paid",
+        "PaymentFailed",
+        "Cancelled",
+        "Refunded"
+      ]
+    },
+    "fulfilmentStatus": {
+      "type": "string",
+      "enum": [
+        "Pending",
+        "FulfilmentPending",
+        "Dispatched",
+        "Delivered"
+      ]
+    },
+    "items": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["productId", "name", "quantity", "unitPrice"],
+        "properties": {
+          "productId": { "type": "string" },
+          "name": { "type": "string" },
+          "quantity": { "type": "integer", "minimum": 1 },
+          "unitPrice": {
+            "type": "integer",
+            "minimum": 0,
+            "description": "Integer Tanzanian Shilling unit price."
+          }
+        }
+      },
+      "minItems": 1
+    },
+    "createdAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "updatedAt": {
+      "type": "string",
+      "format": "date-time"
+    }
+  }
+}

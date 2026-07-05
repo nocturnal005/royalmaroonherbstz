@@ -1,0 +1,13 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "ShippingEstimatePayload",
+  "description": "Validation payload to retrieve shipping costs and delivery timelines.",
+  "type": "object",
+  "required": ["deliveryRegion"],
+  "properties": {
+    "deliveryRegion": {
+      "type": "string",
+      "enum": ["dar", "arusha", "dodoma", "mwanza", "kilimanjaro", "mbeya", "morogoro", "tanga", "zanzibar"]
+    }
+  }
+}

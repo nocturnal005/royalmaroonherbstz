@@ -1,0 +1,36 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "AdminPayloads",
+  "description": "Validation schemas for administrative operations (login and product updates).",
+  "type": "object",
+  "properties": {
+    "loginRequest": {
+      "type": "object",
+      "required": ["username", "password"],
+      "properties": {
+        "username": { "type": "string", "minLength": 4 },
+        "password": { "type": "string", "minLength": 8 }
+      }
+    },
+    "loginResponse": {
+      "type": "object",
+      "required": ["success", "token"],
+      "properties": {
+        "success": { "type": "boolean", "const": true },
+        "token": { "type": "string" }
+      }
+    },
+    "productComplianceStatus": {
+      "type": "object",
+      "required": ["isValidForPublishing", "missingFields"],
+      "properties": {
+        "isValidForPublishing": { "type": "boolean" },
+        "missingFields": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "List of missing compliance fields required before publication."
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,54 @@
+{
+  "Subagents": [
+    {
+      "TypeName": "research",
+      "Role": "Image OCR Specialist 1",
+      "Prompt": "Call `view_file` on the following images in the folder `public/images/products/royal-herbs`. Look at each image and extract the main product name from the label in Title Case. Exclude brand 'Royal Maroon Herbs' and capsule counts/weights. Return ONLY a JSON object mapping filename to product name:\nZOZ_1934.JPG\nZOZ_1937.JPG\nZOZ_1939.JPG\nZOZ_1941.JPG\nZOZ_1944.JPG\nZOZ_1946.JPG\nZOZ_1950.JPG\nZOZ_1952.JPG\nZOZ_1954.JPG\nZOZ_1956.JPG\nZOZ_1957.JPG\nZOZ_1959.JPG\nZOZ_1961.JPG\nZOZ_1963.JPG\nZOZ_1965.JPG"
+    },
+    {
+      "TypeName": "research",
+      "Role": "Image OCR Specialist 2",
+      "Prompt": "Call `view_file` on the following images in the folder `public/images/products/royal-herbs`. Look at each image and extract the main product name from the label in Title Case. Exclude brand 'Royal Maroon Herbs' and capsule counts/weights. Return ONLY a JSON object mapping filename to product name:\nZOZ_1967.JPG\nZOZ_1970.JPG\nZOZ_1971.JPG\nZOZ_1974.JPG\nZOZ_1984.JPG\nZOZ_1986.JPG\nZOZ_1987.JPG\nZOZ_1989.JPG\nZOZ_1994.JPG\nZOZ_1995.JPG\nZOZ_1998.JPG\nZOZ_1999.JPG\nZOZ_2002.JPG\nZOZ_2004.JPG\nZOZ_2007.JPG"
+    },
+    {
+      "TypeName": "research",
+      "Role": "Image OCR Specialist 3",
+      "Prompt": "Call `view_file` on the following images in the folder `public/images/products/royal-herbs`. Look at each image and extract the main product name from the label in Title Case. Exclude brand 'Royal Maroon Herbs' and capsule counts/weights. Return ONLY a JSON object mapping filename to product name:\nZOZ_2010.JPG\nZOZ_2011.JPG\nZOZ_2013.JPG\nZOZ_2016.JPG\nZOZ_2018.JPG\nZOZ_2019.JPG\nZOZ_2020.JPG\nZOZ_2022.JPG\nZOZ_2024.JPG\nZOZ_2026.JPG\nZOZ_2028.JPG\nZOZ_2031.JPG\nZOZ_2032.JPG\nZOZ_2035.JPG\nZOZ_2037.JPG"
+    },
+    {
+      "TypeName": "research",
+      "Role": "Image OCR Specialist 4",
+      "Prompt": "Call `view_file` on the following images in the folder `public/images/products/royal-herbs`. Look at each image and extract the main product name from the label in Title Case. Exclude brand 'Royal Maroon Herbs' and capsule counts/weights. Return ONLY a JSON object mapping filename to product name:\nZOZ_2040.JPG\nZOZ_2043.JPG\nZOZ_2045.JPG\nZOZ_2046.JPG\nZOZ_2048.JPG\nZOZ_2050.JPG\nZOZ_2052.JPG\nZOZ_2054.JPG\nZOZ_2059.JPG\nZOZ_2066.JPG\nZOZ_2075.JPG\nZOZ_2077.JPG\nZOZ_2079.JPG\nZOZ_2080.JPG\nZOZ_2083.JPG"
+    },
+    {
+      "TypeName": "research",
+      "Role": "Image OCR Specialist 5",
+      "Prompt": "Call `view_file` on the following images in the folder `public/images/products/royal-herbs`. Look at each image and extract the main product name from the label in Title Case. Exclude brand 'Royal Maroon Herbs' and capsule counts/weights. Return ONLY a JSON object mapping filename to product name:\nZOZ_2084.JPG\nZOZ_2086.JPG\nZOZ_2088.JPG\nZOZ_2092.JPG\nZOZ_2096.JPG\nZOZ_2100.JPG\nZOZ_2106.JPG\nZOZ_2108.JPG\nZOZ_2112.JPG\nZOZ_2125.JPG\nZOZ_2130.JPG\nZOZ_2134.JPG\nZOZ_2137.JPG\nZOZ_2142.JPG\nZOZ_2144.JPG"
+    },
+    {
+      "TypeName": "research",
+      "Role": "Image OCR Specialist 6",
+      "Prompt": "Call `view_file` on the following images in the folder `public/images/products/royal-herbs`. Look at each image and extract the main product name from the label in Title Case. Exclude brand 'Royal Maroon Herbs' and capsule counts/weights. Return ONLY a JSON object mapping filename to product name:\nZOZ_2147.JPG\nZOZ_2148.JPG\nZOZ_2149.JPG\nZOZ_2151.JPG\nZOZ_2154.JPG\nZOZ_2156.JPG\nZOZ_2159.JPG\nZOZ_2160.JPG\nZOZ_2162.JPG\nZOZ_2171.JPG\nZOZ_2174.JPG\nZOZ_2176.JPG\nZOZ_2178.JPG\nZOZ_2180.JPG\nZOZ_2185.JPG"
+    },
+    {
+      "TypeName": "research",
+      "Role": "Image OCR Specialist 7",
+      "Prompt": "Call `view_file` on the following images in the folder `public/images/products/royal-herbs`. Look at each image and extract the main product name from the label in Title Case. Exclude brand 'Royal Maroon Herbs' and capsule counts/weights. Return ONLY a JSON object mapping filename to product name:\nZOZ_2188.JPG\nZOZ_2190.JPG\nZOZ_2192.JPG\nZOZ_2194.JPG\nZOZ_2200.JPG\nZOZ_2206.JPG\nZOZ_2208.JPG\nZOZ_2211.JPG\nZOZ_2212.JPG\nZOZ_2213.JPG\nZOZ_2215.JPG\nZOZ_2216.JPG\nZOZ_2221.JPG\nZOZ_2223.JPG\nZOZ_2226.JPG"
+    },
+    {
+      "TypeName": "research",
+      "Role": "Image OCR Specialist 8",
+      "Prompt": "Call `view_file` on the following images in the folder `public/images/products/royal-herbs`. Look at each image and extract the main product name from the label in Title Case. Exclude brand 'Royal Maroon Herbs' and capsule counts/weights. Return ONLY a JSON object mapping filename to product name:\nZOZ_2228.JPG\nZOZ_2234.JPG\nZOZ_2237.JPG\nZOZ_2241.JPG\nZOZ_2246.JPG\nZOZ_2249.JPG\nZOZ_2250.JPG\nZOZ_2252.JPG\nZOZ_2254.JPG\nZOZ_2257.JPG\nZOZ_2260.JPG\nZOZ_2878.JPG\nZOZ_2881.JPG\nZOZ_2883.JPG\nZOZ_2885.JPG"
+    },
+    {
+      "TypeName": "research",
+      "Role": "Image OCR Specialist 9",
+      "Prompt": "Call `view_file` on the following images in the folder `public/images/products/royal-herbs`. Look at each image and extract the main product name from the label in Title Case. Exclude brand 'Royal Maroon Herbs' and capsule counts/weights. Return ONLY a JSON object mapping filename to product name:\nZOZ_2891.JPG\nZOZ_2892.JPG\nZOZ_2896.JPG\nZOZ_2900.JPG\nZOZ_2904.JPG\nZOZ_2906.JPG\nZOZ_2909.JPG\nZOZ_2910.JPG\nZOZ_2913.JPG\nZOZ_2922.JPG\nZOZ_2925.JPG\nZOZ_2928.JPG\nZOZ_2932.JPG\nZOZ_2933.JPG\nZOZ_2943.JPG"
+    },
+    {
+      "TypeName": "research",
+      "Role": "Image OCR Specialist 10",
+      "Prompt": "Call `view_file` on the following images in the folder `public/images/products/royal-herbs`. Look at each image and extract the main product name from the label in Title Case. Exclude brand 'Royal Maroon Herbs' and capsule counts/weights. Return ONLY a JSON object mapping filename to product name:\nZOZ_2947.JPG"
+    }
+  ]
+}

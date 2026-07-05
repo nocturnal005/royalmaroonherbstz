@@ -1,0 +1,146 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Product",
+  "description": "Standardized schema for compliant wellness products. In admin publishing flows, a product must not have isPublished: true unless all required compliance fields are present and non-empty. Use 'Not Applicable' or 'None' if appropriate.",
+  "type": "object",
+  "required": [
+    "id",
+    "name",
+    "category",
+    "format",
+    "concern",
+    "price",
+    "currency",
+    "image",
+    "imageAlt",
+    "shortDescription",
+    "keyIngredients",
+    "fullIngredients",
+    "usageInstructions",
+    "servingGuidance",
+    "warnings",
+    "contraindications",
+    "allergyWarning",
+    "storageInstructions",
+    "healthDisclaimer",
+    "suitableFor",
+    "notSuitableFor",
+    "stockStatus",
+    "isPublished",
+    "createdAt",
+    "updatedAt"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z0-9-]+$"
+    },
+    "name": {
+      "type": "string",
+      "minLength": 3
+    },
+    "category": {
+      "type": "string"
+    },
+    "format": {
+      "type": "string"
+    },
+    "concern": {
+      "type": "string"
+    },
+    "price": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Integer price value in Tanzanian Shillings (TZS)."
+    },
+    "currency": {
+      "type": "string",
+      "const": "TZS"
+    },
+    "image": {
+      "type": "string",
+      "description": "Relative URL path to the product image asset."
+    },
+    "imageAlt": {
+      "type": "string",
+      "minLength": 5
+    },
+    "shortDescription": {
+      "type": "string",
+      "minLength": 10
+    },
+    "keyIngredients": {
+      "type": "array",
+      "items": { "type": "string" },
+      "minItems": 1
+    },
+    "fullIngredients": {
+      "type": "array",
+      "items": { "type": "string" },
+      "minItems": 1,
+      "description": "Compliance: Complete botanical and herbal ingredients list."
+    },
+    "usageInstructions": {
+      "type": "string",
+      "minLength": 5,
+      "description": "Compliance: Detailed step-by-step product usage instructions."
+    },
+    "servingGuidance": {
+      "type": "string",
+      "minLength": 5,
+      "description": "Compliance: Public-facing serving guidelines (dosages phrasing avoided)."
+    },
+    "warnings": {
+      "type": "array",
+      "items": { "type": "string" },
+      "minItems": 1,
+      "description": "Compliance: Warning labels regarding interactions or usage limits."
+    },
+    "contraindications": {
+      "type": "array",
+      "items": { "type": "string" },
+      "minItems": 1,
+      "description": "Compliance: Specific medical scenarios where use is contraindicated."
+    },
+    "allergyWarning": {
+      "type": "string",
+      "minLength": 2,
+      "description": "Compliance: Critical allergy information (e.g. facility exposure warnings)."
+    },
+    "storageInstructions": {
+      "type": "string",
+      "minLength": 5,
+      "description": "Compliance: Required storage conditions for stability."
+    },
+    "healthDisclaimer": {
+      "type": "string",
+      "minLength": 10,
+      "description": "Compliance: Required regulatory health disclaimer."
+    },
+    "suitableFor": {
+      "type": "array",
+      "items": { "type": "string" },
+      "minItems": 1
+    },
+    "notSuitableFor": {
+      "type": "array",
+      "items": { "type": "string" },
+      "minItems": 1
+    },
+    "stockStatus": {
+      "type": "string",
+      "enum": ["in_stock", "out_of_stock", "low_stock"]
+    },
+    "isPublished": {
+      "type": "boolean"
+    },
+    "createdAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "updatedAt": {
+      "type": "string",
+      "format": "date-time"
+    }
+  }
+}

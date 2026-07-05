@@ -1,0 +1,29 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "CartPayload",
+  "description": "Schema for validated cart payloads. Quantities and product configurations are checked against database records.",
+  "type": "object",
+  "required": ["items"],
+  "properties": {
+    "items": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["productId", "quantity"],
+        "properties": {
+          "productId": {
+            "type": "string"
+          },
+          "quantity": {
+            "type": "integer",
+            "minimum": 1
+          }
+        }
+      }
+    },
+    "deliveryRegion": {
+      "type": "string",
+      "enum": ["dar", "arusha", "dodoma", "mwanza", "kilimanjaro", "mbeya", "morogoro", "tanga", "zanzibar"]
+    }
+  }
+}

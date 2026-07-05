@@ -1,0 +1,43 @@
+{
+  "name": "royal-maroon-herbs-ecommerce",
+  "version": "1.0.0",
+  "description": "Royal Maroon Herbs Full-Stack E-Commerce Website",
+  "main": "server/index.js",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "server:migrate": "node server/db/migrate.js",
+    "server:seed": "node server/db/seed.js",
+    "server:dev": "node server/index.js",
+    "server:test:manual": "node server/utils/testManual.js",
+    "server:create-admin": "node server/db/createAdmin.js",
+    "server:test:stage11": "node server/utils/testManual11.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "devDependencies": {
+    "autoprefixer": "^10.4.19",
+    "postcss": "^8.4.38",
+    "tailwindcss": "^3.4.3",
+    "vite": "^5.2.11"
+  },
+  "dependencies": {
+    "ajv": "^8.20.0",
+    "ajv-formats": "^3.0.1",
+    "bcryptjs": "^3.0.3",
+    "better-sqlite3": "^12.11.1",
+    "cookie-parser": "^1.4.7",
+    "cors": "^2.8.6",
+    "dotenv": "^17.4.2",
+    "exifr": "^7.1.3",
+    "express": "^5.2.1",
+    "express-rate-limit": "^8.5.2",
+    "helmet": "^8.2.0",
+    "jsonwebtoken": "^9.0.3",
+    "puppeteer-core": "^25.2.1",
+    "tesseract.js": "^7.0.0"
+  }
+}

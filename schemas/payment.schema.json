@@ -1,0 +1,46 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "PaymentPayloads",
+  "description": "Validation schemas for payment initiation and status feedback. Money values are represented as integer TZS.",
+  "type": "object",
+  "properties": {
+    "initiationRequest": {
+      "type": "object",
+      "required": ["checkoutSessionId", "paymentMethod", "amount", "customerPhone"],
+      "properties": {
+        "checkoutSessionId": {
+          "type": "string"
+        },
+        "paymentMethod": {
+          "type": "string",
+          "enum": ["mpesa", "tigo", "airtel", "card"]
+        },
+        "amount": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "Integer amount in TZS."
+        },
+        "customerPhone": {
+          "type": "string",
+          "pattern": "^\\+255[67][0-9]{8}$"
+        }
+      }
+    },
+    "initiationResponse": {
+      "type": "object",
+      "required": ["success", "data"],
+      "properties": {
+        "success": { "type": "boolean", "const": true },
+        "data": {
+          "type": "object",
+          "required": ["paymentReference", "paymentStatus", "customerMessage"],
+          "properties": {
+            "paymentReference": { "type": "string" },
+            "paymentStatus": { "type": "string", "enum": ["pending", "success", "failed"] },
+            "customerMessage": { "type": "string" }
+          }
+        }
+      }
+    }
+  }
+}
