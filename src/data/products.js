@@ -315,4 +315,37 @@ function makeProduct(item, index) {
   };
 }
 
-export const products = catalog.map(makeProduct);
+// Clean the catalog before building products:
+// 1) Correct the `format` for items whose name makes their true category
+//    obvious (the "New Arrivals" batch was all tagged "powders", so e.g.
+//    "Stinging Nettle Capsules" was landing under Powder instead of Capsules).
+// 2) Remove repeated products — keep the first occurrence of each name
+//    (case-insensitive), which drops the duplicated core block and the
+//    repeated New Arrivals re-shoots.
+// Products whose true format isn't inferable from the name (the photo/product
+// differs from the listing text). Keyed by normalized name.
+const FORMAT_OVERRIDES = {
+  'catuaba bark': 'capsules'
+};
+
+function correctFormat(item) {
+  const [name] = item;
+  const copy = [...item];
+  const key = name.toLowerCase().replace(/\s+/g, ' ').trim();
+  if (FORMAT_OVERRIDES[key]) copy[2] = FORMAT_OVERRIDES[key];
+  else if (/capsule/i.test(name)) copy[2] = 'capsules';
+  else if (/\boils?\b/i.test(name)) copy[2] = 'oils';
+  return copy;
+}
+
+const seenNames = new Set();
+const cleanedCatalog = catalog
+  .map(correctFormat)
+  .filter((item) => {
+    const key = item[0].toLowerCase().replace(/\s+/g, ' ').trim();
+    if (seenNames.has(key)) return false;
+    seenNames.add(key);
+    return true;
+  });
+
+export const products = cleanedCatalog.map(makeProduct);

@@ -7,6 +7,17 @@ export const concernFilters = [
   ["beauty", "Beauty & Grooming"]
 ];
 
+// Botanicals nav sub-tabs -> product filter. Values map to product `format`
+// (see ProductGrid), except 'spice' which matches spice categories.
+export const botanicalFilters = [
+  ["capsules", "Capsules"],
+  ["powders", "Powder"],
+  ["teas", "Leaves"],
+  ["seeds", "Seeds"],
+  ["spice", "Spice"],
+  ["oils", "Oils"]
+];
+
 export const formatNames = {
   "capsules": "Capsules",
   "powders": "Powders",

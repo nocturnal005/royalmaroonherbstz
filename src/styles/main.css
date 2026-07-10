@@ -67,3 +67,55 @@
   animation: none !important;
   transition: none !important;
 }
+
+/* ---- Hero: "Restorative Herbal Blends" (Claude Design handoff) ---- */
+
+/* Center badge double-ring, from the .dc source's ::before / ::after */
+.hero-badge::before {
+  content: "";
+  position: absolute;
+  inset: clamp(10px, 1.1vw, 16px);
+  border: 1.5px solid var(--accent, #37624A);
+  border-radius: 50%;
+  opacity: 0.9;
+}
+
+.hero-badge::after {
+  content: "";
+  position: absolute;
+  inset: clamp(17px, 1.9vw, 27px);
+  border: 1.4px solid var(--accent, #37624A);
+  border-radius: 50%;
+  opacity: 0.82;
+}
+
+/* CTA hover (from the source's style-hover) */
+.hero-dc-cta {
+  transition: background 0.35s ease, color 0.35s ease, letter-spacing 0.35s ease;
+}
+
+.hero-dc-cta:hover {
+  background: var(--accent, #37624A) !important;
+  color: #F5F0E0 !important;
+  letter-spacing: 0.24em !important;
+  opacity: 1;
+}
+
+/* Entrance animations, from the source's @keyframes */
+@keyframes heroRiseIn {
+  from { opacity: 0; transform: translate(-50%, -42%); }
+  to { opacity: 1; transform: translate(-50%, -50%); }
+}
+
+@keyframes heroFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.hero-rise-in { animation: heroRiseIn 0.9s ease both; }
+.hero-fade-in { animation: heroFadeIn 1s ease both; }
+.hero-fade-in-slow { animation: heroFadeIn 1.2s ease both; }
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-rise-in, .hero-fade-in, .hero-fade-in-slow { animation: none; }
+}

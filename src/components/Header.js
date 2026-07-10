@@ -1,4 +1,4 @@
-import { concernFilters } from './FilterSidebar.js';
+import { botanicalFilters } from './FilterSidebar.js';
 
 export function Header() {
   return `
@@ -8,27 +8,28 @@ export function Header() {
           <img src="/images/brand/logo.png" alt="Royal Maroon Herbs Logo" class="h-20 w-auto object-contain" />
         </a>
         <nav class="hidden md:flex items-center gap-6" aria-label="Main Navigation">
+          <a class="font-label-md text-label-md text-secondary hover:text-primary transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 rounded" href="#">About Us</a>
           <a class="font-label-md text-label-md text-primary font-bold border-b-2 border-tertiary-fixed-dim pb-1 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 rounded" href="/">Shop</a>
-          
+
           <div class="relative">
             <button id="desktop-wellness-btn" class="flex items-center gap-1 font-label-md text-label-md text-secondary hover:text-primary transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 rounded" aria-expanded="false" aria-haspopup="true">
-              Health and Wellness
+              Botanicals
               <span class="material-symbols-outlined text-sm transition-transform duration-200" id="desktop-wellness-icon">expand_more</span>
             </button>
             <div id="desktop-wellness-menu" class="absolute left-0 top-full mt-2 w-56 bg-surface/95 backdrop-blur-md border border-surface/20 shadow-lg rounded-xl flex-col hidden z-50 overflow-hidden">
-              ${concernFilters.filter(f => f[0] !== 'all').map(([value, label]) => `
-                <a href="/?need=${value}#collection" class="block px-4 py-3 font-label-sm text-label-sm text-secondary hover:text-primary hover:bg-surface-variant transition-colors">${label}</a>
+              ${botanicalFilters.map(([value, label]) => `
+                <a href="#cat-${value}" class="block px-4 py-3 font-label-sm text-label-sm text-secondary hover:text-primary hover:bg-surface-variant transition-colors">${label}</a>
               `).join('')}
             </div>
           </div>
 
-          <a class="font-label-md text-label-md text-secondary hover:text-primary transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 rounded" href="#">Learn</a>
-          <a class="font-label-md text-label-md text-secondary hover:text-primary transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 rounded" href="#">About Us</a>
+          <a class="font-label-md text-label-md text-secondary hover:text-primary transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 rounded" href="/maroon-hub">Maroon Hub</a>
+          <a class="font-label-md text-label-md text-secondary hover:text-primary transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 rounded" href="#">Wholesale</a>
           <a class="font-label-md text-label-md text-secondary hover:text-primary transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 rounded" href="#">Contact</a>
         </nav>
       </div>
       <div class="flex items-center gap-6">
-        <button class="text-primary hover:text-tertiary-fixed-variant transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 rounded p-1" aria-label="Search">
+        <button id="search-btn" class="text-primary hover:text-tertiary-fixed-variant transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 rounded p-1" aria-label="Search">
           <span class="material-symbols-outlined" data-icon="search">search</span>
         </button>
         <button class="text-primary hover:text-tertiary-fixed-variant transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 rounded p-1" aria-label="Account">
@@ -47,22 +48,23 @@ export function Header() {
       <!-- Mobile Navigation Drawer -->
       <div id="mobile-menu" class="hidden absolute top-20 left-0 right-0 bg-surface border-b border-secondary-container p-6 flex flex-col gap-4 shadow-lg z-40 transition-all duration-300">
         <nav class="flex flex-col gap-4" aria-label="Mobile Navigation">
+          <a class="font-label-md text-label-md text-secondary hover:text-primary transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-primary p-2" href="#">About Us</a>
           <a class="font-label-md text-label-md text-primary font-bold focus:outline-none focus:ring-2 focus:ring-primary p-2" href="/">Shop</a>
-          
+
           <div>
             <button id="mobile-wellness-btn" class="w-full flex items-center justify-between font-label-md text-label-md text-secondary hover:text-primary transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-primary p-2">
-              Health and Wellness
+              Botanicals
               <span class="material-symbols-outlined text-sm transition-transform duration-200" id="mobile-wellness-icon">expand_more</span>
             </button>
             <div id="mobile-wellness-menu" class="hidden flex-col pl-4 mt-2 border-l-2 border-surface-variant">
-              ${concernFilters.filter(f => f[0] !== 'all').map(([value, label]) => `
-                <a href="/?need=${value}#collection" class="block p-2 font-label-sm text-label-sm text-secondary hover:text-primary transition-colors">${label}</a>
+              ${botanicalFilters.map(([value, label]) => `
+                <a href="#cat-${value}" class="block p-2 font-label-sm text-label-sm text-secondary hover:text-primary transition-colors">${label}</a>
               `).join('')}
             </div>
           </div>
 
-          <a class="font-label-md text-label-md text-secondary hover:text-primary transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-primary p-2" href="#">Learn</a>
-          <a class="font-label-md text-label-md text-secondary hover:text-primary transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-primary p-2" href="#">About Us</a>
+          <a class="font-label-md text-label-md text-secondary hover:text-primary transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-primary p-2" href="/maroon-hub">Maroon Hub</a>
+          <a class="font-label-md text-label-md text-secondary hover:text-primary transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-primary p-2" href="#">Wholesale</a>
           <a class="font-label-md text-label-md text-secondary hover:text-primary transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-primary p-2" href="#">Contact</a>
         </nav>
       </div>
@@ -103,6 +105,16 @@ export function setupHeaderScrollListener() {
       } else {
         mobileMenu.classList.remove('hidden');
       }
+    });
+
+    // Close the mobile menu when any nav link inside it is tapped (anchor
+    // links scroll without a reload, so the menu must dismiss itself).
+    mobileMenu.querySelectorAll('a').forEach((link) => {
+      link.addEventListener('click', () => {
+        mobileMenu.classList.add('hidden');
+        toggleBtn.setAttribute('aria-expanded', 'false');
+        toggleBtn.innerHTML = '<span class="material-symbols-outlined">menu</span>';
+      });
     });
 
     // Close mobile menu on window resize if switching to desktop

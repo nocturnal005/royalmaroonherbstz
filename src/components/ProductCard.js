@@ -22,8 +22,7 @@ export function ProductCard(product) {
       
       <!-- Product Details Left-Aligned -->
       <div class="text-left px-1 mt-3">
-        <span class="font-label-sm text-[10px] text-stone-500 uppercase tracking-widest block mb-1">${product.category}</span>
-        <h4 class="font-semibold text-stone-900 mb-1 group-hover:text-stone-700 transition-colors text-sm line-clamp-2 min-h-[40px] cursor-pointer view-details-btn" data-id="${product.id}">${product.name}</h4>
+        <h4 class="font-semibold text-stone-900 mb-0.5 group-hover:text-stone-700 transition-colors text-sm line-clamp-2 cursor-pointer view-details-btn" data-id="${product.id}">${product.name}</h4>
         <span class="font-bold text-stone-900 text-sm block mb-2">${formatTZS(product.price)}</span>
         
         <button class="view-details-btn text-stone-500 hover:text-stone-900 text-xs font-semibold underline underline-offset-4 focus:outline-none transition-colors" 

@@ -1,12 +1,13 @@
 import './styles/main.css';
 import { AnnouncementBar } from './components/AnnouncementBar.js';
 import { Header, setupHeaderScrollListener } from './components/Header.js';
-import { Hero } from './components/Hero.js';
+import { Hero, setupHeroCarousel } from './components/Hero.js';
 import { FilterDropdown } from './components/FilterSidebar.js';
 import { ProductGrid, setupProductGridFilters } from './components/ProductGrid.js';
-import { StorySection } from './components/StorySection.js';
-import { NewsletterSection } from './components/NewsletterSection.js';
 import { Footer } from './components/Footer.js';
+import { BackToTop, setupBackToTop } from './components/BackToTop.js';
+import { SearchOverlay, setupSearch } from './components/Search.js';
+import { MaroonHub } from './pages/MaroonHub.js';
 import { showProductDetailModal } from './components/ProductDetailModal.js';
 import { products } from './data/products.js';
 import { initCartDrawer, openCartDrawer, renderCartDrawer } from './components/CartDrawer.js';
@@ -43,6 +44,33 @@ function initApp() {
     return;
   }
 
+  // Maroon Knowledge Hub (content pages)
+  if (window.location.pathname === '/maroon-hub') {
+    app.innerHTML = `
+      ${AnnouncementBar()}
+      ${Header()}
+      <main>${MaroonHub()}</main>
+      ${Footer()}
+      ${BackToTop()}
+      ${SearchOverlay()}
+    `;
+    setupHeaderScrollListener();
+    setupBackToTop();
+    setupSearch();
+    initCartDrawer(() => initCheckoutWizard(document.getElementById('cart-btn')));
+    document.getElementById('app').addEventListener('click', (e) => {
+      const cartBtn = e.target.closest('#cart-btn');
+      if (cartBtn) { e.preventDefault(); openCartDrawer(cartBtn); }
+    });
+    onCartChange(() => {
+      const badge = document.getElementById('cart-badge');
+      if (badge) badge.textContent = getCartCount();
+      renderCartDrawer();
+    });
+    window.scrollTo(0, 0);
+    return;
+  }
+
   app.innerHTML = `
     ${AnnouncementBar()}
     ${Header()}
@@ -54,15 +82,18 @@ function initApp() {
           ${ProductGrid()}
         </div>
       </section>
-      ${StorySection()}
-      ${NewsletterSection()}
     </main>
     ${Footer()}
+    ${BackToTop()}
+    ${SearchOverlay()}
   `;
 
   // Initialize UI interactive scripts (presentation-only)
   setupHeaderScrollListener();
+  setupHeroCarousel();
   setupProductGridFilters();
+  setupBackToTop();
+  setupSearch();
   setupFilterDetailsAdjuster();
   setupIngredientToggles();
 
