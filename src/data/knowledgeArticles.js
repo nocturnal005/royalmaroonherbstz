@@ -1,4 +1,4 @@
-// Maroon Knowledge Hub — journal articles, structured as research-poster panels.
+// Maroon Knowledge Hub, journal articles, structured as research-poster panels.
 // Content researched from current herbal/botanical literature; every reference
 // is a real, verifiable source (PubMed/PMC/MDPI/Frontiers DOIs), Harvard style.
 // Authored by Royal Maroon Herbs, dated across August 2026 (Weeks 1–5).
@@ -42,7 +42,7 @@ export const articles = [
     family: 'Zingiberaceae',
     compounds: 'Curcuminoids (curcumin)',
     primaryUse: 'Anti-inflammatory & metabolic',
-    evidenceLevel: 3, evidenceLabel: 'Moderate–strong',
+    evidenceLevel: 3, evidenceLabel: 'Moderate to strong',
     sections: [
       { label: 'Origin & Traditional Use', body: `Turmeric, the golden rhizome of Curcuma longa, has coloured and medicated South Asian life for over four thousand years. A cornerstone of Ayurvedic and Siddha traditions, it was applied to wounds, joint pain and digestive complaints long before its chemistry was understood. That chemistry centres on the curcuminoids, a family of polyphenols dominated by curcumin, the pigment responsible for both its hue and much of its pharmacology.` },
       { label: 'Benefits to Human Health', body: `Curcumin is a genuinely versatile molecule, with documented anti-inflammatory, antioxidant and immunomodulatory actions. Here the human evidence is comparatively strong: controlled trials report reduced arthritis symptoms and lower inflammatory markers such as CRP, TNF-alpha and IL-6, plus favourable effects on blood glucose and lipids in metabolic disorders.` },
@@ -111,7 +111,7 @@ export const articles = [
     evidenceLevel: 1, evidenceLabel: 'Preliminary',
     sections: [
       { label: 'Origin & Traditional Use', body: `Psidium guajava, a member of the Myrtaceae family native to tropical Central and South America, has travelled with human hands across Africa, Asia and the Pacific for centuries. Long before it entered the laboratory, its leaves were brewed as a folk tea and pressed into poultices. Gutiérrez, Mitchell and Solis (2008) document a strikingly consistent ethnobotanical record: leaf decoctions for diarrhoea and dysentery, wound washes, and infusions for coughs and diabetes across otherwise unconnected cultures.` },
-      { label: 'Benefits to Human Health', body: `Modern interest centres on the leaf's dense phenolic chemistry, chiefly quercetin, gallic acid and ellagitannins. These constituents underpin antioxidant, anti-inflammatory and, most notably, anti-hyperglycaemic effects. Deguchi and Miyazaki (2010) show guava-leaf polyphenol inhibits alpha-glucosidase, blunting post-meal glucose spikes by roughly 20–37% in animal and human trials, alongside improved lipid markers.` },
+      { label: 'Benefits to Human Health', body: `Modern interest centres on the leaf's dense phenolic chemistry, chiefly quercetin, gallic acid and ellagitannins. These constituents underpin antioxidant, anti-inflammatory and, most notably, anti-hyperglycaemic effects. Deguchi and Miyazaki (2010) show guava-leaf polyphenol inhibits alpha-glucosidase, blunting post-meal glucose spikes by roughly 20 to 37% in animal and human trials, alongside improved lipid markers.` },
       { label: 'Evidence & Verified Potency', body: `The evidence is promising but uneven. Luo et al. (2019) confirm potent radical-scavenging and glucose-lowering activity for leaf polysaccharides, yet most data derive from cell and rodent models. Human trials remain small, short and heterogeneous, so claims of clinical potency should stay measured until standardised extracts and adequately powered randomised trials arrive.` }
     ],
     references: [
@@ -152,7 +152,7 @@ export const articles = [
     family: 'Malvaceae',
     compounds: 'Fibre, vitamin C, procyanidins',
     primaryUse: 'Glycaemic & antioxidant',
-    evidenceLevel: 2, evidenceLabel: 'Preliminary–moderate',
+    evidenceLevel: 2, evidenceLabel: 'Preliminary to moderate',
     sections: [
       { label: 'Origin & Traditional Use', body: `Revered across sub-Saharan Africa as the 'Tree of Life', the baobab (Adansonia digitata) has anchored traditional pharmacopoeias for millennia. Its dry, tangy fruit pulp was consumed for rehydration and used against fever, diarrhoea and dysentery, while bark and leaves served antipyretic and anti-inflammatory roles. This ethnomedicinal breadth reflects a genuinely nutrient-dense matrix rather than folklore alone.` },
       { label: 'Benefits to Human Health', body: `The fruit pulp is exceptionally rich in dietary fibre (roughly 80 g/100 g), vitamin C, potassium and iron, alongside polyphenols such as procyanidins, gallic acid and epicatechin. These constituents underpin measurable antioxidant, anti-inflammatory and metabolic activity, and plausibly explain baobab's traditional use for gut and febrile complaints as well as its emerging cardiometabolic interest.` },
@@ -176,7 +176,7 @@ export const articles = [
     primaryUse: 'Wound healing & cognition',
     evidenceLevel: 2, evidenceLabel: 'Moderate (topical)',
     sections: [
-      { label: 'Origin & Traditional Use', body: `Gotu kola (Centella asiatica), a creeping wetland herb of Asia and Africa, has been prized for centuries in Ayurvedic and traditional Chinese medicine as a 'brain tonic' and wound-healing plant. Traditional practitioners applied it for memory, longevity, skin regeneration and venous complaints — uses that modern phytochemistry has begun to rationalise rather than dismiss.` },
+      { label: 'Origin & Traditional Use', body: `Gotu kola (Centella asiatica), a creeping wetland herb of Asia and Africa, has been prized for centuries in Ayurvedic and traditional Chinese medicine as a 'brain tonic' and wound-healing plant. Traditional practitioners applied it for memory, longevity, skin regeneration and venous complaints, uses that modern phytochemistry has begun to rationalise rather than dismiss.` },
       { label: 'Benefits to Human Health', body: `Its activity is attributed chiefly to four triterpenes: asiaticoside, madecassoside, asiatic acid and madecassic acid. These compounds stimulate collagen synthesis and exert anti-inflammatory, antioxidant and anti-apoptotic effects, supporting both the herb's dermatological reputation and its neuroprotective interest in ageing and cognition.` },
       { label: 'Evidence & Verified Potency', body: `Regarding verified potency, the best-substantiated application is topical wound and scar healing, where triterpene fractions show reproducible collagen-promoting effects. Neuroprotective and cognitive claims are mechanistically plausible and supported by animal and preclinical data, but human evidence remains thin: reviews consistently flag few controlled trials, small samples and heterogeneous preparations. Enthusiasm should therefore be tempered with caution.` }
     ],

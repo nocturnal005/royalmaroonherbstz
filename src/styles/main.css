@@ -119,3 +119,11 @@
 @media (prefers-reduced-motion: reduce) {
   .hero-rise-in, .hero-fade-in, .hero-fade-in-slow { animation: none; }
 }
+
+/* Maroon Hub + About: justify body prose ("distribute evenly between margins").
+   Single-line elements (labels, dates) are unaffected by justification. */
+.hub-article p,
+.about-prose p {
+  text-align: justify;
+  text-justify: inter-word;
+}

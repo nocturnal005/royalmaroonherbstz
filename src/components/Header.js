@@ -8,7 +8,7 @@ export function Header() {
           <img src="/images/brand/logo.png" alt="Royal Maroon Herbs Logo" class="h-20 w-auto object-contain" />
         </a>
         <nav class="hidden md:flex items-center gap-6" aria-label="Main Navigation">
-          <a class="font-label-md text-label-md text-secondary hover:text-primary transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 rounded" href="#">About Us</a>
+          <a class="font-label-md text-label-md text-secondary hover:text-primary transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 rounded" href="/about">About Us</a>
           <a class="font-label-md text-label-md text-primary font-bold border-b-2 border-tertiary-fixed-dim pb-1 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 rounded" href="/">Shop</a>
 
           <div class="relative">
@@ -48,7 +48,7 @@ export function Header() {
       <!-- Mobile Navigation Drawer -->
       <div id="mobile-menu" class="hidden absolute top-20 left-0 right-0 bg-surface border-b border-secondary-container p-6 flex flex-col gap-4 shadow-lg z-40 transition-all duration-300">
         <nav class="flex flex-col gap-4" aria-label="Mobile Navigation">
-          <a class="font-label-md text-label-md text-secondary hover:text-primary transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-primary p-2" href="#">About Us</a>
+          <a class="font-label-md text-label-md text-secondary hover:text-primary transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-primary p-2" href="/about">About Us</a>
           <a class="font-label-md text-label-md text-primary font-bold focus:outline-none focus:ring-2 focus:ring-primary p-2" href="/">Shop</a>
 
           <div>

@@ -1,6 +1,6 @@
 import { articles } from '../data/knowledgeArticles.js';
 
-// Maroon Knowledge Hub — "Scholarly Organic" research-poster articles adapted
+// Maroon Knowledge Hub, "Scholarly Organic" research-poster articles adapted
 // from five Stitch layouts (one per publishing week). Palette + fonts are
 // scoped to this section. Fabricated-data widgets from the source templates
 // (fake bar charts, pH/potency, CSV export) are replaced with honest elements:
@@ -82,7 +82,7 @@ function bullets(items) {
 const eyebrow = (t) => `<p class="uppercase tracking-[0.2em] text-[12px] text-[#715a3e] mb-2" style="${SANS};font-weight:600">${t}</p>`;
 const secHead = (icon, t) => `<h2 class="uppercase tracking-[0.12em] text-[13px] text-[#283527] border-b border-[#283527]/10 pb-2 mb-4 flex items-center gap-2" style="${SANS};font-weight:600"><span class="material-symbols-outlined text-[16px]">${icon}</span>${t}</h2>`;
 
-/* ============ TEMPLATE 1 — Modern Asymmetric (Week 1) ============ */
+/* ============ TEMPLATE 1, Modern Asymmetric (Week 1) ============ */
 function tModernAsymmetric(a) {
   const [origin, benefits, evidence] = a.sections;
   return `
@@ -127,7 +127,7 @@ function tModernAsymmetric(a) {
     ${refsPanel(a)}${buyBlock(a)}${disclaimer}`;
 }
 
-/* ============ TEMPLATE 2 — Three-Column Research (Week 2) ============ */
+/* ============ TEMPLATE 2, Three-Column Research (Week 2) ============ */
 function tThreeColumn(a) {
   const [origin, benefits, evidence] = a.sections;
   const card = (inner) => `<div class="border border-[#283527]/15 bg-white p-7 flex flex-col">${inner}</div>`;
@@ -156,7 +156,7 @@ function tThreeColumn(a) {
     ${refsPanel(a)}${buyBlock(a)}${disclaimer}`;
 }
 
-/* ============ TEMPLATE 3 — Technical Monograph (Week 3) ============ */
+/* ============ TEMPLATE 3, Technical Monograph (Week 3) ============ */
 function tTechnicalMonograph(a) {
   const [origin, benefits, evidence] = a.sections;
   const navItem = (icon, t, active) => `<div class="flex items-center gap-3 px-4 py-2.5 ${active ? 'bg-[#283527] text-white' : 'text-[#444842]'}" style="${SANS}"><span class="material-symbols-outlined text-[18px]">${icon}</span><span class="text-[14px]">${t}</span></div>`;
@@ -188,7 +188,7 @@ function tTechnicalMonograph(a) {
     ${refsPanel(a)}${buyBlock(a)}${disclaimer}`;
 }
 
-/* ============ TEMPLATE 4 — Modular Grid (Week 4) ============ */
+/* ============ TEMPLATE 4, Modular Grid (Week 4) ============ */
 function tModularGrid(a) {
   const [origin, benefits, evidence] = a.sections;
   return `
@@ -221,7 +221,7 @@ function tModularGrid(a) {
     ${refsPanel(a)}${buyBlock(a)}${disclaimer}`;
 }
 
-/* ============ TEMPLATE 5 — Comparative / Tradition vs Science (Week 5) ============ */
+/* ============ TEMPLATE 5, Comparative / Tradition vs Science (Week 5) ============ */
 function tComparative(a) {
   const [origin, benefits, evidence] = a.sections;
   const col = (tag, title, inner) => `
@@ -235,7 +235,7 @@ function tComparative(a) {
     <header class="text-center max-w-3xl mx-auto mb-10">
       ${eyebrow('Botanical Analysis')}
       <h1 class="text-[#283527] leading-[1.1] text-[32px] md:text-[44px]" style="${SERIF}">${a.title}</h1>
-      <p class="mt-3 text-[16px] text-[#444842]" style="${SANS}">${a.herb} <span class="italic">(${a.latin})</span> — tradition weighed against the current evidence.</p>
+      <p class="mt-3 text-[16px] text-[#444842]" style="${SANS}">${a.herb} <span class="italic">(${a.latin})</span>, tradition weighed against the current evidence.</p>
       <p class="mt-2 text-[14px] text-[#444842]" style="${SANS}">${a.date}</p>
     </header>
     <div class="flex flex-col md:flex-row gap-0 md:gap-10 md:divide-x md:divide-[#283527]/15">
@@ -287,7 +287,7 @@ function indexView() {
       <header class="text-center mb-12">
         <p class="uppercase tracking-[0.3em] text-[12px] text-[#715a3e] mb-4" style="font-family:'Inter',sans-serif;font-weight:600">Maroon Knowledge Hub</p>
         <h1 class="text-[#283527] leading-tight text-[36px] md:text-[54px]" style="font-family:'Playfair Display',serif;font-weight:700">The Botanical Journal</h1>
-        <p class="mt-4 text-[17px] text-[#444842] max-w-2xl mx-auto" style="font-family:'Inter',sans-serif">A weekly research brief on the plants behind our collection — reviewing current herbal and botanical science, published across five editions.</p>
+        <p class="mt-4 text-[17px] text-[#444842] max-w-2xl mx-auto" style="font-family:'Inter',sans-serif">A weekly research brief on the plants behind our collection, reviewing current herbal and botanical science, published across five editions.</p>
       </header>
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         ${lead ? articleCard(lead, true) : ''}
@@ -296,7 +296,7 @@ function indexView() {
     </div>`;
 }
 
-// "Continue Reading" strip — appended once at the page level so it works the
+// "Continue Reading" strip, appended once at the page level so it works the
 // same across all five templates. Wraps around to the first article after
 // the last, so readers can browse the whole journal without returning to the
 // index each time.
@@ -323,7 +323,7 @@ export function MaroonHub() {
   let inner;
   if (current) {
     const render = TEMPLATES[current.week] || tModernAsymmetric;
-    inner = `<article class="max-w-[1280px] mx-auto">${render(current)}</article>${continueReading(current)}`;
+    inner = `<article class="hub-article max-w-[1280px] mx-auto">${render(current)}</article>${continueReading(current)}`;
   } else if (articles.length) {
     inner = indexView();
   } else {

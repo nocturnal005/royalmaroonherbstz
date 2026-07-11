@@ -8,6 +8,7 @@ import { Footer } from './components/Footer.js';
 import { BackToTop, setupBackToTop } from './components/BackToTop.js';
 import { SearchOverlay, setupSearch } from './components/Search.js';
 import { MaroonHub } from './pages/MaroonHub.js';
+import { AboutUs } from './pages/AboutUs.js';
 import { showProductDetailModal } from './components/ProductDetailModal.js';
 import { products } from './data/products.js';
 import { initCartDrawer, openCartDrawer, renderCartDrawer } from './components/CartDrawer.js';
@@ -44,12 +45,14 @@ function initApp() {
     return;
   }
 
-  // Maroon Knowledge Hub (content pages)
-  if (window.location.pathname === '/maroon-hub') {
+  // Static content pages (Maroon Knowledge Hub, About Us)
+  const CONTENT_PAGES = { '/maroon-hub': MaroonHub, '/about': AboutUs };
+  const contentPage = CONTENT_PAGES[window.location.pathname];
+  if (contentPage) {
     app.innerHTML = `
       ${AnnouncementBar()}
       ${Header()}
-      <main>${MaroonHub()}</main>
+      <main>${contentPage()}</main>
       ${Footer()}
       ${BackToTop()}
       ${SearchOverlay()}
