@@ -44,6 +44,61 @@ const formatDefaults = {
   }
 };
 
+// Per-product retail prices (TZS) from the owner's price sheet
+// ("Product name and pricing.docx", provided 2026-07-11). Keys are the
+// normalized product name (lowercase, single-spaced). Products not listed
+// here keep the flat per-format placeholder price in `formatDefaults`.
+// Where the sheet listed a product at two different prices (Fenugreek Powder,
+// Neem Powder, Moringa Leaves, Bladderwrack, Sea Moss Powder), the owner
+// chose the higher figure.
+const PRICE_OVERRIDES = {
+  "stinging nettle powder": 30000,
+  "sting nettle powder": 30000,
+  "baobab pulp": 30000,
+  "baobab powder": 30000,
+  "bladderwrack powder": 98000,
+  "fenugreek and halim seeds": 20000,
+  "fenugreek & halim seeds": 20000,
+  "neem powder": 30000,
+  "cancer bush": 68000,
+  "senna pods": 17000,
+  "soursop leaves": 10000,
+  "guava leaves": 10000,
+  "guava leaves powder": 15000,
+  "tongkat ali powder": 68000,
+  "tonkat ali": 68000,
+  "shilajit powder": 98000,
+  "wheat grass powder": 30000,
+  "gotu kola powder": 40000,
+  "liquorice powder": 17000,
+  "licorice powder": 17000,
+  "turmeric powder": 15000,
+  "turmeric mix": 20000,
+  "sea moss powder": 40000,
+  "black maca powder": 34000,
+  "lemongrass": 20000,
+  "fenugreek powder": 68000,
+  "ashwagandha capsules": 70000,
+  "bitter melon capsules": 68000,
+  "bitter melon vegan capsules": 68000,
+  "black castor oil": 30000,
+  "moringa leaves": 50000,
+  "mango leaves powder": 30000,
+  "cinnamon powder": 20000,
+  "stinging nettle, avocado and pumpkin seed powder": 68000,
+  "nettle, avocado and pumpkin seed vegan capsules": 68000,
+  "stinging nettle capsules": 68000,
+  "nutmeg": 8000,
+  "osu": 68000,
+  "osu powder": 68000,
+  "holi basil": 68000,
+  "nishati": 70000,
+  "ginkgo biloba capsule": 68000,
+  "jimerito honey": 512000
+};
+
+const normalizeName = (name) => name.toLowerCase().replace(/\s+/g, " ").trim();
+
 const catalog = [
   ["Stinging Nettle Powder", "Herbal Powders", "powders", "daily-wellness", "stinging-nettle-powder.jpg", "A finely milled green nettle powder for simple teas, smoothies, and everyday botanical routines.", "Stinging nettle leaf powder"],
   ["Wild Crafted Sea Moss", "Sea Botanicals", "teas", "daily-wellness", "wild-crafted-sea-moss.jpg", "Whole dried sea moss for soaking, rinsing, and preparing into gels, drinks, or kitchen blends.", "Wild crafted sea moss"],
@@ -284,7 +339,7 @@ function makeProduct(item, index) {
     format,
     concern,
     imageScale: imageScale || null,
-    price: defaults.price,
+    price: PRICE_OVERRIDES[normalizeName(name)] ?? defaults.price,
     currency: "TZS",
     image: `/images/products/royal-herbs/${imageFile}`,
     imageAlt: `Royal Maroon Herbs ${name} product packaging.`,

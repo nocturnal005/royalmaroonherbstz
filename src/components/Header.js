@@ -18,7 +18,7 @@ export function Header() {
             </button>
             <div id="desktop-wellness-menu" class="absolute left-0 top-full mt-2 w-56 bg-surface/95 backdrop-blur-md border border-surface/20 shadow-lg rounded-xl flex-col hidden z-50 overflow-hidden">
               ${botanicalFilters.map(([value, label]) => `
-                <a href="#cat-${value}" class="block px-4 py-3 font-label-sm text-label-sm text-secondary hover:text-primary hover:bg-surface-variant transition-colors">${label}</a>
+                <a href="/#cat-${value}" class="block px-4 py-3 font-label-sm text-label-sm text-secondary hover:text-primary hover:bg-surface-variant transition-colors">${label}</a>
               `).join('')}
             </div>
           </div>
@@ -58,7 +58,7 @@ export function Header() {
             </button>
             <div id="mobile-wellness-menu" class="hidden flex-col pl-4 mt-2 border-l-2 border-surface-variant">
               ${botanicalFilters.map(([value, label]) => `
-                <a href="#cat-${value}" class="block p-2 font-label-sm text-label-sm text-secondary hover:text-primary transition-colors">${label}</a>
+                <a href="/#cat-${value}" class="block p-2 font-label-sm text-label-sm text-secondary hover:text-primary transition-colors">${label}</a>
               `).join('')}
             </div>
           </div>
