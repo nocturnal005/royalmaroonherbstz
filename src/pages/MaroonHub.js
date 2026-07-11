@@ -184,6 +184,7 @@ function tTechnicalMonograph(a) {
         <div class="mt-5 bg-[#fdddb9]/40 border-l-2 border-[#715a3e] p-4"><p class="uppercase tracking-[0.1em] text-[10px] text-[#715a3e] mb-1" style="${SANS}">Curator's Note</p><p class="text-[13px] italic text-[#444842] leading-relaxed" style="${SANS}">${firstSentence(evidence.body)}</p></div>
       </aside>
     </div>
+    ${a.illustration2 ? `<figure class="mt-8 aspect-[16/9] md:aspect-[5/2] overflow-hidden border border-[#283527]/15"><img src="${a.illustration2}" alt="${a.herb} in leaf, root and powder form (${a.latin})" class="w-full h-full object-cover"/></figure>` : ''}
     ${refsPanel(a)}${buyBlock(a)}${disclaimer}`;
 }
 
@@ -224,7 +225,7 @@ function tModularGrid(a) {
 function tComparative(a) {
   const [origin, benefits, evidence] = a.sections;
   const col = (tag, title, inner) => `
-    <div class="flex-1">
+    <div class="flex-1 min-w-0">
       ${eyebrow(tag)}
       <h2 class="text-[#283527] text-[28px] leading-tight mb-1" style="${SERIF}">${title}</h2>
       ${inner}
@@ -240,15 +241,16 @@ function tComparative(a) {
     <div class="flex flex-col md:flex-row gap-0 md:gap-10 md:divide-x md:divide-[#283527]/15">
       ${col('Traditional Knowledge', origin.label, `
         <p class="italic text-[#715a3e] text-[15px] mb-5" style="${SERIF}">Family ${a.family}</p>
-        <div class="border border-[#283527]/15 bg-white p-3 mb-5"><div class="aspect-[4/3] bg-[#f5f3ee] flex items-center justify-center p-4">${illustration(a)}</div></div>
+        <div class="aspect-[4/3] overflow-hidden border border-[#283527]/15 mb-5">${illustration(a)}</div>
         <p class="text-[15px] text-[#444842] leading-relaxed" style="${SANS}">${origin.body}</p>`)}
-      <div class="md:pl-10">${col('Modern Evidence', benefits.label, `
+      <div class="flex-1 min-w-0 md:pl-10">${col('Modern Evidence', benefits.label, `
         <p class="text-[15px] text-[#444842] leading-relaxed mb-5" style="${SANS}">${benefits.body}</p>
         <div class="p-5 bg-[#283527] text-white mb-4">
           <h3 class="uppercase tracking-[0.12em] text-[12px] text-[#becca3] mb-2 flex items-center gap-2" style="${SANS};font-weight:600"><span class="material-symbols-outlined text-[15px]">verified</span>${evidence.label}</h3>
           <p class="text-[14px] leading-relaxed text-white/90" style="${SANS}">${evidence.body}</p>
         </div>
-        <div class="flex items-center gap-3"><span class="uppercase tracking-[0.1em] text-[11px] text-[#715a3e]" style="${SANS}">Strength</span>${meter(a.evidenceLevel, a.evidenceLabel)}<span class="text-[13px] text-[#283527]" style="${SANS}">${a.evidenceLabel}</span></div>`)}</div>
+        <div class="flex items-center gap-3"><span class="uppercase tracking-[0.1em] text-[11px] text-[#715a3e]" style="${SANS}">Strength</span>${meter(a.evidenceLevel, a.evidenceLabel)}<span class="text-[13px] text-[#283527]" style="${SANS}">${a.evidenceLabel}</span></div>
+        ${a.illustration2 ? `<div class="aspect-[4/3] overflow-hidden border border-[#283527]/15 mt-6"><img src="${a.illustration2}" alt="${a.herb} preparations (${a.latin})" class="w-full h-full object-cover"/></div>` : ''}`)}</div>
     </div>
     ${refsPanel(a)}${buyBlock(a)}${disclaimer}`;
 }
@@ -294,6 +296,26 @@ function indexView() {
     </div>`;
 }
 
+// "Continue Reading" strip — appended once at the page level so it works the
+// same across all five templates. Wraps around to the first article after
+// the last, so readers can browse the whole journal without returning to the
+// index each time.
+function continueReading(current) {
+  const i = articles.findIndex(a => a.slug === current.slug);
+  const next = articles[(i + 1) % articles.length];
+  return `
+    <div class="max-w-[1280px] mx-auto mt-10 pt-8 border-t border-[#283527]/10">
+      <p class="uppercase tracking-[0.2em] text-[11px] text-[#715a3e] mb-4" style="font-family:'Inter',sans-serif;font-weight:600">Continue Reading</p>
+      <a href="/maroon-hub?article=${next.slug}" class="group flex items-center justify-between gap-6 border border-[#283527]/15 bg-white p-5 md:p-6 hover:border-[#283527] transition-colors">
+        <div class="min-w-0">
+          <p class="italic text-[#715a3e] text-[14px] mb-1" style="font-family:'Playfair Display',serif">${next.herb} (${next.latin})</p>
+          <h3 class="text-[#283527] text-[19px] md:text-[22px] leading-snug truncate" style="font-family:'Playfair Display',serif">${next.title}</h3>
+        </div>
+        <span class="material-symbols-outlined text-[#283527] text-[28px] shrink-0 transition-transform group-hover:translate-x-1">arrow_forward</span>
+      </a>
+    </div>`;
+}
+
 export function MaroonHub() {
   const params = new URLSearchParams(window.location.search);
   const slug = params.get('article');
@@ -301,7 +323,7 @@ export function MaroonHub() {
   let inner;
   if (current) {
     const render = TEMPLATES[current.week] || tModernAsymmetric;
-    inner = `<article class="max-w-[1280px] mx-auto">${render(current)}</article>`;
+    inner = `<article class="max-w-[1280px] mx-auto">${render(current)}</article>${continueReading(current)}`;
   } else if (articles.length) {
     inner = indexView();
   } else {
