@@ -2,7 +2,6 @@ import './styles/main.css';
 import { AnnouncementBar } from './components/AnnouncementBar.js';
 import { Header, setupHeaderScrollListener } from './components/Header.js';
 import { Hero, setupHeroCarousel } from './components/Hero.js';
-import { FilterDropdown } from './components/FilterSidebar.js';
 import { ProductGrid, setupProductGridFilters } from './components/ProductGrid.js';
 import { Footer } from './components/Footer.js';
 import { BackToTop, setupBackToTop } from './components/BackToTop.js';
@@ -80,7 +79,6 @@ function initApp() {
     <main>
       ${Hero()}
       <section class="px-margin-desktop py-24 flex flex-col gap-8 max-w-[1800px] w-full mx-auto" id="collection">
-        ${FilterDropdown()}
         <div class="w-full">
           ${ProductGrid()}
         </div>

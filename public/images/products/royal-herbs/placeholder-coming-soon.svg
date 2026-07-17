@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="800" viewBox="0 0 800 800" role="img" aria-label="Product photo coming soon">
+  <rect width="800" height="800" fill="#faf8f3"/>
+  <rect x="28" y="28" width="744" height="744" rx="28" fill="none" stroke="#e8e1d2" stroke-width="2"/>
+  <g transform="translate(400 350)">
+    <path d="M0 130 C 0 40 0 -40 0 -130" stroke="#a8bfae" stroke-width="7" stroke-linecap="round" fill="none"/>
+    <path d="M0 -20 C -90 -60 -110 -160 -30 -200 C 30 -160 40 -70 0 -20 Z" fill="#c3d5c6"/>
+    <path d="M0 40 C 80 10 130 -60 90 -130 C 20 -110 -10 -30 0 40 Z" fill="#9db8a2"/>
+    <path d="M0 -20 C -55 -75 -65 -140 -30 -190" stroke="#8aa890" stroke-width="4" stroke-linecap="round" fill="none"/>
+    <path d="M0 30 C 45 -5 80 -60 88 -120" stroke="#87a58d" stroke-width="4" stroke-linecap="round" fill="none"/>
+  </g>
+  <text x="400" y="600" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-size="40" fill="#57534e">Photo coming soon</text>
+  <text x="400" y="655" text-anchor="middle" font-family="Verdana, Geneva, sans-serif" font-size="22" letter-spacing="4" fill="#a8a29e">ROYAL MAROON HERBS</text>
+</svg>

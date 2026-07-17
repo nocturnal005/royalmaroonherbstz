@@ -44,19 +44,24 @@ const formatDefaults = {
   }
 };
 
-// Per-product retail prices (TZS) from the owner's price sheet
-// ("Product name and pricing.docx", provided 2026-07-11). Keys are the
-// normalized product name (lowercase, single-spaced). Products not listed
-// here keep the flat per-format placeholder price in `formatDefaults`.
-// Where the sheet listed a product at two different prices (Fenugreek Powder,
-// Neem Powder, Moringa Leaves, Bladderwrack, Sea Moss Powder), the owner
-// chose the higher figure.
+// Per-product retail prices (TZS) from the owner's price sheets:
+// - "Product name and pricing.docx" (2026-07-11)
+// - updated price list provided in chat on 2026-07-17 (supersedes earlier
+//   figures for the products it lists, e.g. Bladderwrack now 34,000 and
+//   Moringa Leaves now 15,000)
+// - "new product list and prices.docx" (2026-07-17) for the newest additions
+// Keys are the normalized product name (lowercase, single-spaced). Products
+// not listed here keep the flat per-format placeholder price in `formatDefaults`.
+// The 2026-07-17 chat list shows Tongkat Ali Capsules twice (70,000 and
+// 68,000); the higher figure is used, matching how earlier duplicate
+// listings were resolved.
 const PRICE_OVERRIDES = {
   "stinging nettle powder": 30000,
   "sting nettle powder": 30000,
   "baobab pulp": 30000,
   "baobab powder": 30000,
-  "bladderwrack powder": 98000,
+  "bladderwrack powder": 34000,
+  "wild crafted bladderwrack": 34000,
   "fenugreek and halim seeds": 20000,
   "fenugreek & halim seeds": 20000,
   "neem powder": 30000,
@@ -67,13 +72,17 @@ const PRICE_OVERRIDES = {
   "guava leaves powder": 15000,
   "tongkat ali powder": 68000,
   "tonkat ali": 68000,
+  "tongkat ali capsules": 70000,
   "shilajit powder": 98000,
-  "wheat grass powder": 30000,
+  "shilajit": 98000,
+  "shilajit capsules": 79000,
+  "wheat grass powder": 20000,
   "gotu kola powder": 40000,
   "liquorice powder": 17000,
   "licorice powder": 17000,
   "turmeric powder": 15000,
   "turmeric mix": 20000,
+  "turmeric mix capsules": 20000,
   "sea moss powder": 40000,
   "black maca powder": 34000,
   "lemongrass": 20000,
@@ -82,7 +91,11 @@ const PRICE_OVERRIDES = {
   "bitter melon capsules": 68000,
   "bitter melon vegan capsules": 68000,
   "black castor oil": 30000,
-  "moringa leaves": 50000,
+  "beard oil": 40000,
+  "black seed oil": 45000,
+  "moringa leaves": 15000,
+  "moringa capsules": 50000,
+  "moringa oil cold pressed": 30000,
   "mango leaves powder": 30000,
   "cinnamon powder": 20000,
   "stinging nettle, avocado and pumpkin seed powder": 68000,
@@ -91,10 +104,42 @@ const PRICE_OVERRIDES = {
   "nutmeg": 8000,
   "osu": 68000,
   "osu powder": 68000,
+  "osu capsules": 68000,
   "holi basil": 68000,
+  "holy basil capsules": 68000,
+  "dandelion": 68000,
+  "dandelion capsules": 68000,
+  "oregano": 68000,
+  "oregano capsules": 68000,
+  "beetroot capsules": 50000,
+  "catuaba bark": 68000,
+  "wormwood": 34000,
+  "sarsaparilla powder": 68000,
+  "flax seed": 10000,
+  "chia seeds": 10000,
   "nishati": 70000,
   "ginkgo biloba capsule": 68000,
-  "jimerito honey": 512000
+  "jimerito honey": 512000,
+  // "new product list and prices.docx" (2026-07-17)
+  "king of the forest": 20000,
+  "aswagandha ksm-66": 98000,
+  "tamarind powder": 17000,
+  "black seed": 15000,
+  "jamaica guaco": 20000,
+  "cordyceps powder": 34000,
+  "medina": 10000,
+  "horny goat weed": 10000,
+  "guinea hen weed": 34000,
+  "lion's mane mushrooms": 50000,
+  "7 mushroom blend": 68000,
+  "damiana leaves": 34000,
+  "sangre de grado": 40000,
+  "shilajit honey": 95000,
+  "snuff powder": 17000,
+  "black seed soap": 10000,
+  "ashwagandha drops": 98000,
+  "traditional chinese herbal formula (back tension)": 10000,
+  "traditional chinese herbal formula (joint stiffness)": 20000
 };
 
 const normalizeName = (name) => name.toLowerCase().replace(/\s+/g, " ").trim();
@@ -290,8 +335,6 @@ const catalog = [
   ["Clove, Wormwood & Black Walnut", "New Arrivals", "powders", "daily-wellness", "ZOZ_2208.JPG", "A new Royal Maroon Herbs botanical product awaiting full description.", "Botanical ingredients"],
   ["Aswagandha KSM-66", "New Arrivals", "powders", "daily-wellness", "ZOZ_2211.JPG", "A new Royal Maroon Herbs botanical product awaiting full description.", "Botanical ingredients"],
   ["Aswagandha KSM-66", "New Arrivals", "powders", "daily-wellness", "ZOZ_2212.JPG", "A new Royal Maroon Herbs botanical product awaiting full description.", "Botanical ingredients"],
-  ["Ashwagandha", "New Arrivals", "powders", "daily-wellness", "ZOZ_2213.JPG", "A new Royal Maroon Herbs botanical product awaiting full description.", "Botanical ingredients"],
-  ["Ashwagandha", "New Arrivals", "powders", "daily-wellness", "ZOZ_2215.JPG", "A new Royal Maroon Herbs botanical product awaiting full description.", "Botanical ingredients"],
   ["Testosterone Booster", "New Arrivals", "powders", "daily-wellness", "ZOZ_2216.JPG", "A new Royal Maroon Herbs botanical product awaiting full description.", "Botanical ingredients"],
   ["Moringa Seed", "New Arrivals", "powders", "daily-wellness", "ZOZ_2221.JPG", "A new Royal Maroon Herbs botanical product awaiting full description.", "Botanical ingredients"],
   ["Sea Moss", "New Arrivals", "powders", "daily-wellness", "ZOZ_2223.JPG", "A new Royal Maroon Herbs botanical product awaiting full description.", "Botanical ingredients"],
@@ -324,7 +367,26 @@ const catalog = [
   ["Mango Leaves Powder", "New Arrivals", "powders", "daily-wellness", "ZOZ_2932.JPG", "A new Royal Maroon Herbs botanical product awaiting full description.", "Botanical ingredients"],
   ["Guava Leaves", "New Arrivals", "powders", "daily-wellness", "ZOZ_2933.JPG", "A new Royal Maroon Herbs botanical product awaiting full description.", "Botanical ingredients"],
   ["Chia Seeds", "New Arrivals", "powders", "daily-wellness", "ZOZ_2943.JPG", "A new Royal Maroon Herbs botanical product awaiting full description.", "Botanical ingredients"],
-  ["Flax Seed", "New Arrivals", "powders", "daily-wellness", "ZOZ_2947.JPG", "A new Royal Maroon Herbs botanical product awaiting full description.", "Botanical ingredients"]
+  ["Flax Seed", "New Arrivals", "powders", "daily-wellness", "ZOZ_2947.JPG", "A new Royal Maroon Herbs botanical product awaiting full description.", "Botanical ingredients"],
+  // Products from "new product list and prices.docx" (2026-07-17).
+  // Photos supplied by the owner in "D:\TZ added products" (2026-07-17).
+  ["Tamarind Powder", "New Arrivals", "powders", "digestive", "tamarind-powder.jpg", "Tangy tamarind fruit powder for drinks, sauces, and traditional recipes.", "Tamarind fruit powder"],
+  ["Black Seed", "New Arrivals", "seeds", "daily-wellness", "black-seed.jpg", "Whole black seeds for culinary use and traditional preparations.", "Black seed (nigella sativa)"],
+  ["Jamaica Guaco", "New Arrivals", "teas", "daily-wellness", "jamaica-guaco.jpg", "A traditional dried herb prepared for slow-steeped infusions.", "Guaco herb"],
+  ["Cordyceps Powder", "New Arrivals", "powders", "active", "cordyceps-powder.jpg", "A fine cordyceps mushroom powder for smoothies, coffee, and warm drinks.", "Cordyceps mushroom powder"],
+  ["Medina", "New Arrivals", "teas", "active", "medina.jpg", "A traditional dried herb sold under its common product name for tea preparation.", "Medina herb"],
+  ["Horny Goat Weed", "New Arrivals", "teas", "active", "horny-goat-weed.jpg", "A traditional dried botanical for carefully measured infusions.", "Horny goat weed herb"],
+  ["Guinea Hen Weed", "New Arrivals", "teas", "daily-wellness", "guinea-hen-weed.jpg", "A strong traditional herb for slow-steeped infusions and botanical routines.", "Guinea hen weed herb"],
+  ["Lion's Mane Mushrooms", "New Arrivals", "powders", "daily-wellness", "lions-mane-mushrooms.jpg", "Dried lion's mane mushroom for teas, broths, and everyday botanical blends.", "Lion's mane mushroom"],
+  ["7 Mushroom Blend", "New Arrivals", "powders", "daily-wellness", "7-mushroom-blend.png", "A seven-mushroom powder blend for smoothies, coffee, and warm drinks.", "Reishi, chaga, shiitake, lion's mane, cordyceps, maitake, tremella"],
+  ["Damiana Leaves", "New Arrivals", "teas", "daily-wellness", "damiana-leaves.jpg", "Dried damiana leaves with a soft herbal aroma for relaxing infusions.", "Damiana leaves"],
+  ["Sangre de Grado", "New Arrivals", "oils", "beauty", "sangre-de-grado.jpg", "A traditional tree-sap botanical for external self-care use as directed on the label.", "Sangre de grado resin"],
+  ["Shilajit Honey", "New Arrivals", "powders", "active", "shilajit-honey.jpg", "A shilajit and honey preparation for stirring into warm water or drinks.", "Honey, shilajit"],
+  ["Snuff Powder", "New Arrivals", "powders", "daily-wellness", "snuff-powder.jpg", "A finely milled traditional botanical powder sold under its common product name.", "Botanical snuff powder"],
+  ["Black Seed Soap", "New Arrivals", "body-care", "beauty", "black-seed-soap.jpg", "A black seed soap bar for everyday external cleansing routines.", "Black seed soap"],
+  ["Ashwagandha Drops", "New Arrivals", "powders", "daily-wellness", "ashwagandha-drops.jpg", "Ashwagandha in a convenient liquid drop format for measured daily servings.", "Ashwagandha extract"],
+  ["Traditional Chinese Herbal Formula (Back Tension)", "New Arrivals", "teas", "active", "tcm-back-tension.jpg", "A traditional Chinese herbal blend prepared for infusion as directed on the label.", "Traditional Chinese herbal blend"],
+  ["Traditional Chinese Herbal Formula (Joint Stiffness)", "New Arrivals", "teas", "active", "tcm-joint-stiffness.jpg", "A traditional Chinese herbal blend prepared for infusion as directed on the label.", "Traditional Chinese herbal blend"]
 ];
 
 function makeProduct(item, index) {

@@ -62,31 +62,15 @@ function renderGroupedProducts(filteredProducts) {
 }
 
 export function ProductGrid() {
-  const urlParams = new URLSearchParams(window.location.search);
-  const need = urlParams.get('need') || 'all';
-
-  // Show every product, grouped into the Botanicals themes. The optional
-  // "Shop By Need" concern filter still narrows the set when active.
-  let filtered = products;
-  if (need !== 'all') {
-    filtered = products.filter(p => p.concern === need);
-  }
-
+  // Show every product, grouped into the Botanicals themes.
   return `
     <div id="product-grid-container" class="w-full">
-      ${renderGroupedProducts(filtered)}
+      ${renderGroupedProducts(products)}
     </div>
   `;
 }
 
 export function setupProductGridFilters() {
-  const dropdown = document.getElementById('need-dropdown');
-  if (dropdown) {
-    dropdown.addEventListener('change', (e) => {
-      window.location.href = `/?need=${e.target.value}#collection`;
-    });
-  }
-
   // Land the viewer at the start of a Botanicals section when arriving via a
   // #cat-<value> link (also handles direct loads where the hash is set before
   // the grid has rendered).
