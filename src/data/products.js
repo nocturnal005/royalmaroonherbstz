@@ -139,7 +139,23 @@ const PRICE_OVERRIDES = {
   "black seed soap": 10000,
   "ashwagandha drops": 98000,
   "traditional chinese herbal formula (back tension)": 10000,
-  "traditional chinese herbal formula (joint stiffness)": 20000
+  "traditional chinese herbal formula (joint stiffness)": 20000,
+  // Owner additions provided in chat (2026-07-18), photos in "D:\TZ added products"
+  "fennel capsules": 30000,
+  "raw cocoa butter": 45000,
+  // Recategorisation (2026-07-18): these items moved out of "powders" but had no
+  // explicit price, so they kept the powders placeholder (25,000). Pin that value
+  // so correcting their category doesn't also change the price shown to customers.
+  "acai berry": 25000,
+  "clove, wormwood & black walnut": 25000,
+  "testosterone booster": 25000,
+  "sea moss": 25000,
+  "coconut": 25000,
+  "chaney root": 25000,
+  "wild crafted purple sea moss": 25000,
+  "spanish needle": 25000,
+  "moringa setenopetala seed": 25000,
+  "moringa seed": 25000
 };
 
 const normalizeName = (name) => name.toLowerCase().replace(/\s+/g, " ").trim();
@@ -378,7 +394,7 @@ const catalog = [
   ["Horny Goat Weed", "New Arrivals", "teas", "active", "horny-goat-weed.jpg", "A traditional dried botanical for carefully measured infusions.", "Horny goat weed herb"],
   ["Guinea Hen Weed", "New Arrivals", "teas", "daily-wellness", "guinea-hen-weed.jpg", "A strong traditional herb for slow-steeped infusions and botanical routines.", "Guinea hen weed herb"],
   ["Lion's Mane Mushrooms", "New Arrivals", "powders", "daily-wellness", "lions-mane-mushrooms.jpg", "Dried lion's mane mushroom for teas, broths, and everyday botanical blends.", "Lion's mane mushroom"],
-  ["7 Mushroom Blend", "New Arrivals", "powders", "daily-wellness", "7-mushroom-blend.png", "A seven-mushroom powder blend for smoothies, coffee, and warm drinks.", "Reishi, chaga, shiitake, lion's mane, cordyceps, maitake, tremella"],
+  ["7 Mushroom Blend", "New Arrivals", "powders", "daily-wellness", "7-mushroom-blend.jpg", "A seven-mushroom powder blend for smoothies, coffee, and warm drinks.", "Reishi, chaga, shiitake, lion's mane, cordyceps, maitake, tremella"],
   ["Damiana Leaves", "New Arrivals", "teas", "daily-wellness", "damiana-leaves.jpg", "Dried damiana leaves with a soft herbal aroma for relaxing infusions.", "Damiana leaves"],
   ["Sangre de Grado", "New Arrivals", "oils", "beauty", "sangre-de-grado.jpg", "A traditional tree-sap botanical for external self-care use as directed on the label.", "Sangre de grado resin"],
   ["Shilajit Honey", "New Arrivals", "powders", "active", "shilajit-honey.jpg", "A shilajit and honey preparation for stirring into warm water or drinks.", "Honey, shilajit"],
@@ -386,7 +402,10 @@ const catalog = [
   ["Black Seed Soap", "New Arrivals", "body-care", "beauty", "black-seed-soap.jpg", "A black seed soap bar for everyday external cleansing routines.", "Black seed soap"],
   ["Ashwagandha Drops", "New Arrivals", "powders", "daily-wellness", "ashwagandha-drops.jpg", "Ashwagandha in a convenient liquid drop format for measured daily servings.", "Ashwagandha extract"],
   ["Traditional Chinese Herbal Formula (Back Tension)", "New Arrivals", "teas", "active", "tcm-back-tension.jpg", "A traditional Chinese herbal blend prepared for infusion as directed on the label.", "Traditional Chinese herbal blend"],
-  ["Traditional Chinese Herbal Formula (Joint Stiffness)", "New Arrivals", "teas", "active", "tcm-joint-stiffness.jpg", "A traditional Chinese herbal blend prepared for infusion as directed on the label.", "Traditional Chinese herbal blend"]
+  ["Traditional Chinese Herbal Formula (Joint Stiffness)", "New Arrivals", "teas", "active", "tcm-joint-stiffness.jpg", "A traditional Chinese herbal blend prepared for infusion as directed on the label.", "Traditional Chinese herbal blend"],
+  // Owner additions provided in chat (2026-07-18), photos in "D:\TZ added products".
+  ["Fennel Capsules", "Capsules", "capsules", "digestive", "fennel-capsules.jpg", "Fennel seed in a convenient 1,000 mg capsule format for everyday digestive and appetite routines.", "Fennel seed capsules"],
+  ["Raw Cocoa Butter", "Body Care", "body-care", "beauty", "raw-cocoa-butter.jpg", "Unrefined, organic raw cocoa butter that keeps its natural chocolate aroma, for moisturizing skin, softening stretch marks, and homemade lip balms.", "Raw cocoa butter"]
 ];
 
 function makeProduct(item, index) {
@@ -442,7 +461,32 @@ function makeProduct(item, index) {
 // Products whose true format isn't inferable from the name (the photo/product
 // differs from the listing text). Keyed by normalized name.
 const FORMAT_OVERRIDES = {
-  'catuaba bark': 'capsules'
+  'catuaba bark': 'capsules',
+  // The "New Arrivals" re-shoot batch was all tagged "powders" in the catalog,
+  // but each product photo shows its true format. Route each to the section it
+  // actually belongs in (verified 2026-07-18 against the product images).
+  // Capsule bottles:
+  'acai berry': 'capsules',
+  'osu': 'capsules',
+  'nishati': 'capsules',
+  'clove, wormwood & black walnut': 'capsules',
+  'aswagandha ksm-66': 'capsules',
+  'testosterone booster': 'capsules',
+  'sea moss': 'capsules',
+  // Cold-pressed oil (pump bottle):
+  'coconut': 'oils',
+  // Whole dried leaves / roots / sea vegetables, steeped like the other teas:
+  'moringa leaves': 'teas',
+  'chaney root': 'teas',
+  'wild crafted bladderwrack': 'teas',
+  'wild crafted purple sea moss': 'teas',
+  'spanish needle': 'teas',
+  // Whole seeds:
+  'nutmeg': 'seeds',
+  'moringa seed': 'seeds',
+  'moringa setenopetala seed': 'seeds',
+  'chia seeds': 'seeds',
+  'flax seed': 'seeds'
 };
 
 function correctFormat(item) {
@@ -455,11 +499,28 @@ function correctFormat(item) {
   return copy;
 }
 
+// Products to drop outright. These are either mislabeled or spelling-variant
+// re-shoots of a product already in the catalog under its proper name, which
+// the exact-name dedup below cannot catch. Removing them keeps the canonical
+// entry and avoids the same product appearing twice (verified 2026-07-18).
+const REMOVE_NAMES = new Set([
+  'stinging nettle powder',  // photo is actually capsules; real powder is "Sting Nettle Powder", capsules are "Stinging Nettle Capsules"
+  'papaya leave',            // re-shoot of "Papaya Leaf"
+  'pimento seed',            // re-shoot of "Pimento Seeds"
+  'fenugreek & halim seeds', // re-shoot of "Fenugreek and Halim Seeds"
+  'licorice powder',         // re-shoot of "Liquorice Powder"
+  'dandelion',               // re-shoot of "Dandelion Capsules"
+  'holi basil',              // re-shoot of "Holy Basil Capsules"
+  'tonkat ali',              // re-shoot of "Tongkat Ali Capsules"
+  'oregano'                  // re-shoot of "Oregano Capsules"
+]);
+
 const seenNames = new Set();
 const cleanedCatalog = catalog
   .map(correctFormat)
   .filter((item) => {
     const key = item[0].toLowerCase().replace(/\s+/g, ' ').trim();
+    if (REMOVE_NAMES.has(key)) return false;
     if (seenNames.has(key)) return false;
     seenNames.add(key);
     return true;

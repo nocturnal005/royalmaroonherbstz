@@ -40,8 +40,8 @@ export function Footer() {
         <h4 class="font-label-md text-label-md text-tertiary-fixed uppercase mb-6">Customer Care</h4>
         <ul class="space-y-4">
           <li><a class="text-on-primary-container opacity-80 hover:opacity-100 hover:text-tertiary-fixed transition-all font-body-md text-body-md" href="#">Shipping &amp; Returns</a></li>
-          <li><a class="text-on-primary-container opacity-80 hover:opacity-100 hover:text-tertiary-fixed transition-all font-body-md text-body-md" href="#">Wholesale</a></li>
-          <li><a class="text-on-primary-container opacity-80 hover:opacity-100 hover:text-tertiary-fixed transition-all font-body-md text-body-md" href="#">Contact Us</a></li>
+          <li><a class="text-on-primary-container opacity-80 hover:opacity-100 hover:text-tertiary-fixed transition-all font-body-md text-body-md" href="/wholesale">Wholesale</a></li>
+          <li><a class="text-on-primary-container opacity-80 hover:opacity-100 hover:text-tertiary-fixed transition-all font-body-md text-body-md" href="mailto:sales@royalmaroonherbstz.com">Contact Us</a></li>
           <li><a class="text-on-primary-container opacity-80 hover:opacity-100 hover:text-tertiary-fixed transition-all font-body-md text-body-md" href="#">Privacy Policy</a></li>
         </ul>
       </div>

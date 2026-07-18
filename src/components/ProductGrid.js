@@ -16,6 +16,9 @@ const CATEGORY_THEMES = {
 // resolves overlaps — e.g. spice-category powders land under "Spice").
 function botanicalCategory(p) {
   if (p.format === 'oils') return 'oils';
+  // Body-care items (butters, soaps) have no sub-tab of their own; group them
+  // with the external beauty/grooming products under Oils rather than Powders.
+  if (p.format === 'body-care') return 'oils';
   if (p.format === 'capsules') return 'capsules';
   if (p.format === 'teas') return 'teas';
   if ((p.category || '').toLowerCase().includes('spice')) return 'spice';

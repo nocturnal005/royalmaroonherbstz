@@ -8,6 +8,7 @@ import { BackToTop, setupBackToTop } from './components/BackToTop.js';
 import { SearchOverlay, setupSearch } from './components/Search.js';
 import { MaroonHub } from './pages/MaroonHub.js';
 import { AboutUs } from './pages/AboutUs.js';
+import { Wholesale, setupWholesalePage } from './pages/Wholesale.js';
 import { showProductDetailModal } from './components/ProductDetailModal.js';
 import { products } from './data/products.js';
 import { initCartDrawer, openCartDrawer, renderCartDrawer } from './components/CartDrawer.js';
@@ -44,8 +45,8 @@ function initApp() {
     return;
   }
 
-  // Static content pages (Maroon Knowledge Hub, About Us)
-  const CONTENT_PAGES = { '/maroon-hub': MaroonHub, '/about': AboutUs };
+  // Static content pages (Maroon Knowledge Hub, About Us, Wholesale)
+  const CONTENT_PAGES = { '/maroon-hub': MaroonHub, '/about': AboutUs, '/wholesale': Wholesale };
   const contentPage = CONTENT_PAGES[window.location.pathname];
   if (contentPage) {
     app.innerHTML = `
@@ -59,6 +60,7 @@ function initApp() {
     setupHeaderScrollListener();
     setupBackToTop();
     setupSearch();
+    if (window.location.pathname === '/wholesale') setupWholesalePage();
     initCartDrawer(() => initCheckoutWizard(document.getElementById('cart-btn')));
     document.getElementById('app').addEventListener('click', (e) => {
       const cartBtn = e.target.closest('#cart-btn');

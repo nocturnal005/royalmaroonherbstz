@@ -24,7 +24,7 @@ export function Header() {
           </div>
 
           <a class="font-label-md text-label-md text-secondary hover:text-primary transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 rounded" href="/maroon-hub">Maroon Hub</a>
-          <a class="font-label-md text-label-md text-secondary hover:text-primary transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 rounded" href="#">Wholesale</a>
+          <a class="font-label-md text-label-md text-secondary hover:text-primary transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 rounded" href="/wholesale">Wholesale</a>
           <a class="font-label-md text-label-md text-secondary hover:text-primary transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 rounded" href="#">Contact</a>
         </nav>
       </div>
@@ -64,7 +64,7 @@ export function Header() {
           </div>
 
           <a class="font-label-md text-label-md text-secondary hover:text-primary transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-primary p-2" href="/maroon-hub">Maroon Hub</a>
-          <a class="font-label-md text-label-md text-secondary hover:text-primary transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-primary p-2" href="#">Wholesale</a>
+          <a class="font-label-md text-label-md text-secondary hover:text-primary transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-primary p-2" href="/wholesale">Wholesale</a>
           <a class="font-label-md text-label-md text-secondary hover:text-primary transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-primary p-2" href="#">Contact</a>
         </nav>
       </div>
