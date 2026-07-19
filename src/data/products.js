@@ -41,6 +41,30 @@ const formatDefaults = {
     servingGuidance: "Patch test before first use and avoid contact with eyes.",
     storageInstructions: "Keep closed and store in a cool, dry place.",
     price: 28000
+  },
+  rubb: {
+    usageInstructions: "Massage a small amount onto the affected area and allow it to absorb; wash hands after use.",
+    servingGuidance: "For external use on unbroken skin, following the product label.",
+    storageInstructions: "Store tightly closed at room temperature, away from heat and direct sunlight.",
+    price: 20000
+  },
+  honey: {
+    usageInstructions: "Take a small spoonful on its own or stir into warm water, tea, or food.",
+    servingGuidance: "Enjoy a small daily serving as directed on the product label.",
+    storageInstructions: "Store sealed at room temperature; natural crystallisation is normal.",
+    price: 95000
+  },
+  salts: {
+    usageInstructions: "Use in cooking and seasoning, or dissolve into a warm bath as preferred.",
+    servingGuidance: "Season to taste; for bath use, add to warm water and stir to dissolve.",
+    storageInstructions: "Keep sealed in a cool, dry place away from moisture.",
+    price: 25000
+  },
+  soaps: {
+    usageInstructions: "Lather onto damp skin, then rinse thoroughly with clean water.",
+    servingGuidance: "For external cleansing use; avoid contact with the eyes.",
+    storageInstructions: "Keep dry between uses and store away from standing water.",
+    price: 10000
   }
 };
 
@@ -155,7 +179,9 @@ const PRICE_OVERRIDES = {
   "wild crafted purple sea moss": 25000,
   "spanish needle": 25000,
   "moringa setenopetala seed": 25000,
-  "moringa seed": 25000
+  // "Moringa Seed" turned out to be a 60-capsule bottle (photo ZOZ_2221);
+  // keep its previously shown price when it moves into the Capsules section.
+  "moringa seed capsules": 25000
 };
 
 const normalizeName = (name) => name.toLowerCase().replace(/\s+/g, " ").trim();
@@ -352,7 +378,7 @@ const catalog = [
   ["Aswagandha KSM-66", "New Arrivals", "powders", "daily-wellness", "ZOZ_2211.JPG", "A new Royal Maroon Herbs botanical product awaiting full description.", "Botanical ingredients"],
   ["Aswagandha KSM-66", "New Arrivals", "powders", "daily-wellness", "ZOZ_2212.JPG", "A new Royal Maroon Herbs botanical product awaiting full description.", "Botanical ingredients"],
   ["Testosterone Booster", "New Arrivals", "powders", "daily-wellness", "ZOZ_2216.JPG", "A new Royal Maroon Herbs botanical product awaiting full description.", "Botanical ingredients"],
-  ["Moringa Seed", "New Arrivals", "powders", "daily-wellness", "ZOZ_2221.JPG", "A new Royal Maroon Herbs botanical product awaiting full description.", "Botanical ingredients"],
+  ["Moringa Seed Capsules", "Capsules", "capsules", "daily-wellness", "ZOZ_2221.JPG", "Moringa seed in an easy 1,000 mg capsule format — two capsules once a day with water.", "Moringa seed capsules"],
   ["Sea Moss", "New Arrivals", "powders", "daily-wellness", "ZOZ_2223.JPG", "A new Royal Maroon Herbs botanical product awaiting full description.", "Botanical ingredients"],
   ["Oregano", "New Arrivals", "powders", "daily-wellness", "ZOZ_2226.JPG", "A new Royal Maroon Herbs botanical product awaiting full description.", "Botanical ingredients"],
   ["Soursop, Mango, And Moringa Vegan Capsules", "New Arrivals", "powders", "daily-wellness", "ZOZ_2228.JPG", "A new Royal Maroon Herbs botanical product awaiting full description.", "Botanical ingredients"],
@@ -361,9 +387,9 @@ const catalog = [
   ["Shilajit", "New Arrivals", "powders", "daily-wellness", "ZOZ_2241.JPG", "A new Royal Maroon Herbs botanical product awaiting full description.", "Botanical ingredients"],
   ["Coconut", "New Arrivals", "powders", "daily-wellness", "ZOZ_2246.JPG", "A new Royal Maroon Herbs botanical product awaiting full description.", "Botanical ingredients"],
   ["Black Seed Oil", "New Arrivals", "powders", "daily-wellness", "ZOZ_2249.JPG", "A new Royal Maroon Herbs botanical product awaiting full description.", "Botanical ingredients"],
-  ["Himalayan Pink Salt Fine", "New Arrivals", "powders", "daily-wellness", "ZOZ_2254.JPG", "A new Royal Maroon Herbs botanical product awaiting full description.", "Botanical ingredients"],
-  ["Himalayan Pink Salt Coarse", "New Arrivals", "powders", "daily-wellness", "ZOZ_2257.JPG", "A new Royal Maroon Herbs botanical product awaiting full description.", "Botanical ingredients"],
-  ["Jimerito Honey", "New Arrivals", "powders", "daily-wellness", "ZOZ_2260.JPG", "A new Royal Maroon Herbs botanical product awaiting full description.", "Botanical ingredients"],
+  ["Himalayan Pink Salt Fine", "New Arrivals", "powders", "daily-wellness", "ZOZ_2254.JPG", "Fine-ground Himalayan pink salt for everyday cooking and seasoning.", "Himalayan pink salt (fine)"],
+  ["Himalayan Pink Salt Coarse", "New Arrivals", "powders", "daily-wellness", "ZOZ_2257.JPG", "Coarse Himalayan pink salt crystals for grinders, brines, and bath soaks.", "Himalayan pink salt (coarse)"],
+  ["Jimerito Honey", "New Arrivals", "powders", "daily-wellness", "ZOZ_2260.JPG", "A rare stingless-bee (jimerito) honey with a distinctive tangy, floral character.", "Jimerito (stingless bee) honey"],
   ["Cinnamon Leaves", "New Arrivals", "powders", "daily-wellness", "ZOZ_2878.JPG", "A new Royal Maroon Herbs botanical product awaiting full description.", "Botanical ingredients"],
   ["Baobab Powder", "New Arrivals", "powders", "daily-wellness", "ZOZ_2881.JPG", "A new Royal Maroon Herbs botanical product awaiting full description.", "Botanical ingredients"],
   ["Bladderwrack Powder", "New Arrivals", "powders", "daily-wellness", "ZOZ_2883.JPG", "A new Royal Maroon Herbs botanical product awaiting full description.", "Botanical ingredients"],
@@ -411,7 +437,7 @@ const catalog = [
 function makeProduct(item, index) {
   const [name, category, format, concern, imageFile, shortDescription, keyIngredients, imageScale] = item;
   const defaults = formatDefaults[format];
-  const topical = format === "oils" || format === "body-care";
+  const topical = format === "oils" || format === "body-care" || format === "soaps" || format === "rubb";
 
   return {
     id: index + 1,
@@ -483,10 +509,20 @@ const FORMAT_OVERRIDES = {
   'spanish needle': 'teas',
   // Whole seeds:
   'nutmeg': 'seeds',
-  'moringa seed': 'seeds',
   'moringa setenopetala seed': 'seeds',
   'chia seeds': 'seeds',
-  'flax seed': 'seeds'
+  'flax seed': 'seeds',
+  // Standalone Botanicals sections (2026-07-19): route these into their own
+  // headers (Rubb, Natural Honey, Salts, Soaps) instead of Powders/Teas/Oils/
+  // Body Care. Verified against the product photos.
+  'traditional chinese herbal formula (back tension)': 'rubb',  // 60ml topical pain liniment
+  'traditional chinese herbal formula (joint stiffness)': 'rubb',
+  'shilajit honey': 'honey',
+  'jimerito honey': 'honey',
+  'himalayan pink salt fine': 'salts',
+  'himalayan pink salt coarse': 'salts',
+  'sangre de grado': 'soaps',   // "Jabón Sangre de Grado" — a soap bar
+  'black seed soap': 'soaps'
 };
 
 function correctFormat(item) {

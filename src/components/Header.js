@@ -16,9 +16,10 @@ export function Header() {
               Botanicals
               <span class="material-symbols-outlined text-sm transition-transform duration-200" id="desktop-wellness-icon">expand_more</span>
             </button>
-            <div id="desktop-wellness-menu" class="absolute left-0 top-full mt-2 w-56 bg-surface/95 backdrop-blur-md border border-surface/20 shadow-lg rounded-xl flex-col hidden z-50 overflow-hidden">
+            <!-- Two columns of five so the 10 sections stay a compact height -->
+            <div id="desktop-wellness-menu" class="absolute left-0 top-full mt-2 w-[22rem] bg-surface/95 backdrop-blur-md border border-surface/20 shadow-lg rounded-xl grid grid-rows-5 grid-flow-col gap-x-1 p-1.5 hidden z-50 overflow-hidden">
               ${botanicalFilters.map(([value, label]) => `
-                <a href="/#cat-${value}" class="block px-4 py-3 font-label-sm text-label-sm text-secondary hover:text-primary hover:bg-surface-variant transition-colors">${label}</a>
+                <a href="/#cat-${value}" class="block px-4 py-2.5 font-label-sm text-label-sm text-secondary hover:text-primary hover:bg-surface-variant transition-colors rounded-lg">${label}</a>
               `).join('')}
             </div>
           </div>
@@ -138,14 +139,12 @@ export function setupHeaderScrollListener() {
     desktopBtn.addEventListener('click', (e) => {
       e.stopPropagation();
       desktopMenu.classList.toggle('hidden');
-      desktopMenu.classList.toggle('flex');
       desktopIcon.classList.toggle('rotate-180');
     });
 
     document.addEventListener('click', (e) => {
       if (!desktopBtn.contains(e.target) && !desktopMenu.contains(e.target)) {
         desktopMenu.classList.add('hidden');
-        desktopMenu.classList.remove('flex');
         desktopIcon.classList.remove('rotate-180');
       }
     });

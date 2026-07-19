@@ -6,7 +6,11 @@ export const botanicalFilters = [
   ["teas", "Leaves"],
   ["seeds", "Seeds"],
   ["spice", "Spice"],
-  ["oils", "Oils"]
+  ["oils", "Oils"],
+  ["rubb", "Rubb"],
+  ["honey", "Natural Honey"],
+  ["salts", "Salts"],
+  ["soaps", "Soaps"]
 ];
 
 export const formatNames = {
@@ -15,5 +19,9 @@ export const formatNames = {
   "teas": "Leaves & Teas",
   "seeds": "Seeds & Spices",
   "oils": "Oils",
-  "body-care": "Body Care"
+  "body-care": "Body Care",
+  "rubb": "Rubb",
+  "honey": "Natural Honey",
+  "salts": "Salts",
+  "soaps": "Soaps"
 };

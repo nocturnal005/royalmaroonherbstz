@@ -12,7 +12,7 @@ import { Draggable } from 'gsap/Draggable';
 
 gsap.registerPlugin(Draggable);
 
-const GALLERY_IMAGES = Array.from({ length: 11 }, (_, i) =>
+const GALLERY_IMAGES = Array.from({ length: 17 }, (_, i) =>
   `/images/wholesale/gallery-${String(i + 1).padStart(2, '0')}.jpg`
 );
 

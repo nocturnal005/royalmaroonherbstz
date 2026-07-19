@@ -9,15 +9,25 @@ const CATEGORY_THEMES = {
   teas:     'Whole dried leaves and teas for slow, considered infusions.',
   seeds:    'Seeds and whole botanicals for kitchen rituals and tea preparation.',
   spice:    'Warming spice blends for food, drinks, and daily rituals.',
-  oils:     'Cold-pressed oils for external beauty, hair, and grooming care.'
+  oils:     'Cold-pressed oils for external beauty, hair, and grooming care.',
+  rubb:     'Topical herbal rubs and liniments for targeted external comfort.',
+  honey:    'Raw and infused natural honeys for spoonfuls, drinks, and rituals.',
+  salts:    'Natural mineral salts for the kitchen table and warm bath soaks.',
+  soaps:    'Botanical cleansing bars for everyday external skincare routines.'
 };
 
 // Assign each product to exactly one Botanicals category (priority order
 // resolves overlaps — e.g. spice-category powders land under "Spice").
 function botanicalCategory(p) {
+  // Standalone sections routed by their own format.
+  if (p.format === 'rubb') return 'rubb';
+  if (p.format === 'honey') return 'honey';
+  if (p.format === 'salts') return 'salts';
+  if (p.format === 'soaps') return 'soaps';
   if (p.format === 'oils') return 'oils';
-  // Body-care items (butters, soaps) have no sub-tab of their own; group them
-  // with the external beauty/grooming products under Oils rather than Powders.
+  // Remaining body-care items (butters) have no sub-tab of their own; group
+  // them with the external beauty/grooming products under Oils rather than
+  // Powders.
   if (p.format === 'body-care') return 'oils';
   if (p.format === 'capsules') return 'capsules';
   if (p.format === 'teas') return 'teas';
