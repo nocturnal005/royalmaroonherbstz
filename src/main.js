@@ -80,7 +80,7 @@ function initApp() {
     ${Header()}
     <main>
       ${Hero()}
-      <section class="px-margin-desktop py-24 flex flex-col gap-8 max-w-[1800px] w-full mx-auto" id="collection">
+      <section class="px-margin-mobile md:px-margin-desktop py-12 md:py-24 flex flex-col gap-8 max-w-[1800px] w-full mx-auto" id="collection">
         <div class="w-full">
           ${ProductGrid()}
         </div>

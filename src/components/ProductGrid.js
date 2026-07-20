@@ -46,12 +46,15 @@ function renderGroupedProducts(filteredProducts) {
     `;
   }
 
-  // Bucket products by Botanicals category
+  // Bucket products by Botanicals category, listing each section A→Z
   const grouped = {};
   filteredProducts.forEach(p => {
     const cat = botanicalCategory(p);
     (grouped[cat] ||= []).push(p);
   });
+  for (const items of Object.values(grouped)) {
+    items.sort((a, b) => a.name.localeCompare(b.name));
+  }
 
   // Render sections in the Botanicals sub-tab order; each is an anchor target.
   let html = '';

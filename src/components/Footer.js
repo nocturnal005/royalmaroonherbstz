@@ -2,7 +2,7 @@ import { botanicalFilters } from './FilterSidebar.js';
 
 export function Footer() {
   return `
-    <footer class="w-full py-16 px-margin-desktop grid grid-cols-1 md:grid-cols-4 gap-gutter bg-primary-container border-t border-on-primary-fixed-variant">
+    <footer class="w-full py-12 md:py-16 px-margin-mobile md:px-margin-desktop grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-gutter bg-primary-container border-t border-on-primary-fixed-variant">
       <div class="col-span-1 md:col-span-1">
         <h3 class="font-headline-md text-headline-md text-on-primary dark:text-primary-fixed uppercase tracking-widest mb-6">Royal Maroon Herbs</h3>
         <p class="font-body-md text-body-md text-on-primary-container opacity-80 mb-6">
@@ -58,7 +58,7 @@ export function Footer() {
       </div>
 
       <!-- Visit / contact us: physical shops and direct phone lines -->
-      <div class="md:col-span-4 mt-4 pt-10 border-t border-on-primary-fixed-variant/40 grid grid-cols-1 sm:grid-cols-2 gap-8">
+      <div class="sm:col-span-2 lg:col-span-4 mt-4 pt-10 border-t border-on-primary-fixed-variant/40 grid grid-cols-1 sm:grid-cols-2 gap-8">
         <div class="flex items-start gap-4">
           <span class="material-symbols-outlined text-tertiary-fixed shrink-0 mt-0.5">storefront</span>
           <div>

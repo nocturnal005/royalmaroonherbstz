@@ -2,12 +2,12 @@ import { botanicalFilters } from './FilterSidebar.js';
 
 export function Header() {
   return `
-    <header class="sticky top-0 left-0 right-0 w-full z-50 flex justify-between items-center px-margin-desktop h-20 max-w-container-max mx-auto bg-surface dark:bg-surface-container border-b border-secondary-container transition-all duration-300">
-      <div class="flex items-center gap-8">
+    <header class="sticky top-0 left-0 right-0 w-full z-50 flex justify-between items-center px-margin-mobile md:px-margin-desktop h-20 max-w-container-max mx-auto bg-surface dark:bg-surface-container border-b border-secondary-container transition-all duration-300">
+      <div class="flex items-center gap-4 xl:gap-8">
         <a href="#" class="flex items-center focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 rounded" aria-label="Royal Maroon Herbs Home">
           <img src="/images/brand/logo.png" alt="Royal Maroon Herbs Logo" class="h-20 w-auto object-contain" />
         </a>
-        <nav class="hidden md:flex items-center gap-6" aria-label="Main Navigation">
+        <nav class="hidden lg:flex items-center gap-4 xl:gap-6" aria-label="Main Navigation">
           <a class="font-label-md text-label-md text-secondary hover:text-primary transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 rounded" href="/about">About Us</a>
           <a class="font-label-md text-label-md text-primary font-bold border-b-2 border-tertiary-fixed-dim pb-1 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 rounded" href="/">Shop</a>
 
@@ -30,8 +30,9 @@ export function Header() {
         </nav>
       </div>
       <div class="flex items-center gap-6">
-        <button id="search-btn" class="text-primary hover:text-tertiary-fixed-variant transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 rounded p-1" aria-label="Search">
-          <span class="material-symbols-outlined" data-icon="search">search</span>
+        <button id="search-btn" class="flex items-center gap-1.5 bg-primary text-on-primary rounded-[999px] px-3 py-2 sm:px-5 sm:py-2.5 hover:bg-primary-container transition-colors shadow-sm focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2" aria-label="Search">
+          <span class="material-symbols-outlined text-[20px]" data-icon="search">search</span>
+          <span class="hidden sm:inline font-label-md text-label-md uppercase tracking-wider">Search</span>
         </button>
         <button class="text-primary hover:text-tertiary-fixed-variant transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 rounded p-1" aria-label="Account">
           <span class="material-symbols-outlined" data-icon="person">person</span>
@@ -41,13 +42,13 @@ export function Header() {
           <span id="cart-badge" class="absolute -top-2 -right-2 bg-tertiary-container text-on-tertiary-container text-[10px] w-4 h-4 flex items-center justify-center rounded-full font-bold">0</span>
         </button>
         <!-- Mobile Hamburger Menu Button -->
-        <button id="mobile-menu-toggle" class="md:hidden text-primary hover:text-tertiary-fixed-variant transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 rounded p-1" aria-label="Open Navigation Menu" aria-expanded="false">
+        <button id="mobile-menu-toggle" class="lg:hidden text-primary hover:text-tertiary-fixed-variant transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 rounded p-1" aria-label="Open Navigation Menu" aria-expanded="false">
           <span class="material-symbols-outlined">menu</span>
         </button>
       </div>
 
       <!-- Mobile Navigation Drawer -->
-      <div id="mobile-menu" class="hidden absolute top-20 left-0 right-0 bg-surface border-b border-secondary-container p-6 flex flex-col gap-4 shadow-lg z-40 transition-all duration-300">
+      <div id="mobile-menu" class="hidden lg:!hidden absolute top-20 left-0 right-0 bg-surface border-b border-secondary-container p-6 flex flex-col gap-4 shadow-lg z-40 transition-all duration-300 max-h-[calc(100vh-5rem)] overflow-y-auto">
         <nav class="flex flex-col gap-4" aria-label="Mobile Navigation">
           <a class="font-label-md text-label-md text-secondary hover:text-primary transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-primary p-2" href="/about">About Us</a>
           <a class="font-label-md text-label-md text-primary font-bold focus:outline-none focus:ring-2 focus:ring-primary p-2" href="/">Shop</a>
@@ -120,7 +121,7 @@ export function setupHeaderScrollListener() {
 
     // Close mobile menu on window resize if switching to desktop
     window.addEventListener('resize', () => {
-      if (window.innerWidth >= 768) { // md breakpoint matches Tailwind
+      if (window.innerWidth >= 1024) { // lg breakpoint — desktop nav takes over
         if (!mobileMenu.classList.contains('hidden')) {
           mobileMenu.classList.add('hidden');
           toggleBtn.setAttribute('aria-expanded', 'false');
