@@ -46,12 +46,30 @@ export function Hero() {
       <!-- scattered herb & spice cutouts (z1) -->
       ${herbMarkup()}
 
+      <!-- Mobile/tablet only: the badge and product-photo sizes below are
+           tuned for desktop widths (their clamp() minimums don't shrink
+           until ~940px+), so under ~1024px they collide (verified
+           overlapping even at 768-900px, not just phone widths). This
+           override shrinks + spreads them apart up through the site's
+           existing lg breakpoint (1024px, where the header/nav also
+           switches to desktop mode); the original formula is already
+           safely non-overlapping by then on its own. Desktop-facing
+           inline styles above are untouched. -->
+      <style>
+        @media (max-width: 1023px) {
+          .hero-pouch-img { left: 15% !important; width: clamp(78px,24vw,200px) !important; }
+          .hero-bottle-img { left: 85% !important; width: clamp(62px,19vw,165px) !important; }
+          .hero-badge { width: clamp(108px,34vw,250px) !important; height: clamp(108px,34vw,250px) !important; }
+          .hero-badge h1 { font-size: clamp(16px,6.4vw,30px) !important; line-height: 1.15 !important; }
+        }
+      </style>
+
       <!-- products (z2) -->
       <img src="/images/hero-dc/pouch.png" alt="Guava Leaves Powder" loading="eager"
-           class="hero-fade-in"
+           class="hero-fade-in hero-pouch-img"
            style="position:absolute; z-index:2; left:26%; top:50%; width:clamp(158px,16.5vw,250px); transform:translate(-50%,-50%); filter:drop-shadow(0 18px 22px rgba(64,58,46,.26));"/>
       <img src="/images/hero-dc/bottle.png" alt="Halim Capsules" loading="eager"
-           class="hero-fade-in"
+           class="hero-fade-in hero-bottle-img"
            style="position:absolute; z-index:2; left:74%; top:55%; width:clamp(126px,13vw,178px); transform:translate(-50%,-50%) rotate(12deg); filter:drop-shadow(0 6px 11px rgba(64,58,46,.2));"/>
 
       <!-- center badge (z3) -->
