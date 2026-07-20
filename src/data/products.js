@@ -217,7 +217,11 @@ const catalog = [
   ["King of the Forest", "Dried Leaves & Teas", "teas", "daily-wellness", "king-of-the-forest.jpg", "A traditional dried herb sold under its common product name for tea preparation.", "King of the Forest herb"],
   ["Catuaba Bark", "Dried Roots & Barks", "teas", "active", "catuaba-bark.jpg", "Cut catuaba bark for slow-simmered teas and traditional botanical routines.", "Catuaba bark"],
   ["Moringa Powder", "Green Powders", "powders", "daily-wellness", "moringa-powder.jpg", "A versatile moringa leaf powder for smoothies, soups, sauces, and everyday green blends.", "Moringa leaf powder"],
-  ["Sea Moss Powder", "Sea Botanicals", "powders", "daily-wellness", "sea-moss-powder-original.jpg", "A convenient powdered sea moss format for blending into drinks and foods.", "Sea moss powder"],
+  // The old "sea-moss-powder*.jpg" files were actually photos of a
+  // Bladderwrack Powder pouch (mislabeled), so this card showed the wrong
+  // product. Those files have been deleted; use the real Sea Moss Powder
+  // 500g shot. The Bladderwrack listing keeps its own photo.
+  ["Sea Moss Powder", "Sea Botanicals", "powders", "daily-wellness", "ZOZ_2050.JPG", "A convenient powdered sea moss format for blending into drinks and foods.", "Sea moss powder"],
   ["Black Maca Powder", "Root Powders", "powders", "active", "black-maca-powder-original.jpg", "A rich, malty black maca powder for smoothies, oats, and warm drinks.", "Black maca root powder", 1.08],
   ["Senna Powder", "Herbal Powders", "powders", "digestive", "senna-powder.jpg", "A powdered senna format for occasional, careful use as directed on the label.", "Senna leaf powder"],
   ["Lemongrass", "Dried Leaves & Teas", "teas", "digestive", "lemongrass.jpg", "Bright dried lemongrass for refreshing hot or iced herbal tea.", "Lemongrass"],
@@ -259,7 +263,11 @@ const catalog = [
   ["King of the Forest", "Dried Leaves & Teas", "teas", "daily-wellness", "king-of-the-forest.jpg", "A traditional dried herb sold under its common product name for tea preparation.", "King of the Forest herb"],
   ["Catuaba Bark", "Dried Roots & Barks", "teas", "active", "catuaba-bark.jpg", "Cut catuaba bark for slow-simmered teas and traditional botanical routines.", "Catuaba bark"],
   ["Moringa Powder", "Green Powders", "powders", "daily-wellness", "moringa-powder.jpg", "A versatile moringa leaf powder for smoothies, soups, sauces, and everyday green blends.", "Moringa leaf powder"],
-  ["Sea Moss Powder", "Sea Botanicals", "powders", "daily-wellness", "sea-moss-powder-original.jpg", "A convenient powdered sea moss format for blending into drinks and foods.", "Sea moss powder"],
+  // The old "sea-moss-powder*.jpg" files were actually photos of a
+  // Bladderwrack Powder pouch (mislabeled), so this card showed the wrong
+  // product. Those files have been deleted; use the real Sea Moss Powder
+  // 500g shot. The Bladderwrack listing keeps its own photo.
+  ["Sea Moss Powder", "Sea Botanicals", "powders", "daily-wellness", "ZOZ_2050.JPG", "A convenient powdered sea moss format for blending into drinks and foods.", "Sea moss powder"],
   ["Black Maca Powder", "Root Powders", "powders", "active", "black-maca-powder-original.jpg", "A rich, malty black maca powder for smoothies, oats, and warm drinks.", "Black maca root powder", 1.08],
   ["Senna Powder", "Herbal Powders", "powders", "digestive", "senna-powder.jpg", "A powdered senna format for occasional, careful use as directed on the label.", "Senna leaf powder"],
   ["Lemongrass", "Dried Leaves & Teas", "teas", "digestive", "lemongrass.jpg", "Bright dried lemongrass for refreshing hot or iced herbal tea.", "Lemongrass"],
