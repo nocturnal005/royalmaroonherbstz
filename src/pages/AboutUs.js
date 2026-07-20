@@ -12,8 +12,8 @@ const VALUES = [
 ];
 
 const PRESS = [
-  { title: 'Healing the Land: Zanzibar’s Herbal Renaissance', meta: 'Zanzibar Mail, Local Feature, April 2026' },
-  { title: 'Blending Cultures Through Nature and Knowledge', meta: 'Zanzibar Mail, Local Feature, May 2026' }
+  { title: 'Healing the Land: Zanzibar’s Herbal Renaissance', meta: 'Zanzibar Mail, Local Feature, April 2026', href: '/press/healing-the-land' },
+  { title: 'Blending Cultures Through Nature and Knowledge', meta: 'Zanzibar Mail, Local Feature, May 2026', href: '/press/blending-cultures' }
 ];
 
 // Alternating story row: image on one side, prose on the other.
@@ -128,10 +128,11 @@ export function AboutUs() {
           </blockquote>
           <div class="flex flex-col sm:flex-row gap-4 justify-center">
             ${PRESS.map(p => `
-              <div class="bg-surface/10 border border-on-primary-fixed-variant/20 rounded-lg px-6 py-4 text-left sm:max-w-xs">
+              <a href="${p.href}" class="group bg-surface/10 border border-on-primary-fixed-variant/20 hover:border-tertiary-fixed rounded-lg px-6 py-4 text-left sm:max-w-xs transition-colors focus:outline-none focus:ring-2 focus:ring-tertiary-fixed">
                 <p class="font-label-md text-label-md text-on-primary mb-1">${p.title}</p>
                 <p class="font-label-sm text-label-sm text-on-primary-container opacity-70">${p.meta}</p>
-              </div>`).join('')}
+                <span class="mt-3 inline-flex items-center gap-1 font-label-sm text-label-sm uppercase tracking-wider text-tertiary-fixed group-hover:gap-2 transition-all">Read the feature <span class="material-symbols-outlined text-[16px]">arrow_forward</span></span>
+              </a>`).join('')}
           </div>
         </div>
       </div>

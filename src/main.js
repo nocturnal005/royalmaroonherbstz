@@ -9,6 +9,7 @@ import { SearchOverlay, setupSearch } from './components/Search.js';
 import { MaroonHub } from './pages/MaroonHub.js';
 import { AboutUs } from './pages/AboutUs.js';
 import { Wholesale, setupWholesalePage } from './pages/Wholesale.js';
+import { Press } from './pages/Press.js';
 import { showProductDetailModal } from './components/ProductDetailModal.js';
 import { products } from './data/products.js';
 import { initCartDrawer, openCartDrawer, renderCartDrawer } from './components/CartDrawer.js';
@@ -45,9 +46,12 @@ function initApp() {
     return;
   }
 
-  // Static content pages (Maroon Knowledge Hub, About Us, Wholesale)
+  // Static content pages (Maroon Knowledge Hub, About Us, Wholesale, Press).
+  // Press features live under /press/<slug>; the Press component reads the
+  // slug from the pathname itself.
   const CONTENT_PAGES = { '/maroon-hub': MaroonHub, '/about': AboutUs, '/wholesale': Wholesale };
-  const contentPage = CONTENT_PAGES[window.location.pathname];
+  const isPressRoute = window.location.pathname.startsWith('/press/');
+  const contentPage = CONTENT_PAGES[window.location.pathname] || (isPressRoute ? Press : null);
   if (contentPage) {
     app.innerHTML = `
       ${AnnouncementBar()}
