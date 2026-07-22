@@ -66,7 +66,7 @@ export function showProductDetailModal(product, triggeringElement) {
           <div>
             <span class="font-label-sm text-label-sm text-secondary uppercase tracking-widest block mb-1">${product.category}</span>
             <h3 id="modal-title" class="font-headline-lg text-headline-lg text-primary">${product.name}</h3>
-            <div class="font-headline-md text-headline-md text-tertiary mt-2">${formatTZS(product.price)}</div>
+            <div class="font-headline-md text-headline-md text-on-tertiary-container font-semibold mt-2">${formatTZS(product.price)}</div>
             <span class="text-[10px] text-secondary opacity-60 italic block mt-1">*Placeholder price pending client approval</span>
           </div>
 
