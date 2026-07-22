@@ -12,7 +12,7 @@ export function Footer() {
           <a class="text-on-primary-container hover:text-tertiary-fixed transition-colors" href="https://www.facebook.com/share/1HFY2gZvEe/" target="_blank" aria-label="Facebook" rel="noopener noreferrer">
             <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M22 12.06C22 6.5 17.52 2 12 2S2 6.5 2 12.06c0 5 3.66 9.15 8.44 9.94v-7.03H7.9v-2.9h2.54V9.85c0-2.5 1.49-3.89 3.77-3.89 1.09 0 2.24.2 2.24.2v2.46H15.2c-1.24 0-1.63.77-1.63 1.56v1.87h2.78l-.44 2.9h-2.34V22C18.34 21.21 22 17.06 22 12.06z"/></svg>
           </a>
-          <a class="text-on-primary-container hover:text-tertiary-fixed transition-colors" href="https://www.instagram.com/royal_maroon_herbs_tz?igsh=eWk4cnVkeWIwN201" target="_blank" aria-label="Instagram" rel="noopener noreferrer">
+          <a class="text-on-primary-container hover:text-tertiary-fixed transition-colors" href="https://www.instagram.com/royal_maroon_herbs_tz/" target="_blank" aria-label="Instagram" rel="noopener noreferrer">
             <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.3" cy="6.7" r="1" fill="currentColor" stroke="none"/></svg>
           </a>
           <a class="text-on-primary-container hover:text-tertiary-fixed transition-colors" href="https://www.tiktok.com/@royal_maroon_herbs?_r=1&_t=ZS-97wYOPCowwE" target="_blank" aria-label="TikTok" rel="noopener noreferrer">
