@@ -57,8 +57,10 @@ export function Footer() {
         </form>
       </div>
 
-      <!-- Visit / contact us: physical shops and direct phone lines -->
-      <div class="sm:col-span-2 lg:col-span-4 mt-4 pt-10 border-t border-on-primary-fixed-variant/40 grid grid-cols-1 sm:grid-cols-2 gap-8">
+      <!-- Visit / contact us: physical shops and direct phone lines.
+           id="contact" is the scroll target for the header's Contact link;
+           scroll-mt clears the sticky header. -->
+      <div id="contact" class="sm:col-span-2 lg:col-span-4 mt-4 pt-10 scroll-mt-28 border-t border-on-primary-fixed-variant/40 grid grid-cols-1 sm:grid-cols-2 gap-8">
         <div class="flex items-start gap-4">
           <span class="material-symbols-outlined text-tertiary-fixed shrink-0 mt-0.5">storefront</span>
           <div>

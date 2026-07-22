@@ -26,7 +26,7 @@ export function Header() {
 
           <a class="font-label-md text-label-md text-secondary hover:text-primary transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 rounded" href="/maroon-hub">Maroon Hub</a>
           <a class="font-label-md text-label-md text-secondary hover:text-primary transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 rounded" href="/wholesale">Wholesale</a>
-          <a class="font-label-md text-label-md text-secondary hover:text-primary transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 rounded" href="#">Contact</a>
+          <a class="font-label-md text-label-md text-secondary hover:text-primary transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 rounded" href="#contact">Contact</a>
         </nav>
       </div>
       <div class="flex items-center gap-6">
@@ -67,7 +67,7 @@ export function Header() {
 
           <a class="font-label-md text-label-md text-secondary hover:text-primary transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-primary p-2" href="/maroon-hub">Maroon Hub</a>
           <a class="font-label-md text-label-md text-secondary hover:text-primary transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-primary p-2" href="/wholesale">Wholesale</a>
-          <a class="font-label-md text-label-md text-secondary hover:text-primary transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-primary p-2" href="#">Contact</a>
+          <a class="font-label-md text-label-md text-secondary hover:text-primary transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-primary p-2" href="#contact">Contact</a>
         </nav>
       </div>
     </header>
@@ -77,6 +77,25 @@ export function Header() {
 export function setupHeaderScrollListener() {
   const header = document.querySelector('header');
   if (!header) return;
+
+  // "Contact" links scroll to the footer address block (id="contact").
+  // On a long page the lazy-loaded product images below the fold shift the
+  // footer down mid-scroll, so a one-shot native hash jump lands short; and
+  // re-clicking when the hash is already #contact does nothing. Handle it
+  // explicitly, with a corrective re-scroll once the layout has settled.
+  if (!window.__contactScrollBound) {
+    window.__contactScrollBound = true;
+    document.addEventListener('click', (e) => {
+      const link = e.target.closest('a[href="#contact"]');
+      if (!link) return;
+      e.preventDefault();
+      const el = document.getElementById('contact');
+      if (!el) return;
+      try { history.replaceState(null, '', '#contact'); } catch (_) {}
+      el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      setTimeout(() => el.scrollIntoView({ behavior: 'smooth', block: 'start' }), 550);
+    });
+  }
 
   // Visual feedback: Add shadow/opacity on scroll
   window.addEventListener('scroll', () => {
