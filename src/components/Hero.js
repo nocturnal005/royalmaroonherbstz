@@ -59,8 +59,19 @@ export function Hero() {
         @media (max-width: 1023px) {
           .hero-pouch-img { left: 15% !important; width: clamp(78px,24vw,200px) !important; }
           .hero-bottle-img { left: 85% !important; width: clamp(62px,19vw,165px) !important; }
-          .hero-badge { width: clamp(108px,34vw,250px) !important; height: clamp(108px,34vw,250px) !important; }
-          .hero-badge h1 { font-size: clamp(16px,6.4vw,30px) !important; line-height: 1.15 !important; }
+          /* The badge's percentage padding resolves against the CONTAINING
+             BLOCK (the full-width hero section), not the badge, so on a
+             375px screen "11%" became 45px per side and left a ~37px content
+             box inside a 127px circle - crushing the headline into three
+             lines that spilled over the rings. Drop it and constrain the
+             headline relative to the badge instead. */
+          .hero-badge { width: clamp(108px,34vw,250px) !important; height: clamp(108px,34vw,250px) !important; padding: 0 !important; }
+          .hero-badge h1 { font-size: clamp(12px,4vw,24px) !important; line-height: 1.2 !important; max-width: 72% !important; }
+          /* The rings are inset by fixed px (10/17px), which on the smaller
+             mobile badge eats ~27% of its width and squeezes the headline.
+             Scale the insets with the badge instead. */
+          .hero-badge::before { inset: 7% !important; }
+          .hero-badge::after { inset: 12% !important; }
         }
       </style>
 

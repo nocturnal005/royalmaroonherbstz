@@ -75,8 +75,8 @@ export function AboutUs() {
             'Our story is rooted in the legacy of the Maroons of Jamaica, communities of escaped Africans who resisted colonial forces and preserved their ancestral knowledge of plants to survive. For the Maroons, understanding herbs was a science of survival and a practice of self-reliance.',
             'We carry that exact same responsibility today in Stone Town, Zanzibar, acting as a living bridge between Jamaican traditions and East African heritage.'
           ],
-          img: '/images/about/founder.jpg',
-          alt: 'Twin Brothers, General Manager of Royal Maroon Herbs, in the Stone Town shop',
+          img: '/images/about/founder-stand.jpg',
+          alt: 'Twin Brothers, General Manager of Royal Maroon Herbs, beside the branded Royal Maroon Herbs product stand',
           imgSide: 'right'
         })}
         ${storyRow({

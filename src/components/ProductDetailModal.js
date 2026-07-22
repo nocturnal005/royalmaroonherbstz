@@ -56,7 +56,7 @@ export function showProductDetailModal(product, triggeringElement) {
 
           <!-- Specific Product Health Disclaimer Block -->
           <div class="p-4 bg-primary-container/20 border border-primary-container/30 rounded-none">
-            <span class="font-label-sm text-label-sm text-tertiary-fixed block mb-2 uppercase tracking-wider font-bold">Safety Notice</span>
+            <span class="font-label-sm text-label-sm text-tertiary block mb-2 uppercase tracking-wider font-bold">Safety Notice</span>
             <p class="font-body-sm text-label-sm text-secondary italic leading-relaxed">${product.healthDisclaimer}</p>
           </div>
         </div>
@@ -66,7 +66,7 @@ export function showProductDetailModal(product, triggeringElement) {
           <div>
             <span class="font-label-sm text-label-sm text-secondary uppercase tracking-widest block mb-1">${product.category}</span>
             <h3 id="modal-title" class="font-headline-lg text-headline-lg text-primary">${product.name}</h3>
-            <div class="font-headline-md text-headline-md text-tertiary-fixed mt-2">${formatTZS(product.price)}</div>
+            <div class="font-headline-md text-headline-md text-tertiary mt-2">${formatTZS(product.price)}</div>
             <span class="text-[10px] text-secondary opacity-60 italic block mt-1">*Placeholder price pending client approval</span>
           </div>
 

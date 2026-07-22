@@ -63,6 +63,11 @@ export function Footer() {
           <span class="material-symbols-outlined text-tertiary-fixed shrink-0 mt-0.5">storefront</span>
           <div>
             <span class="font-label-sm text-label-sm text-tertiary-fixed uppercase tracking-wider block mb-2">Dar es Salaam Shop</span>
+            <p class="font-body-md text-body-md text-on-primary-container opacity-80 leading-relaxed mb-3">
+              Palm Village, Mikocheni B &ndash; Mwai Kibaki Road,<br/>
+              Kinondoni District, Dar es Salaam,<br/>
+              Tanzania &ndash; East Africa
+            </p>
             <p class="font-body-md text-body-md text-on-primary-container opacity-80 leading-relaxed">
               For local inquiries or orders, contact the shop directly:<br/>
               <a class="hover:text-tertiary-fixed hover:opacity-100 transition-all" href="tel:+255793306987">+255 793 306 987</a>
