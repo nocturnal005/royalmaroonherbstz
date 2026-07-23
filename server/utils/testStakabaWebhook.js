@@ -143,7 +143,8 @@ async function runTests() {
     process.exit(1);
   }
 
-  console.log(`Using product '${product.id}' (starting stock: ${product.stock_quantity}) for all scenarios.\n`);
+  const initialStock = product.stock_quantity;
+  console.log(`Using product '${product.id}' (starting stock: ${initialStock}) for all scenarios.\n`);
 
   // --- Scenario A: successful payment -> fulfilment + stock deduction ---
   console.log('--- Scenario A: successful payment ---');
@@ -232,6 +233,57 @@ async function runTests() {
   check(paymentE.status === 'Failed', 'payment marked Failed', paymentE.status);
   check(orderE.payment_status === 'PaymentFailed', 'order payment_status = PaymentFailed', orderE.payment_status);
   check(getProductStock(product.id) === stockBeforeE, 'stock untouched on failed payment', `stock=${getProductStock(product.id)}`);
+
+  // --- Scenario F: each reachable mobile money network end-to-end ---
+  // The network-specific leg is the initiate call, which sends Stakaba's
+  // `network` enum (Mpesa/TigoPesa/AirtelMoney). Verify the sandbox accepts
+  // each and returns a real internalReference, then confirm the success
+  // webhook fulfils the order the same way for every network.
+  console.log('\n--- Scenario F: reachable mobile money networks (mpesa, tigo, airtel) ---');
+  for (const network of ['mpesa', 'tigo', 'airtel']) {
+    try {
+      const f = await createOrderAndInitiate({ productId: product.id, paymentMethod: network });
+      check(Boolean(f.internalReference), `[${network}] sandbox initiate returned an internalReference`);
+
+      const stockBeforeF = getProductStock(product.id);
+      const fRes = await sendWebhook(WEBHOOK_SECRET, {
+        event: 'transaction.success',
+        internalReference: f.internalReference,
+        status: 'SUCCESS',
+        grossAmount: f.amount,
+        metadata: { orderId: f.orderId }
+      });
+      const paymentF = getPayment(f.paymentReference);
+      check(fRes.status === 200 && paymentF.status === 'Paid', `[${network}] payment fulfilled to Paid`, `status=${paymentF.status}`);
+      check(getProductStock(product.id) === stockBeforeF - 1, `[${network}] stock decremented by 1`, `before=${stockBeforeF}, after=${getProductStock(product.id)}`);
+    } catch (err) {
+      check(false, `[${network}] end-to-end flow`, err.message);
+    }
+  }
+
+  // --- Scenario G: HaloPesa is NOT reachable via checkout ---
+  // NETWORK_MAP maps halo -> HaloPesa, but the checkout schema enum, the DB
+  // CHECK constraint, and the frontend all omit it. Assert that a checkout
+  // session with halo is rejected, so this known gap can't silently regress.
+  console.log('\n--- Scenario G: halo is blocked at checkout (known gap) ---');
+  const gRes = await api('/checkout/session', {
+    method: 'POST',
+    headers: { 'Idempotency-Key': idempotencyKey() },
+    body: JSON.stringify({
+      customerName: 'Stakaba Test Customer',
+      customerPhone: '+255712345678',
+      customerEmail: 'stakaba-test@example.com',
+      deliveryRegion: 'dar',
+      paymentMethod: 'halo',
+      items: [{ productId: product.id, quantity: 1 }]
+    })
+  });
+  check(gRes.status === 400, 'halo checkout session rejected (400) — HaloPesa unreachable by design', `status=${gRes.status}`);
+
+  // Self-cleaning: restore the test product's stock to its pre-run value so
+  // the script is repeatable without manual DB fixups.
+  db.prepare('UPDATE products SET stock_quantity = ? WHERE id = ?').run(initialStock, product.id);
+  console.log(`\nRestored product '${product.id}' stock to ${initialStock}.`);
 
   console.log('\n========================================');
   console.log(passed ? 'ALL CHECKS PASSED' : 'SOME CHECKS FAILED — see [FAIL] lines above');
