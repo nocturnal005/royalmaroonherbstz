@@ -9,6 +9,7 @@
     "preview": "vite preview",
     "server:migrate": "node server/db/migrate.js",
     "server:seed": "node server/db/seed.js",
+    "server:seed:catalog": "node server/db/seedProductsFromCatalog.js",
     "server:dev": "node server/index.js",
     "server:test:manual": "node server/utils/testManual.js",
     "server:create-admin": "node server/db/createAdmin.js",
