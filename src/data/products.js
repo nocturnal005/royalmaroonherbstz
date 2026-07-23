@@ -442,10 +442,105 @@ const catalog = [
   ["Raw Cocoa Butter", "Body Care", "body-care", "beauty", "raw-cocoa-butter.jpg", "Unrefined, organic raw cocoa butter that keeps its natural chocolate aroma, for moisturizing skin, softening stretch marks, and homemade lip balms.", "Raw cocoa butter"]
 ];
 
+// Real product descriptions sourced from the owner's official product-label
+// artwork (PDFs in "D:\wholesale\product description", provided 2026-07-23).
+// Keyed by normalized product name. When present, these replace the generic
+// placeholder shortDescription/keyIngredients ("A new Royal Maroon Herbs
+// botanical product awaiting full description." / "Botanical ingredients")
+// that many New Arrivals still carry, so the shop "Learn More" panel shows a
+// real description, Key Botanicals, and Full Ingredient Panel.
+//
+// Copy is written in the catalog's careful, non-medical voice: it captures
+// what each product IS (botanical identity, format, nutrient/traditional
+// framing) but deliberately omits the disease/treatment claims printed on the
+// labels, consistent with the site-wide health disclaimer. On-label SAFETY
+// caveats (e.g. the parasite blend's "not for pregnancy / max four weeks") are
+// kept. Labels not yet covering a listed product (Black Walnut, Neem Oil have
+// no standalone catalog entry) are omitted pending the full list.
+const DESCRIPTION_OVERRIDES = {
+  "ashwagandha capsules": {
+    description: "Ashwagandha root extract (Withania somnifera) in 1,000 mg vegetarian capsules — a traditional adaptogenic root long used in Ayurvedic wellness, packaged for simple daily servings with no powder to measure.",
+    keyIngredients: "Ashwagandha root extract (Withania somnifera), vegetable capsule"
+  },
+  "catuaba bark": {
+    description: "Catuaba bark in 1,000 mg vegetarian capsules — a traditional botanical from the bark of a tree native to Brazil, packaged for convenient daily use.",
+    keyIngredients: "Catuaba bark extract, vegetable capsule"
+  },
+  "clove, wormwood & black walnut": {
+    description: "A traditional three-botanical blend of clove, wormwood, and black walnut, taken in small measured servings as part of a periodic herbal routine. Not suitable for pregnant or breastfeeding women, people with epilepsy, or children; use for no longer than four weeks at a time.",
+    keyIngredients: "Clove, wormwood, black walnut"
+  },
+  "fenugreek & halim seeds": {
+    description: "A blend of fenugreek and halim (garden cress) seeds, naturally rich in protein, iron, magnesium, folate, manganese, and dietary fibre. Traditionally taken as a small daily spoonful stirred into water.",
+    keyIngredients: "Fenugreek seed, halim (garden cress) seed"
+  },
+  "fenugreek and halim seeds": {
+    description: "A blend of fenugreek and halim (garden cress) seeds, naturally rich in protein, iron, magnesium, folate, manganese, and dietary fibre. Traditionally taken as a small daily spoonful stirred into water.",
+    keyIngredients: "Fenugreek seed, halim (garden cress) seed"
+  },
+  "nishati": {
+    description: "Nishati capsules blend ashwagandha (600 mg), safed musli (200 mg), and shilajit (200 mg) in 1,000 mg vegetarian capsules — three traditional Ayurvedic botanicals in one daily serving. Take one after lunch and one after dinner, or as directed.",
+    keyIngredients: "Ashwagandha (Withania somnifera), safed musli (Chlorophytum borivilianum), shilajit, vegetable capsule"
+  },
+  "shilajit capsules": {
+    description: "Purified shilajit extract in 1,000 mg vegetarian capsules — a mineral-rich resin traditionally used in Ayurvedic wellness, packaged for simple daily servings with no sticky resin to handle.",
+    keyIngredients: "Shilajit extract, vegetable capsule"
+  },
+  "shilajit powder": {
+    description: "A mineral-rich shilajit powder — a traditional Ayurvedic resin naturally containing fulvic acid — for stirring a small measured portion into warm water or drinks.",
+    keyIngredients: "Shilajit powder"
+  },
+  "shilajit": {
+    description: "A mineral-rich shilajit resin naturally containing fulvic acid, traditionally used in Ayurvedic wellness. Dissolve a small measured portion in warm water or a drink as directed.",
+    keyIngredients: "Shilajit resin"
+  },
+  "tamarind powder": {
+    description: "A tangy tamarind fruit powder naturally containing vitamin C, calcium, iron, potassium, and dietary fibre. Long used in South Indian cooking and warm drinks; stir a small spoonful into water, food, or recipes.",
+    keyIngredients: "Tamarind fruit powder"
+  },
+  "tongkat ali capsules": {
+    description: "Tongkat Ali root extract in 1,000 mg vegetarian capsules — a traditional Southeast Asian botanical, packaged for convenient daily servings without tasting the bitter powder.",
+    keyIngredients: "Tongkat Ali root extract, vegetable capsule"
+  },
+  "tongkat ali powder": {
+    description: "Tongkat Ali root (Eurycoma longifolia), a traditional Southeast Asian botanical, milled for careful use in warm drinks and blends.",
+    keyIngredients: "Tongkat Ali root powder"
+  },
+  "tonkat ali": {
+    description: "Tongkat Ali root (Eurycoma longifolia), a traditional Southeast Asian botanical, milled for careful use in warm drinks and blends.",
+    keyIngredients: "Tongkat Ali root powder"
+  },
+  "wormwood": {
+    description: "Wormwood (Artemisia absinthium), a classic bitter herb used for centuries in carefully measured infusions as part of a periodic digestive routine. Steep small, measured servings and follow the label guidance.",
+    keyIngredients: "Wormwood (Artemisia absinthium)"
+  },
+  "cancer bush": {
+    description: "Cancer bush (Sutherlandia frutescens), a traditional Southern African botanical used for centuries in herbal infusions. Prepare as a measured tea for careful daily use.",
+    keyIngredients: "Cancer bush (Sutherlandia frutescens)"
+  },
+  "halim seeds": {
+    description: "Halim (garden cress) seeds, naturally rich in iron, folic acid, calcium, zinc, and vitamins C and E. Traditionally simmered a teaspoon per cup of water for ten minutes and taken daily.",
+    keyIngredients: "Halim (garden cress) seeds"
+  },
+  "halim capsules": {
+    description: "Halim (garden cress) seed in a convenient capsule format — naturally rich in iron, folic acid, and calcium — for measured daily servings without simmering the seeds.",
+    keyIngredients: "Halim (garden cress) seed, vegetable capsule"
+  },
+  "king of the forest": {
+    description: "King of the Forest, a traditional botanical valued in folk herbal practice, prepared as a leaf tea. Steep a measured serving for careful daily use.",
+    keyIngredients: "King of the Forest leaves"
+  }
+};
+
 function makeProduct(item, index) {
-  const [name, category, format, concern, imageFile, shortDescription, keyIngredients, imageScale] = item;
+  const [name, category, format, concern, imageFile, rawShortDescription, rawKeyIngredients, imageScale] = item;
   const defaults = formatDefaults[format];
   const topical = format === "oils" || format === "body-care" || format === "soaps" || format === "rubb";
+
+  // Prefer an official-label description/ingredient list when we have one.
+  const override = DESCRIPTION_OVERRIDES[normalizeName(name)];
+  const shortDescription = override?.description ?? rawShortDescription;
+  const keyIngredients = override?.keyIngredients ?? rawKeyIngredients;
 
   return {
     id: index + 1,
