@@ -128,9 +128,9 @@ function renderWizard() {
       <div class="p-6 md:p-10 flex-grow flex flex-col">
         <!-- Header & Step indicators -->
         <div class="mb-8">
-          <span class="text-label-sm font-label-sm text-tertiary-fixed uppercase tracking-widest block mb-2">Secure Checkout Demo</span>
+          <span class="text-label-sm font-label-sm text-tertiary-fixed uppercase tracking-widest block mb-2">Secure Checkout</span>
           <h3 id="wizard-title" class="font-headline-md text-headline-md text-primary uppercase">
-            ${currentStep < 5 ? `Checkout — Step ${currentStep} of 5` : 'Step 5 of 5: Payment Status Preview'}
+            ${currentStep < 5 ? `Checkout — Step ${currentStep} of 5` : 'Step 5 of 5: Payment Status'}
           </h3>
           
           <!-- Step indicator dots -->
@@ -142,18 +142,6 @@ function renderWizard() {
             <div class="h-1.5 flex-grow ${currentStep >= 5 ? 'bg-primary' : 'bg-secondary-container/30'}"></div>
           </div>
         </div>
-
-        <!-- Demo Warnings (Steps 1 to 4) -->
-        ${currentStep < 5 ? `
-          <div class="mb-6 p-4 bg-primary-container/20 border border-primary-container/30 text-xs text-secondary space-y-1">
-            <p class="font-bold flex items-center gap-1 text-primary">
-              <span class="material-symbols-outlined text-sm">info</span>
-              This is a frontend checkout preview only.
-            </p>
-            <p>Do not enter real payment credentials or private financial data.</p>
-            <p class="opacity-80">Final totals, order creation, and payment confirmation will be handled securely by the backend in a later stage.</p>
-          </div>
-        ` : ''}
 
         <!-- Step Specific Content -->
         <div class="flex-grow">
@@ -365,7 +353,7 @@ function renderStepContent(cartItems, subtotal, shippingFee, estimatedTotal) {
               Back
             </button>
             <button id="submit-checkout-wizard" class="bg-primary text-surface font-label-md text-label-md px-10 py-5 uppercase tracking-widest hover:bg-on-primary-container transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 flex items-center gap-2">
-              <span>Continue to Payment Preview</span>
+              <span>Continue to Payment</span>
               <span class="material-symbols-outlined text-[18px]">verified</span>
             </button>
           </div>
