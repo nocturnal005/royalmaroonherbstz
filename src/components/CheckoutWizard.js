@@ -263,7 +263,7 @@ function renderStepContent(cartItems, subtotal, shippingFee, estimatedTotal) {
               <input type="radio" id="pay-mpesa" name="payment-method" value="mpesa" ${selectedPaymentMethod === 'mpesa' ? 'checked' : ''} class="form-radio text-primary border-secondary" />
               <div>
                 <span class="font-label-md text-label-md text-primary uppercase block font-bold">Vodacom M-Pesa</span>
-                <span class="text-xs text-secondary">Pay via Selcom mobile prompt</span>
+                <span class="text-xs text-secondary">Pay via mobile money prompt</span>
               </div>
             </label>
 
@@ -271,7 +271,7 @@ function renderStepContent(cartItems, subtotal, shippingFee, estimatedTotal) {
               <input type="radio" id="pay-tigo" name="payment-method" value="tigo" ${selectedPaymentMethod === 'tigo' ? 'checked' : ''} class="form-radio text-primary border-secondary" />
               <div>
                 <span class="font-label-md text-label-md text-primary uppercase block font-bold">Tigo Pesa</span>
-                <span class="text-xs text-secondary">Pay via Selcom mobile prompt</span>
+                <span class="text-xs text-secondary">Pay via mobile money prompt</span>
               </div>
             </label>
 
@@ -279,7 +279,7 @@ function renderStepContent(cartItems, subtotal, shippingFee, estimatedTotal) {
               <input type="radio" id="pay-airtel" name="payment-method" value="airtel" ${selectedPaymentMethod === 'airtel' ? 'checked' : ''} class="form-radio text-primary border-secondary" />
               <div>
                 <span class="font-label-md text-label-md text-primary uppercase block font-bold">Airtel Money</span>
-                <span class="text-xs text-secondary">Pay via Selcom mobile prompt</span>
+                <span class="text-xs text-secondary">Pay via mobile money prompt</span>
               </div>
             </label>
 
@@ -287,14 +287,14 @@ function renderStepContent(cartItems, subtotal, shippingFee, estimatedTotal) {
               <input type="radio" id="pay-card" name="payment-method" value="card" ${selectedPaymentMethod === 'card' ? 'checked' : ''} class="form-radio text-primary border-secondary" />
               <div>
                 <span class="font-label-md text-label-md text-primary uppercase block font-bold">Credit/Debit Card</span>
-                <span class="text-xs text-secondary">Processed via Selcom checkout gateway</span>
+                <span class="text-xs text-secondary">Processed via Stakaba secure checkout</span>
               </div>
             </label>
           </div>
 
           <div class="p-4 bg-error-container/10 border border-error-container/30 text-xs text-secondary">
-            <span class="font-bold text-error uppercase block mb-1">Selcom Checkout notice</span>
-            In the final version, this will open a secure checkout session. No card details or transaction credentials will be transmitted or stored in this demo mockup.
+            <span class="font-bold text-error uppercase block mb-1">Secure checkout notice</span>
+            Mobile money sends a USSD prompt to your phone; card payments open Stakaba's PCI-DSS hosted checkout. Card details are never entered on or stored by this site.
           </div>
 
           <div class="flex justify-between pt-6 border-t border-secondary-container/30">
@@ -654,8 +654,7 @@ async function submitCheckout() {
         deliveryRegion: selectedRegion.id,
         paymentMethod: selectedPaymentMethod,
         items: cartItems.map(item => ({
-          productId: item.product.id,
-          margin: 0,
+          productId: String(item.product.id),
           quantity: item.quantity
         }))
       })
@@ -674,7 +673,9 @@ async function submitCheckout() {
     renderWizard();
 
     const paymentIdempotencyKey = `pay_idem_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`;
-    const initiateRes = await fetch('/api/payments/initiate', {
+    // Amount is intentionally omitted — the backend uses the checkout session
+    // total as the authoritative amount.
+    const initiateRes = await fetch('/api/payments/stakaba/initiate', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -683,7 +684,6 @@ async function submitCheckout() {
       body: JSON.stringify({
         checkoutSessionId,
         paymentMethod: selectedPaymentMethod,
-        amount: validatedEstimatedTotal,
         customerPhone: normalizePhone(customerPhone)
       })
     });
@@ -691,6 +691,16 @@ async function submitCheckout() {
     const initiateData = await initiateRes.json();
     if (!initiateRes.ok || !initiateData.success) {
       throw new Error(initiateData.error?.message || 'Payment initiation failed.');
+    }
+
+    // Card payments use Stakaba's hosted PCI checkout — redirect the customer
+    // there. Mobile money returns no checkoutUrl and continues with polling.
+    if (initiateData.data.checkoutUrl) {
+      paymentReference = initiateData.data.paymentReference;
+      customerMessage = 'Redirecting you to the secure card checkout page…';
+      renderWizard();
+      window.location.assign(initiateData.data.checkoutUrl);
+      return;
     }
 
     paymentReference = initiateData.data.paymentReference;
@@ -718,7 +728,7 @@ async function retryCheckoutPayment(sessionId, amount) {
 
   try {
     const paymentIdempotencyKey = `pay_idem_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`;
-    const initiateRes = await fetch('/api/payments/initiate', {
+    const initiateRes = await fetch('/api/payments/stakaba/initiate', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -727,7 +737,6 @@ async function retryCheckoutPayment(sessionId, amount) {
       body: JSON.stringify({
         checkoutSessionId: sessionId,
         paymentMethod: selectedPaymentMethod,
-        amount: amount,
         customerPhone: normalizePhone(customerPhone)
       })
     });
@@ -735,6 +744,14 @@ async function retryCheckoutPayment(sessionId, amount) {
     const initiateData = await initiateRes.json();
     if (!initiateRes.ok || !initiateData.success) {
       throw new Error(initiateData.error?.message || 'Payment initiation failed.');
+    }
+
+    if (initiateData.data.checkoutUrl) {
+      paymentReference = initiateData.data.paymentReference;
+      customerMessage = 'Redirecting you to the secure card checkout page…';
+      renderWizard();
+      window.location.assign(initiateData.data.checkoutUrl);
+      return;
     }
 
     paymentReference = initiateData.data.paymentReference;
@@ -769,7 +786,7 @@ function startPollingStatus(sessionId, amount) {
     }
 
     try {
-      const res = await fetch(`/api/payments/status/${paymentReference}`);
+      const res = await fetch(`/api/payments/stakaba/status/${paymentReference}`);
       const data = await res.json();
 
       if (res.ok && data.success) {

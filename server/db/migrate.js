@@ -52,6 +52,16 @@ function runMigration() {
     addColumnIfNotExists('payment_events', 'raw_payload_redacted', 'TEXT');
     addColumnIfNotExists('payment_events', 'processed_at', 'DATETIME DEFAULT CURRENT_TIMESTAMP');
 
+    // Stakaba payment gateway columns. `provider` distinguishes rows from the
+    // legacy Selcom integration; `stakaba_reference` stores Stakaba's
+    // `internalReference`, which is how webhooks are matched back to a payment
+    // we created. For Stakaba webhook idempotency we reuse the existing UNIQUE
+    // column payment_events.selcom_transaction_id to hold the internalReference
+    // (a generic provider transaction id), so no new unique index is needed.
+    addColumnIfNotExists('payments', 'provider', "TEXT");
+    addColumnIfNotExists('payments', 'stakaba_reference', 'TEXT');
+    addColumnIfNotExists('payment_events', 'provider', "TEXT");
+
     console.log('✓ SQLite database migrations completed successfully.');
     
     // Log audit event
