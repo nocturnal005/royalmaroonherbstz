@@ -12,6 +12,7 @@
     "server:seed:catalog": "node server/db/seedProductsFromCatalog.js",
     "server:dev": "node server/index.js",
     "server:test:manual": "node server/utils/testManual.js",
+    "server:test:stakaba-webhook": "node server/utils/testStakabaWebhook.js",
     "server:create-admin": "node server/db/createAdmin.js",
     "server:test:stage11": "node server/utils/testManual11.js"
   },
