@@ -532,6 +532,78 @@ const DESCRIPTION_OVERRIDES = {
   }
 };
 
+// Key Benefits, taken VERBATIM from the owner's official product-label artwork
+// (PDFs in "D:\wholesale\product description"). Per the owner's instruction
+// (2026-07-23) this section uses only the labels' own wording — including the
+// disease/treatment claims printed on them — and no copy of our own. Keyed by
+// normalized product name; only products whose label carries benefit text
+// appear here, so the shop's "Key Benefits" section is shown only for them.
+// (Black Walnut and Neem Oil labels have no standalone catalog product yet.)
+const KEY_BENEFITS = {
+  // Capsule labels — explicit BENEFITS bullet lists.
+  "shilajit capsules": ["Enhances Energy & Stamina", "Promotes Healthy Aging", "Supports Cognitive Function", "Boosts Immune System"],
+  "shilajit powder": ["Enhances Energy & Stamina", "Promotes Healthy Aging", "Supports Cognitive Function", "Boosts Immune System"],
+  "shilajit": ["Enhances Energy & Stamina", "Promotes Healthy Aging", "Supports Cognitive Function", "Boosts Immune System"],
+  "ashwagandha capsules": ["Reduces Stress & Anxiety", "Boosts Brain Function & Memory", "Enhances Muscle Strength", "Supports Immune Health"],
+  "tongkat ali capsules": ["Improve Concentration", "Increase Fertility (Both Men and Women)", "Boost Testosterone", "Reduces Stress"],
+  // Prose labels — benefit statements in the labels' own words.
+  "catuaba bark": [
+    "Enhance libido and sexual performance in both men and women",
+    "Enhance brain function, energy levels and overall well-being",
+    "Boost dopamine in the brain to function better"
+  ],
+  "clove, wormwood & black walnut": [
+    "Helps eliminate parasites in the gastrointestinal tract while supporting overall gut health",
+    "Used for centuries to address parasitic infections, including pinworms, roundworms, and tapeworms",
+    "Helps relieve symptoms associated with malaria",
+    "Beneficial for regulating menstrual cramps"
+  ],
+  "wormwood": [
+    "Supports gut health, which plays a central role in overall body function",
+    "Used for centuries to help address parasitic infections — pinworms, roundworms, and tapeworms",
+    "May help relieve symptoms associated with malaria",
+    "Beneficial for regulating menstrual cramps"
+  ],
+  "cancer bush": [
+    "Bolsters the immune system and strengthens the body's defences against various diseases",
+    "Cancer-fighting potential (although more research is needed)",
+    "Packed with antioxidants that help neutralize harmful free radicals, reducing oxidative stress",
+    "Good for reducing symptoms of anxiety"
+  ],
+  "tamarind powder": [
+    "Contains vitamin C, B, E, calcium, iron, potassium, manganese, phosphorus, and fibre",
+    "Helps your stomach digest food faster by stimulating the activity of bile",
+    "Can be used to lower high blood pressure — its potassium works as a vasodilator to lower cardiovascular stress"
+  ],
+  "fenugreek & halim seeds": [
+    "A rich source of protein, magnesium, iron, copper, folate, manganese, and dietary fibre",
+    "Supports women who struggle with heavy periods",
+    "Good for post-pregnancy care and recovery — a rich source of calcium and vitamins"
+  ],
+  "fenugreek and halim seeds": [
+    "A rich source of protein, magnesium, iron, copper, folate, manganese, and dietary fibre",
+    "Supports women who struggle with heavy periods",
+    "Good for post-pregnancy care and recovery — a rich source of calcium and vitamins"
+  ],
+  "halim seeds": [
+    "Rich in vitamins C and E, zinc, iron, and selenium to help keep the immune system functioning properly",
+    "Helps keep cholesterol levels in check",
+    "Rich in folic acid, iron, and calcium — a great addition to the diet of pregnant women"
+  ],
+  "halim capsules": [
+    "Rich in vitamins C and E, zinc, iron, and selenium to help keep the immune system functioning properly",
+    "Helps keep cholesterol levels in check",
+    "Rich in folic acid, iron, and calcium — a great addition to the diet of pregnant women"
+  ],
+  "king of the forest": [
+    "Leaves are rubbed on the skin to treat herpes simplex virus and fungal infections such as ringworm and athlete's foot",
+    "Traditionally used for skin blemishes, liver spots, eczema, and rashes",
+    "Said to help promote menstruation and improve blood circulation in women",
+    "Tea is used to purify the blood, combat constipation, and ease swelling, joint pain, and inflammation associated with arthritis",
+    "The whole plant is used for malaria"
+  ]
+};
+
 function makeProduct(item, index) {
   const [name, category, format, concern, imageFile, rawShortDescription, rawKeyIngredients, imageScale] = item;
   const defaults = formatDefaults[format];
@@ -556,6 +628,7 @@ function makeProduct(item, index) {
     shortDescription,
     keyIngredients,
     fullIngredients: keyIngredients.split(",").map((ingredient) => ingredient.trim()),
+    keyBenefits: KEY_BENEFITS[normalizeName(name)] ?? null,
     usageInstructions: defaults.usageInstructions,
     servingGuidance: defaults.servingGuidance,
     warnings: topical

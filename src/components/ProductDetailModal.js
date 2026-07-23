@@ -76,6 +76,16 @@ export function showProductDetailModal(product, triggeringElement) {
             <p class="font-body-md text-body-md text-secondary leading-relaxed">${product.shortDescription}</p>
           </div>
 
+          <!-- Key Benefits (verbatim from the product label; shown only when present) -->
+          ${Array.isArray(product.keyBenefits) && product.keyBenefits.length ? `
+          <div class="p-4 bg-tertiary-container/20 border border-tertiary-container/40 rounded-none">
+            <span class="font-label-sm text-label-sm text-tertiary uppercase tracking-wider block mb-2 font-bold">Key Benefits</span>
+            <ul class="list-disc pl-4 space-y-1 font-body-sm text-body-sm text-secondary">
+              ${product.keyBenefits.map(benefit => `<li>${benefit}</li>`).join('')}
+            </ul>
+          </div>
+          ` : ''}
+
           <!-- Key Ingredients (quick highlight) -->
           <div>
             <span class="font-label-sm text-label-sm text-primary uppercase tracking-wider block mb-1">Key Botanicals</span>
