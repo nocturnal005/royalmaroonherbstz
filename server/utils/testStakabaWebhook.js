@@ -90,14 +90,15 @@ async function createOrderAndInitiate({ productId, quantity = 1, paymentMethod =
     throw new Error(`Payment initiation failed: ${initiateRes.status} ${JSON.stringify(initiateRes.data)}`);
   }
 
-  const { paymentReference } = initiateRes.data.data;
+  const { paymentReference, checkoutUrl } = initiateRes.data.data;
   const payment = db.prepare('SELECT * FROM payments WHERE payment_reference = ?').get(paymentReference);
 
   return {
     orderId: orderDraftReference,
     paymentReference,
     internalReference: payment.stakaba_reference,
-    amount: payment.amount
+    amount: payment.amount,
+    checkoutUrl // null for mobile money; a hosted-checkout URL for card
   };
 }
 
@@ -280,6 +281,37 @@ async function runTests() {
     })
   });
   check(gRes.status === 400, 'halo checkout session rejected (400) — HaloPesa unreachable by design', `status=${gRes.status}`);
+
+  // --- Scenario H: card payment (hosted checkout) end-to-end ---
+  // Card payments differ from mobile money: the network-specific leg is the
+  // hosted-checkout redirect, so the initiate call must return a usable
+  // `checkoutUrl` (the customer enters Visa/Mastercard details on Stakaba's
+  // page — we never see the card or its brand). We can't drive that hosted
+  // page from a test, so we verify our two testable card responsibilities:
+  //   (1) initiate returns a real internalReference + an https checkoutUrl,
+  //   (2) the success webhook fulfils a card order identically to mobile money.
+  console.log('\n--- Scenario H: card payment (hosted checkout) ---');
+  try {
+    const h = await createOrderAndInitiate({ productId: product.id, paymentMethod: 'card' });
+    check(Boolean(h.internalReference), '[card] sandbox initiate returned an internalReference');
+    check(typeof h.checkoutUrl === 'string' && /^https:\/\//.test(h.checkoutUrl), '[card] initiate returned an https hosted-checkout URL', String(h.checkoutUrl));
+
+    const stockBeforeH = getProductStock(product.id);
+    const hRes = await sendWebhook(WEBHOOK_SECRET, {
+      event: 'transaction.success',
+      internalReference: h.internalReference,
+      status: 'SUCCESS',
+      grossAmount: h.amount,
+      metadata: { orderId: h.orderId }
+    });
+    const paymentH = getPayment(h.paymentReference);
+    const orderH = getOrder(h.orderId);
+    check(hRes.status === 200 && paymentH.status === 'Paid', '[card] payment fulfilled to Paid', `status=${paymentH.status}`);
+    check(orderH.fulfilment_status === 'FulfilmentPending', '[card] order queued for fulfilment', orderH.fulfilment_status);
+    check(getProductStock(product.id) === stockBeforeH - 1, '[card] stock decremented by 1', `before=${stockBeforeH}, after=${getProductStock(product.id)}`);
+  } catch (err) {
+    check(false, '[card] end-to-end flow', err.message);
+  }
 
   // Self-cleaning: restore the test product's stock to its pre-run value so
   // the script is repeatable without manual DB fixups.
