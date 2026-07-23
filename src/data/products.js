@@ -442,94 +442,75 @@ const catalog = [
   ["Raw Cocoa Butter", "Body Care", "body-care", "beauty", "raw-cocoa-butter.jpg", "Unrefined, organic raw cocoa butter that keeps its natural chocolate aroma, for moisturizing skin, softening stretch marks, and homemade lip balms.", "Raw cocoa butter"]
 ];
 
-// Real product descriptions sourced from the owner's official product-label
+// Product descriptions taken VERBATIM from the owner's official product-label
 // artwork (PDFs in "D:\wholesale\product description", provided 2026-07-23).
-// Keyed by normalized product name. When present, these replace the generic
-// placeholder shortDescription/keyIngredients ("A new Royal Maroon Herbs
-// botanical product awaiting full description." / "Botanical ingredients")
-// that many New Arrivals still carry, so the shop "Learn More" panel shows a
-// real description, Key Botanicals, and Full Ingredient Panel.
+// Per the owner's instruction (2026-07-23), the Description shown in the shop
+// "Learn More" panel must be the label's own wording — including the
+// disease/treatment claims printed on the labels — and NOT any copy of ours.
 //
-// Copy is written in the catalog's careful, non-medical voice: it captures
-// what each product IS (botanical identity, format, nutrient/traditional
-// framing) but deliberately omits the disease/treatment claims printed on the
-// labels, consistent with the site-wide health disclaimer. On-label SAFETY
-// caveats (e.g. the parasite blend's "not for pregnancy / max four weeks") are
-// kept. Labels not yet covering a listed product (Black Walnut, Neem Oil have
-// no standalone catalog entry) are omitted pending the full list.
+// Two cases, keyed by normalized product name:
+//   1. Labels that carry a DESCRIPTION paragraph -> `description` is that
+//      paragraph verbatim (only obvious OCR typos fixed, e.g. "trengthens" ->
+//      "strengthens"; no claims added or removed). `keyIngredients` is the
+//      label's own ingredient/botanical identity.
+//   2. Capsule / benefit-only labels (Shilajit, Ashwagandha, Tongkat Ali,
+//      Nishati) have NO description paragraph — only a benefits list and an
+//      ingredients list. For these we carry ONLY the label's `keyIngredients`
+//      and leave `description` unset, so it falls back to the pre-existing
+//      owner-written catalog text (never ours). Their benefit wording appears
+//      in the separate Key Benefits section (see KEY_BENEFITS below).
+//
+// Black Walnut and Neem Oil labels have no standalone catalog product yet, so
+// they're omitted pending the full list. NOTE: plain "Shilajit" (the resin
+// jar) and "Nishati" have no label description paragraph and no owner catalog
+// text, so their Description still shows the generic placeholder — flagged for
+// the owner to supply wording.
 const DESCRIPTION_OVERRIDES = {
-  "ashwagandha capsules": {
-    description: "Ashwagandha root extract (Withania somnifera) in 1,000 mg vegetarian capsules — a traditional adaptogenic root long used in Ayurvedic wellness, packaged for simple daily servings with no powder to measure.",
-    keyIngredients: "Ashwagandha root extract (Withania somnifera), vegetable capsule"
-  },
+  // --- 1. Labels WITH a description paragraph: verbatim label text ---
   "catuaba bark": {
-    description: "Catuaba bark in 1,000 mg vegetarian capsules — a traditional botanical from the bark of a tree native to Brazil, packaged for convenient daily use.",
+    description: "Catuaba is a herbal remedy derived from the bark of a tree native to Brazil. They say Catuaba makes the old young again and the young never age. The use is to enhance libido and sexual performance in both men and women. It also enhances brain function, energy levels, and overall well-being. Catuaba boosts your dopamine so the brain functions better. Take two capsules daily. From what we know, dopamine basically shuts off negative emotion.",
     keyIngredients: "Catuaba bark extract, vegetable capsule"
   },
   "clove, wormwood & black walnut": {
-    description: "A traditional three-botanical blend of clove, wormwood, and black walnut, taken in small measured servings as part of a periodic herbal routine. Not suitable for pregnant or breastfeeding women, people with epilepsy, or children; use for no longer than four weeks at a time.",
+    description: "This herbal blend is used to help eliminate parasites in the gastrointestinal tract while supporting overall gut health. These herbs have been used for centuries to address parasitic infections, including pinworms, roundworms, and tapeworms, and to help relieve symptoms associated with malaria. This combination is also beneficial for regulating menstrual cramps. This blend is not recommended for pregnant or breastfeeding women, individuals with epilepsy, or children. It should only be taken for a maximum of four weeks.",
     keyIngredients: "Clove, wormwood, black walnut"
   },
   "fenugreek & halim seeds": {
-    description: "A blend of fenugreek and halim (garden cress) seeds, naturally rich in protein, iron, magnesium, folate, manganese, and dietary fibre. Traditionally taken as a small daily spoonful stirred into water.",
+    description: "This combination can be used to support women who struggle with heavy periods — take one teaspoon of this powder per day. Fenugreek and halim seeds mix are a rich source of protein, magnesium, iron, copper, folate, manganese, and dietary fibre. This mix is good for post-pregnancy care as it is a rich source of calcium and vitamins, and it is a very good nutrition supplement for post-pregnancy recovery. This mix has amazing benefits for great health.",
     keyIngredients: "Fenugreek seed, halim (garden cress) seed"
   },
   "fenugreek and halim seeds": {
-    description: "A blend of fenugreek and halim (garden cress) seeds, naturally rich in protein, iron, magnesium, folate, manganese, and dietary fibre. Traditionally taken as a small daily spoonful stirred into water.",
+    description: "This combination can be used to support women who struggle with heavy periods — take one teaspoon of this powder per day. Fenugreek and halim seeds mix are a rich source of protein, magnesium, iron, copper, folate, manganese, and dietary fibre. This mix is good for post-pregnancy care as it is a rich source of calcium and vitamins, and it is a very good nutrition supplement for post-pregnancy recovery. This mix has amazing benefits for great health.",
     keyIngredients: "Fenugreek seed, halim (garden cress) seed"
   },
-  "nishati": {
-    description: "Nishati capsules blend ashwagandha (600 mg), safed musli (200 mg), and shilajit (200 mg) in 1,000 mg vegetarian capsules — three traditional Ayurvedic botanicals in one daily serving. Take one after lunch and one after dinner, or as directed.",
-    keyIngredients: "Ashwagandha (Withania somnifera), safed musli (Chlorophytum borivilianum), shilajit, vegetable capsule"
-  },
-  "shilajit capsules": {
-    description: "Purified shilajit extract in 1,000 mg vegetarian capsules — a mineral-rich resin traditionally used in Ayurvedic wellness, packaged for simple daily servings with no sticky resin to handle.",
-    keyIngredients: "Shilajit extract, vegetable capsule"
-  },
-  "shilajit powder": {
-    description: "A mineral-rich shilajit powder — a traditional Ayurvedic resin naturally containing fulvic acid — for stirring a small measured portion into warm water or drinks.",
-    keyIngredients: "Shilajit powder"
-  },
-  "shilajit": {
-    description: "A mineral-rich shilajit resin naturally containing fulvic acid, traditionally used in Ayurvedic wellness. Dissolve a small measured portion in warm water or a drink as directed.",
-    keyIngredients: "Shilajit resin"
-  },
   "tamarind powder": {
-    description: "A tangy tamarind fruit powder naturally containing vitamin C, calcium, iron, potassium, and dietary fibre. Long used in South Indian cooking and warm drinks; stir a small spoonful into water, food, or recipes.",
+    description: "Tamarind was used by the Tamils in south India in ancient times as a natural medicine. It also contains vitamin C, B, E, calcium, iron, potassium, manganese, phosphorus, and fibre. Tamarind helps your stomach to digest foods faster, as it stimulates the activity of bile. This tamarind powder can also be used to lower high blood pressure, as the potassium within works as a vasodilator to lower cardiovascular stress.",
     keyIngredients: "Tamarind fruit powder"
   },
-  "tongkat ali capsules": {
-    description: "Tongkat Ali root extract in 1,000 mg vegetarian capsules — a traditional Southeast Asian botanical, packaged for convenient daily servings without tasting the bitter powder.",
-    keyIngredients: "Tongkat Ali root extract, vegetable capsule"
-  },
-  "tongkat ali powder": {
-    description: "Tongkat Ali root (Eurycoma longifolia), a traditional Southeast Asian botanical, milled for careful use in warm drinks and blends.",
-    keyIngredients: "Tongkat Ali root powder"
-  },
-  "tonkat ali": {
-    description: "Tongkat Ali root (Eurycoma longifolia), a traditional Southeast Asian botanical, milled for careful use in warm drinks and blends.",
-    keyIngredients: "Tongkat Ali root powder"
-  },
   "wormwood": {
-    description: "Wormwood (Artemisia absinthium), a classic bitter herb used for centuries in carefully measured infusions as part of a periodic digestive routine. Steep small, measured servings and follow the label guidance.",
+    description: "Wormwood is used to support gut health, which plays a central role in overall body function. This herb has been used for centuries to help address parasitic infections, specifically pinworms, roundworms, and tapeworms. It may also help relieve symptoms associated with malaria and is beneficial for regulating menstrual cramps.",
     keyIngredients: "Wormwood (Artemisia absinthium)"
   },
   "cancer bush": {
-    description: "Cancer bush (Sutherlandia frutescens), a traditional Southern African botanical used for centuries in herbal infusions. Prepare as a measured tea for careful daily use.",
+    description: "This herb has been a cornerstone in herbal medicine for centuries. Cancer bush is renowned for its ability to bolster the immune system; it strengthens the body's defences against various diseases, helping to ward off infections and illnesses effectively. Also cancer-fighting potential — although more research is needed — the bush offering hope for its use as a supplementary treatment. Antioxidant benefit: packed with antioxidants, the bush helps neutralize harmful free radicals in the body, which can reduce oxidative stress and lower risk of chronic diseases. Also good to reducing symptoms of anxiety.",
     keyIngredients: "Cancer bush (Sutherlandia frutescens)"
   },
   "halim seeds": {
-    description: "Halim (garden cress) seeds, naturally rich in iron, folic acid, calcium, zinc, and vitamins C and E. Traditionally simmered a teaspoon per cup of water for ten minutes and taken daily.",
+    description: "The nutrients found in halim seeds include vitamins C and E, zinc, iron, and selenium. These nutrients play an important role in keeping the immune system functioning properly. Halim also keeps cholesterol levels in check. Halim seeds can be a great addition to the diet of pregnant women as they are rich in folic acid, iron, and calcium. Directions: boil one teaspoon to one cup of water for 10 minutes; use daily.",
     keyIngredients: "Halim (garden cress) seeds"
   },
-  "halim capsules": {
-    description: "Halim (garden cress) seed in a convenient capsule format — naturally rich in iron, folic acid, and calcium — for measured daily servings without simmering the seeds.",
-    keyIngredients: "Halim (garden cress) seed, vegetable capsule"
-  },
   "king of the forest": {
-    description: "King of the Forest, a traditional botanical valued in folk herbal practice, prepared as a leaf tea. Steep a measured serving for careful daily use.",
+    description: "The leaves are rubbed on the skin to treat herpes simplex virus, for fungal infections such as ringworm, athlete's foot and other skin fungi, scabies and other parasitic infections, skin blemishes, liver spots, eczema, and rashes. The leaves are said to be useful for promoting menstruation and improving blood circulation in females. The tea made from the leaves is used to purify the blood, combat constipation, for shortness of breath, and also to help with swelling, joint pain, and inflammation associated with arthritis. The whole plant is used for malaria. This herb is truly the king of the forest.",
     keyIngredients: "King of the Forest leaves"
-  }
+  },
+
+  // --- 2. Capsule / benefit-only labels: no description paragraph exists, so
+  //        we carry ONLY the label's ingredient list and let the Description
+  //        fall back to the owner's catalog text. ---
+  "ashwagandha capsules": { keyIngredients: "Ashwagandha root extract (Withania somnifera), vegetable capsule" },
+  "shilajit capsules": { keyIngredients: "Shilajit extract, vegetable capsule" },
+  "tongkat ali capsules": { keyIngredients: "Tongkat Ali extract, vegetable capsule" },
+  "nishati": { keyIngredients: "Ashwagandha (Withania somnifera), safed musli (Chlorophytum borivilianum), shilajit, vegetable capsule" }
 };
 
 // Key Benefits, taken VERBATIM from the owner's official product-label artwork
