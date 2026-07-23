@@ -261,11 +261,12 @@ async function runTests() {
     }
   }
 
-  // --- Scenario G: HaloPesa is NOT reachable via checkout ---
-  // NETWORK_MAP maps halo -> HaloPesa, but the checkout schema enum, the DB
-  // CHECK constraint, and the frontend all omit it. Assert that a checkout
-  // session with halo is rejected, so this known gap can't silently regress.
-  console.log('\n--- Scenario G: halo is blocked at checkout (known gap) ---');
+  // --- Scenario G: HaloPesa is NOT a supported payment method ---
+  // HaloPesa is intentionally unsupported: the checkout schema enum, the DB
+  // CHECK constraint, the frontend, and NETWORK_MAP all omit it. Assert that
+  // a checkout session with halo is rejected, so support can't be half-added
+  // (e.g. to the util only) without this failing.
+  console.log('\n--- Scenario G: halo is rejected as an unsupported method ---');
   const gRes = await api('/checkout/session', {
     method: 'POST',
     headers: { 'Idempotency-Key': idempotencyKey() },

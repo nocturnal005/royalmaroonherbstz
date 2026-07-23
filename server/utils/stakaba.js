@@ -24,8 +24,7 @@ const timeoutMs = () => parseInt(process.env.STAKABA_REQUEST_TIMEOUT_MS || '1500
 export const NETWORK_MAP = {
   mpesa: 'Mpesa',
   tigo: 'TigoPesa',
-  airtel: 'AirtelMoney',
-  halo: 'HaloPesa'
+  airtel: 'AirtelMoney'
 };
 
 export class StakabaError extends Error {
