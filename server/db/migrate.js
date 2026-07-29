@@ -62,6 +62,12 @@ function runMigration() {
     addColumnIfNotExists('payments', 'stakaba_reference', 'TEXT');
     addColumnIfNotExists('payment_events', 'provider', "TEXT");
 
+    // Selcom hosted checkout (card payments): the payment gateway URL cannot
+    // be re-derived after create-order, so persist it to let an in-flight
+    // card payment be resumed (initiate reuse) instead of creating a
+    // duplicate Selcom order.
+    addColumnIfNotExists('payments', 'checkout_url', 'TEXT');
+
     console.log('✓ SQLite database migrations completed successfully.');
     
     // Log audit event

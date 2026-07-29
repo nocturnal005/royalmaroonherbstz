@@ -27,9 +27,14 @@ This document outlines the API integration boundaries, signature placeholders, t
 
 ## 📝 Webhook Verification and Acknowledgement
 
-1. **Signature Verification Placeholder**:
-   - All public webhook endpoints must validate the authenticity of incoming Selcom payloads by verifying their digital signature.
-   - **Important**: *Selcom signature verification details are to be confirmed against official Selcom documentation or sandbox credentials in Stage 10.* We do not assume header layouts, signing algorithms, or HMAC keys until sandbox specifications are reviewed.
+1. **Webhook Authenticity Model (unsigned webhooks)**:
+   - Confirmed directly with Selcom's team (2026-07): **Selcom webhooks are NOT signed**. There is no digest/HMAC to verify on inbound callbacks (the outbound request-signing scheme still applies to calls *we* make to Selcom). There is also **no Selcom sandbox** — local testing runs with `SELCOM_MODE=mock` plus the webhook simulation harness (`npm run server:test:selcom-webhook`).
+   - Authenticity is therefore layered, all checks under our control (see `server/routes/webhooks.js`):
+     1. **Secret URL path** — the endpoint is `POST /api/webhooks/selcom/:secret`, where `:secret` must equal `SELCOM_WEBHOOK_SECRET` (constant-time compare; wrong/missing secret → 404 so the endpoint is not discoverable). The full secret URL is supplied per-order in the create-order `webhook` field, so no dashboard configuration is needed.
+     2. **Source-IP allowlist** — `SELCOM_WEBHOOK_ALLOWED_IPS` (comma-separated IPs/CIDRs obtained from Selcom support). When set, non-matching source IPs are rejected with 403 and audit-logged. When unset, requests are accepted but loudly warned (startup + per request). `X-Forwarded-For` is ignored unless Express `trust proxy` is configured, so the header cannot be spoofed to bypass the allowlist. Loopback is allowed in `SELCOM_MODE=mock` for the local harness.
+     3. **Reference match** — the webhook's `order_id` must match a payment this backend created (`payments.selcom_reference`). Unknown ids are logged and acknowledged without state change.
+     4. **Amount match** — the webhook's `amount` must equal the integer TZS amount recorded on that payment; mismatches are logged and refused without state change.
+   - There is no timestamp replay check: nothing is signed, so a timestamp would prove nothing. Replay safety comes from `transid` idempotency (below).
 2. **Idempotency Checks**:
    - Ensure the transaction state transitions only from `AwaitingPayment` to `Paid` or `PaymentFailed`. Once an order is updated to `Paid`, all future status changes from payment events must be rejected.
 3. **Audit Log Logging & Webhook Log Security**:

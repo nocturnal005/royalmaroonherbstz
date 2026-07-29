@@ -12,6 +12,21 @@ function escapeHTML(value) {
     .replaceAll("'", '&#039;');
 }
 
+// Active payment gateway. Flip this single word back to 'stakaba' to return
+// to the Stakaba integration (kept wired as fallback) — endpoints and
+// user-facing provider naming derive from it.
+const PAYMENT_PROVIDER = 'selcom';
+const PAYMENT_PROVIDER_LABEL = PAYMENT_PROVIDER === 'stakaba' ? 'Stakaba' : 'Selcom';
+const PAYMENT_API = PAYMENT_PROVIDER === 'stakaba'
+  ? {
+      initiate: '/api/payments/stakaba/initiate',
+      status: (reference) => `/api/payments/stakaba/status/${reference}`
+    }
+  : {
+      initiate: '/api/payments/initiate',
+      status: (reference) => `/api/payments/status/${reference}`
+    };
+
 let wizardElement = null;
 let backdropElement = null;
 let lastTriggeringElement = null;
@@ -275,14 +290,14 @@ function renderStepContent(cartItems, subtotal, shippingFee, estimatedTotal) {
               <input type="radio" id="pay-card" name="payment-method" value="card" ${selectedPaymentMethod === 'card' ? 'checked' : ''} class="form-radio text-primary border-secondary" />
               <div>
                 <span class="font-label-md text-label-md text-primary uppercase block font-bold">Credit/Debit Card</span>
-                <span class="text-xs text-secondary">Processed via Stakaba secure checkout</span>
+                <span class="text-xs text-secondary">Processed via ${PAYMENT_PROVIDER_LABEL} secure checkout</span>
               </div>
             </label>
           </div>
 
           <div class="p-4 bg-error-container/10 border border-error-container/30 text-xs text-secondary">
             <span class="font-bold text-error uppercase block mb-1">Secure checkout notice</span>
-            Mobile money sends a USSD prompt to your phone; card payments open Stakaba's PCI-DSS hosted checkout. Card details are never entered on or stored by this site.
+            Mobile money sends a USSD prompt to your phone; card payments open ${PAYMENT_PROVIDER_LABEL}'s PCI-DSS hosted checkout. Card details are never entered on or stored by this site.
           </div>
 
           <div class="flex justify-between pt-6 border-t border-secondary-container/30">
@@ -663,7 +678,7 @@ async function submitCheckout() {
     const paymentIdempotencyKey = `pay_idem_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`;
     // Amount is intentionally omitted — the backend uses the checkout session
     // total as the authoritative amount.
-    const initiateRes = await fetch('/api/payments/stakaba/initiate', {
+    const initiateRes = await fetch(PAYMENT_API.initiate, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -681,8 +696,9 @@ async function submitCheckout() {
       throw new Error(initiateData.error?.message || 'Payment initiation failed.');
     }
 
-    // Card payments use Stakaba's hosted PCI checkout — redirect the customer
-    // there. Mobile money returns no checkoutUrl and continues with polling.
+    // Card payments use the provider's hosted PCI checkout — redirect the
+    // customer there. Mobile money returns no checkoutUrl and continues with
+    // polling.
     if (initiateData.data.checkoutUrl) {
       paymentReference = initiateData.data.paymentReference;
       customerMessage = 'Redirecting you to the secure card checkout page…';
@@ -716,7 +732,7 @@ async function retryCheckoutPayment(sessionId, amount) {
 
   try {
     const paymentIdempotencyKey = `pay_idem_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`;
-    const initiateRes = await fetch('/api/payments/stakaba/initiate', {
+    const initiateRes = await fetch(PAYMENT_API.initiate, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -774,7 +790,7 @@ function startPollingStatus(sessionId, amount) {
     }
 
     try {
-      const res = await fetch(`/api/payments/stakaba/status/${paymentReference}`);
+      const res = await fetch(PAYMENT_API.status(paymentReference));
       const data = await res.json();
 
       if (res.ok && data.success) {

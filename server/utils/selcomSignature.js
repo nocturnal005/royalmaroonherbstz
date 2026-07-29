@@ -45,72 +45,10 @@ export function generateSelcomHeaders(payload, signedFieldsList, timestamp = new
   return { headers, signingString };
 }
 
-/**
- * Verifies the signature of an incoming webhook payload using constant-time comparison.
- * @param {Object} body Raw parsed JSON body of the webhook
- * @param {Object} headers HTTP headers of the request (case-insensitive keys)
- * @returns {boolean} True if verification passes
- */
-export function verifySelcomWebhook(body, headers) {
-  const apiKey = process.env.SELCOM_API_KEY || '';
-  const apiSecret = process.env.SELCOM_API_SECRET || '';
-  if (!apiKey || !apiSecret) {
-    throw new Error('Selcom credentials (SELCOM_API_KEY, SELCOM_API_SECRET) must be set in environment.');
-  }
-
-  const authHeader = headers['authorization'] || headers['Authorization'];
-  const digestMethodHeader = headers['digest-method'] || headers['Digest-Method'];
-  const receivedDigest = headers['digest'] || headers['Digest'];
-  const timestamp = headers['timestamp'] || headers['Timestamp'];
-  const signedFieldsList = headers['signed-fields'] || headers['Signed-Fields'];
-
-  if (!receivedDigest || !timestamp || !signedFieldsList || !authHeader || !digestMethodHeader) {
-    return false;
-  }
-
-  // 1. Verify Authorization equals SELCOM <Base64(API_KEY)>
-  const expectedAuth = `SELCOM ${Buffer.from(apiKey).toString('base64')}`;
-  if (authHeader !== expectedAuth) {
-    return false;
-  }
-
-  // 2. Verify Digest-Method equals HS256
-  if (digestMethodHeader !== 'HS256') {
-    return false;
-  }
-
-  // 3. Verify Signed-Fields exactly matches expected webhook fields list
-  const expectedSignedFields = process.env.SELCOM_SIGNED_FIELDS_WEBHOOK || '';
-  if (signedFieldsList !== expectedSignedFields) {
-    return false;
-  }
-
-  // 4. Re-build signing base string
-  let signingString = `timestamp=${timestamp}`;
-  const fields = signedFieldsList.split(',');
-  for (const field of fields) {
-    const val = body[field];
-    if (val === undefined || val === null) {
-      throw new Error(`Webhook payload missing signed field: "${field}"`);
-    }
-    signingString += `&${field}=${val}`;
-  }
-
-  // Calculate local HMAC-SHA256 signature
-  const hmac = crypto.createHmac('sha256', apiSecret);
-  hmac.update(signingString);
-  const calculatedDigest = hmac.digest('base64');
-
-  // Perform constant-time buffer comparison to mitigate timing attacks
-  const calculatedBuffer = Buffer.from(calculatedDigest);
-  const receivedBuffer = Buffer.from(receivedDigest);
-
-  if (calculatedBuffer.length !== receivedBuffer.length) {
-    return false;
-  }
-
-  return crypto.timingSafeEqual(calculatedBuffer, receivedBuffer);
-}
+// NOTE: There is intentionally no verifySelcomWebhook here any more. Selcom
+// webhooks are NOT signed (confirmed by Selcom's team, 2026-07) — inbound
+// authenticity is handled in routes/webhooks.js via a secret URL path, a
+// source-IP allowlist, reference + amount matching, and transid idempotency.
 
 /**
  * Redacts sensitive fields from a gateway payload recursively before storage.

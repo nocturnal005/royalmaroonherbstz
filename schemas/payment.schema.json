@@ -6,7 +6,7 @@
   "properties": {
     "initiationRequest": {
       "type": "object",
-      "required": ["checkoutSessionId", "paymentMethod", "amount", "customerPhone"],
+      "required": ["checkoutSessionId", "paymentMethod", "customerPhone"],
       "properties": {
         "checkoutSessionId": {
           "type": "string"
@@ -18,7 +18,7 @@
         "amount": {
           "type": "integer",
           "minimum": 1,
-          "description": "Integer amount in TZS."
+          "description": "Optional integer amount in TZS. The server uses the checkout session total as the authoritative amount; if a client sends this it must match or the request is rejected."
         },
         "customerPhone": {
           "type": "string",

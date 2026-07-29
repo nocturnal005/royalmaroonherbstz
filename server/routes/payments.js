@@ -5,6 +5,7 @@ import { validateBody } from '../middleware/validation.js';
 import { checkIdempotency } from '../middleware/idempotency.js';
 import { logAuditEvent } from '../audit/logger.js';
 import { generateSelcomHeaders, redactPayload } from '../utils/selcomSignature.js';
+import { createHostedCheckoutOrder, buildSecretWebhookUrl } from '../utils/selcomCheckout.js';
 
 const router = express.Router();
 
@@ -12,10 +13,14 @@ function generatePaymentRef() {
   return `pay_ref_${crypto.randomBytes(6).toString('hex')}`;
 }
 
+const b64 = (value) => Buffer.from(String(value), 'utf8').toString('base64');
+
 /**
  * POST /api/payments/initiate
- * Initiates Selcom mobile money payment via create-order-minimal + wallet-payment.
- * Protected by idempotency.
+ * Initiates a Selcom payment. Mobile money (mpesa/tigo/airtel) uses
+ * create-order-minimal + wallet-payment USSD push with status polling; card
+ * uses the full create-order hosted checkout and returns a `checkoutUrl` the
+ * frontend redirects to. Protected by idempotency.
  */
 router.post('/initiate', checkIdempotency, validateBody('payment'), async (req, res, next) => {
   try {
@@ -23,7 +28,7 @@ router.post('/initiate', checkIdempotency, validateBody('payment'), async (req, 
 
     // 1. Verify checkout session exists and fetch order draft
     const session = db.prepare(`
-      SELECT order_draft_reference, total, customer_name, customer_email
+      SELECT order_draft_reference, total, customer_name, customer_email, customer_phone, delivery_region_id
       FROM checkout_sessions
       WHERE id = ?
     `).get(checkoutSessionId);
@@ -58,7 +63,7 @@ router.post('/initiate', checkIdempotency, validateBody('payment'), async (req, 
     // and is not expired yet. If it does, return the existing payment reference instead of a duplicate USSD push.
     const nowIso = new Date().toISOString();
     const existingActive = db.prepare(`
-      SELECT payment_reference, status, customer_message, expires_at
+      SELECT payment_reference, status, customer_message, expires_at, checkout_url
       FROM payments
       WHERE order_id = ? AND status = 'AwaitingPayment' AND expires_at > ?
     `).get(session.order_draft_reference, nowIso);
@@ -70,18 +75,97 @@ router.post('/initiate', checkIdempotency, validateBody('payment'), async (req, 
         data: {
           paymentReference: existingActive.payment_reference,
           paymentStatus: 'AwaitingPayment',
-          customerMessage: 'An active USSD payment prompt is already pending on your phone.'
+          customerMessage: existingActive.checkout_url
+            ? 'A card checkout is already in progress for this order.'
+            : 'An active USSD payment prompt is already pending on your phone.',
+          expiresAt: existingActive.expires_at,
+          checkoutUrl: existingActive.checkout_url || null
         }
       });
     }
 
     const paymentReference = generatePaymentRef();
-    const expiresAt = new Date(Date.now() + 120000).toISOString(); // 2 minute expiry window
 
     // Selcom payloads and signed fields setup
     const orderId = `ord_selcom_${crypto.randomBytes(6).toString('hex')}`;
     const transId = `tx_selcom_${crypto.randomBytes(6).toString('hex')}`;
     const timestamp = new Date().toISOString();
+
+    // --- Track C: card payments via full create-order hosted checkout -------
+    if (paymentMethod === 'card') {
+      // Hosted checkout pages live longer than a USSD prompt; Selcom's
+      // default order expiry is 60 minutes.
+      const cardExpiresAt = new Date(Date.now() + 60 * 60 * 1000).toISOString();
+      const itemAgg = db.prepare('SELECT COALESCE(SUM(quantity), 1) AS n FROM order_items WHERE order_id = ?')
+        .get(session.order_draft_reference);
+      const region = db.prepare('SELECT name FROM shipping_regions WHERE id = ?').get(session.delivery_region_id);
+
+      let hosted;
+      try {
+        hosted = await createHostedCheckoutOrder({
+          orderId,
+          amount,
+          buyerName: session.customer_name,
+          buyerEmail: session.customer_email,
+          buyerPhone: customerPhone || session.customer_phone,
+          regionName: region ? region.name : null,
+          noOfItems: itemAgg.n
+        });
+      } catch (err) {
+        logAuditEvent('PAYMENT_INITIATE_GATEWAY_FAILURE', null, paymentReference, { gatewayError: err.message }, req);
+        return res.status(502).json({
+          success: false,
+          error: { code: 'BAD_GATEWAY', message: `Payment gateway error: ${err.message}` }
+        });
+      }
+
+      const cardMessage = 'Redirecting you to the secure card checkout page.';
+      const persistCardTx = db.transaction(() => {
+        db.prepare(`
+          INSERT INTO payments (
+            payment_reference, order_id, amount, status, provider, selcom_reference,
+            provider_status, provider_message, checkout_url,
+            initiated_at, expires_at, customer_message
+          ) VALUES (?, ?, ?, 'AwaitingPayment', 'selcom', ?, 'AwaitingPayment', 'Hosted checkout created', ?, ?, ?, ?)
+        `).run(
+          paymentReference,
+          session.order_draft_reference,
+          amount,
+          orderId,
+          hosted.checkoutUrl,
+          new Date().toISOString(),
+          cardExpiresAt,
+          cardMessage
+        );
+
+        db.prepare(`
+          UPDATE orders
+          SET order_status = 'AwaitingPayment',
+              payment_status = 'AwaitingPayment',
+              updated_at = CURRENT_TIMESTAMP
+          WHERE id = ?
+        `).run(session.order_draft_reference);
+      });
+      persistCardTx();
+
+      logAuditEvent('PAYMENT_INITIATED', null, paymentReference, {
+        orderId: session.order_draft_reference, amount, order_id: orderId, method: 'card'
+      }, req);
+
+      return res.status(202).json({
+        success: true,
+        data: {
+          paymentReference,
+          paymentStatus: 'AwaitingPayment',
+          customerMessage: cardMessage,
+          expiresAt: cardExpiresAt,
+          checkoutUrl: hosted.checkoutUrl
+        }
+      });
+    }
+
+    // --- Mobile money: create-order-minimal + wallet-payment USSD push ------
+    const expiresAt = new Date(Date.now() + 120000).toISOString(); // 2 minute expiry window
 
     const orderPayload = {
       vendor: process.env.SELCOM_VENDOR_ID || 'dev_vendor_id',
@@ -91,7 +175,11 @@ router.post('/initiate', checkIdempotency, validateBody('payment'), async (req, 
       buyer_phone: customerPhone,
       amount: amount,
       currency: 'TZS',
-      webhook: process.env.SELCOM_WEBHOOK_URL || 'http://localhost:5000/api/webhooks/selcom',
+      // Base64 per docs ("All urls in the request and response are base64
+      // encoded"). Includes the secret path segment the webhook handler
+      // authenticates — the webhook URL is supplied per-order, so no
+      // dashboard configuration is needed.
+      webhook: b64(buildSecretWebhookUrl()),
       buyer_remarks: 'Natures Alchemy Order',
       merchant_remarks: 'Store checkout',
       no_of_items: 1
@@ -170,10 +258,10 @@ router.post('/initiate', checkIdempotency, validateBody('payment'), async (req, 
     const executePaymentTx = db.transaction(() => {
       db.prepare(`
         INSERT INTO payments (
-          payment_reference, order_id, amount, status, selcom_reference, 
-          selcom_transid, provider_status, provider_result_code, provider_message, 
+          payment_reference, order_id, amount, status, provider, selcom_reference,
+          selcom_transid, provider_status, provider_result_code, provider_message,
           initiated_at, expires_at, customer_message
-        ) VALUES (?, ?, ?, 'AwaitingPayment', ?, ?, 'AwaitingPayment', '000', 'USSD push initiated', ?, ?, ?)
+        ) VALUES (?, ?, ?, 'AwaitingPayment', 'selcom', ?, ?, 'AwaitingPayment', '000', 'USSD push initiated', ?, ?, ?)
       `).run(
         paymentReference,
         session.order_draft_reference,
@@ -209,7 +297,9 @@ router.post('/initiate', checkIdempotency, validateBody('payment'), async (req, 
       data: {
         paymentReference,
         paymentStatus: 'AwaitingPayment',
-        customerMessage: 'Please authorize the payment prompt on your phone.'
+        customerMessage: 'Please authorize the payment prompt on your phone.',
+        expiresAt,
+        checkoutUrl: null // mobile money has no hosted-checkout redirect
       }
     });
   } catch (error) {
