@@ -28,7 +28,7 @@ To prevent duplicate charges, double orders, or redundant database operations, t
 - **Checkout Session (`POST /api/checkout/session`)**: Sending the same `Idempotency-Key` will return the existing checkout session details rather than creating a new draft order or session.
 - **Payment Initiation (`POST /api/payments/initiate`)**: A duplicate initiation request with the same `Idempotency-Key` returns the existing payment transaction state. It does not spawn a new push notification attempt.
 - **Payment Retry**: Retrying a payment due to network timeouts should pass the original backend-generated `paymentReference` or `orderId` to ensure the gateway reuses the existing reference.
-- **Selcom Webhook (`POST /api/webhooks/selcom`)**: The webhook receiver must track Selcom transaction IDs (`transid`) to ensure duplicate events do not update order state or trigger double fulfilment processes.
+- **Payment Webhook**: The webhook receiver must track gateway transaction IDs (`transid`) to ensure duplicate events do not update order state or trigger double fulfilment processes.
 
 ---
 
@@ -253,7 +253,12 @@ Tracks the lifecycle of orders.
 ---
 
 ### 6. Payment Initiation API
-Triggers Selcom mobile money or gateway session.
+Triggers a mobile money prompt or a hosted card checkout session.
+
+> **Not currently implemented.** The Selcom and Stakaba integrations that
+> previously served this endpoint have been removed. The AzamPay integration
+> will implement it; the request/response shape below is the contract it should
+> honour so the existing checkout wizard keeps working unchanged.
 
 #### `POST /api/payments/initiate`
 - **Headers**: Requires `Idempotency-Key: <UUID>`
@@ -299,20 +304,29 @@ Queries the current state of a payment.
 
 ---
 
-### 8. Selcom Webhook API
-Receives transaction notifications from Selcom.
+### 8. Payment Webhook API
+Receives transaction notifications from the payment gateway.
 
-#### `POST /api/webhooks/selcom`
-- **Headers**: Includes digital signature headers (e.g. `Authorization` or `X-Selcom-Signature`).
-- **Request Body (Placeholder)**:
+> **Not currently implemented.** The Selcom and Stakaba webhook receivers have
+> been removed. The AzamPay integration will register its own callback
+> receiver. AzamPay callbacks carry an RSA (SHA-256, PKCS#1 v1.5) signature over
+> `{utilityref}{externalreference}{transactionstatus}{operator}`, verified
+> against the public key served by their API — so the receiver must verify that
+> signature rather than trusting the payload.
+
+#### `POST /api/webhooks/azampay` *(planned)*
+- **Request Body (per AzamPay's documented callback schema)**:
 ```json
 {
-  "transid": "selcom_trans_8829103",
+  "transactionstatus": "success",
+  "operator": "Tigo",
+  "reference": "REF123456789",
+  "externalreference": "EXT987654321",
   "utilityref": "pay_ref_88203d9d7",
-  "amount": 29000,
+  "amount": "29000",
+  "transid": "TXN123456",
   "msisdn": "255712345678",
-  "state": "SUCCESS",
-  "responsecode": "00"
+  "signature": "Base64EncodedSignature..."
 }
 ```
 - **Response `200 OK`**:

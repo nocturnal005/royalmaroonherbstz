@@ -12,20 +12,16 @@ function escapeHTML(value) {
     .replaceAll("'", '&#039;');
 }
 
-// Active payment gateway. Flip this single word back to 'stakaba' to return
-// to the Stakaba integration (kept wired as fallback) — endpoints and
-// user-facing provider naming derive from it.
-const PAYMENT_PROVIDER = 'selcom';
-const PAYMENT_PROVIDER_LABEL = PAYMENT_PROVIDER === 'stakaba' ? 'Stakaba' : 'Selcom';
-const PAYMENT_API = PAYMENT_PROVIDER === 'stakaba'
-  ? {
-      initiate: '/api/payments/stakaba/initiate',
-      status: (reference) => `/api/payments/stakaba/status/${reference}`
-    }
-  : {
-      initiate: '/api/payments/initiate',
-      status: (reference) => `/api/payments/status/${reference}`
-    };
+// Payment gateway = AzamPay. Provider-neutral endpoint paths: the backend
+// routes are not implemented yet (the previous Selcom/Stakaba integrations
+// were removed), so these will 404 until the AzamPay integration registers
+// them. Mobile money returns a status to poll; card payments return a
+// `checkoutUrl` to redirect to.
+const PAYMENT_PROVIDER_LABEL = 'AzamPay';
+const PAYMENT_API = {
+  initiate: '/api/payments/initiate',
+  status: (reference) => `/api/payments/status/${reference}`
+};
 
 let wizardElement = null;
 let backdropElement = null;

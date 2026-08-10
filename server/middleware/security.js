@@ -55,7 +55,7 @@ export function configureCors() {
  * Create a rate limiter middleware for sensitive API routes.
  */
 export function createRateLimiter(windowMs, max, message) {
-  const isMock = process.env.SELCOM_MODE === 'mock' || process.env.NODE_ENV === 'test';
+  const isMock = process.env.PAYMENTS_MODE === 'mock' || process.env.NODE_ENV === 'test';
   return rateLimit({
     windowMs: windowMs || 60000, // default 1 minute
     max: isMock ? 10000 : (max || 100), // limit each IP

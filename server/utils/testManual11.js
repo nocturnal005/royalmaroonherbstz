@@ -1,7 +1,7 @@
 // Set test environment variables before importing anything else
 process.env.PORT = '5999';
 process.env.NODE_ENV = 'test';
-process.env.SELCOM_MODE = 'mock';
+process.env.PAYMENTS_MODE = 'mock';
 process.env.DATABASE_PATH = './server/db/nature_alchemy_test.db';
 process.env.JWT_SECRET = 'test_secret_for_stage11_jwt_validation';
 
@@ -10,8 +10,8 @@ if (process.env.NODE_ENV !== 'test') {
   console.error("FATAL ERROR: Safety guard triggered. NODE_ENV must be 'test'. Aborting.");
   process.exit(1);
 }
-if (process.env.SELCOM_MODE !== 'mock') {
-  console.error("FATAL ERROR: Safety guard triggered. SELCOM_MODE must be 'mock'. Aborting.");
+if (process.env.PAYMENTS_MODE !== 'mock') {
+  console.error("FATAL ERROR: Safety guard triggered. PAYMENTS_MODE must be 'mock'. Aborting.");
   process.exit(1);
 }
 if (!process.env.DATABASE_PATH || !process.env.DATABASE_PATH.includes('nature_alchemy_test.db')) {
@@ -39,7 +39,6 @@ await import('../db/migrate.js');
 
 // Import local modules dynamically to prevent ES module hoisting
 const { default: db } = await import('../config/database.js');
-const { generateSelcomHeaders } = await import('./selcomSignature.js');
 const { default: app } = await import('../index.js');
 
 const PORT = process.env.PORT || '5000';
@@ -304,8 +303,8 @@ async function runTests() {
   `).run();
 
   db.prepare(`
-    INSERT INTO payments (payment_reference, order_id, amount, status, selcom_reference, initiated_at, expires_at, customer_message)
-    VALUES ('ref_admin_read_only', 'ord_admin_read_only', 50000, 'AwaitingPayment', 'selcom_ref_11', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'Please pay')
+    INSERT INTO payments (payment_reference, order_id, amount, status, initiated_at, expires_at, customer_message)
+    VALUES ('ref_admin_read_only', 'ord_admin_read_only', 50000, 'AwaitingPayment', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'Please pay')
   `).run();
 
   // Try to modify order fulfilment status but pass paymentStatus to verify it is ignored and strictly read-only
@@ -464,258 +463,9 @@ async function runTests() {
     }
   }
 
-  // 7. Payment Mock-Mode & Stage 10 Security tests
-  console.log('\n--- 5. Testing Payment Mock-Mode & Stage 10 Security Regressions ---');
-  
-  const sessId = checkoutSessionRes.data.data.checkoutSessionId;
-
-  // A. Frontend amount tampering rejected
-  const tamperPayRes = await testRequest('Initiate payment with tampered amount', '/payments/initiate', {
-    method: 'POST',
-    headers: { 'Idempotency-Key': 'idem_pay_tamper11' },
-    body: JSON.stringify({
-      checkoutSessionId: sessId,
-      paymentMethod: 'mpesa',
-      amount: 1000, // Tampered price: 1,000 TZS instead of 30,000 TZS
-      customerPhone: '+255712345678'
-    })
-  });
-  console.log(`  Tampered amount status (Expected: 400): ${tamperPayRes.status}`);
-  if (tamperPayRes.status !== 400) {
-    console.log('  ✗ Failed: Allowed frontend amount tampering.');
-    passed = false;
-  } else {
-    console.log('  ✓ Success: Frontend amount tampering rejected, backend relies on session total.');
-  }
-
-  // B. Strict validation (rejections of unknown properties)
-  const unknownPayRes = await testRequest('Initiate payment with unknown fields', '/payments/initiate', {
-    method: 'POST',
-    headers: { 'Idempotency-Key': 'idem_pay_unknown11' },
-    body: JSON.stringify({
-      checkoutSessionId: sessId,
-      paymentMethod: 'mpesa',
-      amount: 30000,
-      customerPhone: '+255712345678',
-      hackerField: 'malicious_input'
-    })
-  });
-  console.log(`  Unknown fields status (Expected: 400): ${unknownPayRes.status}`);
-  if (unknownPayRes.status !== 400) {
-    console.log('  ✗ Failed: Strict validation failed to reject unknown parameters.');
-    passed = false;
-  } else {
-    console.log('  ✓ Success: Strict Ajv validation rejected unknown properties.');
-  }
-
-  // C. Initiate payment successfully
-  const initiatePayRes = await testRequest('Initiate payment successfully', '/payments/initiate', {
-    method: 'POST',
-    headers: { 'Idempotency-Key': 'idem_pay_success11' },
-    body: JSON.stringify({
-      checkoutSessionId: sessId,
-      paymentMethod: 'mpesa',
-      amount: 30000,
-      customerPhone: '+255712345678'
-    })
-  });
-  
-  const paymentRef = initiatePayRes.data.data.paymentReference;
-  console.log(`  Payment Reference: "${paymentRef}"`);
-  if (initiatePayRes.status !== 202 || !paymentRef.startsWith('pay_ref_')) {
-    console.log('  ✗ Failed: Payment initiation failed.');
-    passed = false;
-  } else {
-    console.log('  ✓ Success: Payment initiated in AwaitingPayment state.');
-  }
-
-  // D. Payment status message mapping (Paid / Awaiting / Timeout)
-  const awaitingStatusRes = await testRequest('Check initial status message', `/payments/status/${paymentRef}`);
-  console.log(`  Awaiting Payment Message: "${awaitingStatusRes.data.data.customerMessage}"`);
-  const expectedAwaitingMsg = 'Please check your mobile handset for the wallet prompt and enter your PIN.';
-  if (awaitingStatusRes.data.data.customerMessage !== expectedAwaitingMsg) {
-    console.log('  ✗ Failed: Wrong awaiting status message.');
-    passed = false;
-  } else {
-    console.log('  ✓ Success: Awaiting payment message mapped correctly.');
-  }
-
-  // 8. Webhook Security & Payload Redaction
-  console.log('\n--- 6. Testing Webhook Security & Redaction ---');
-  
-  const webhookBody = {
-    transid: 'tx_stage11_999',
-    order_id: 'ord_stage11_test',
-    reference: paymentRef,
-    result: 'SUCCESS',
-    resultcode: '000',
-    payment_status: 'PAID',
-    msisdn: '+255712345678',
-    buyer_phone: '+255712345678'
-  };
-
-  const webhookTimestamp = new Date().toISOString();
-  const validWebhookHeaders = generateSelcomHeaders(webhookBody, process.env.SELCOM_SIGNED_FIELDS_WEBHOOK, webhookTimestamp);
-
-  // A. Submit webhook with wrong Authorization header
-  const wrongAuthRes = await testRequest('Webhook wrong Authorization (Expected: 401)', '/webhooks/selcom', {
-    method: 'POST',
-    headers: {
-      ...validWebhookHeaders.headers,
-      'Authorization': 'SELCOM wrong_auth'
-    },
-    body: JSON.stringify(webhookBody)
-  });
-  if (wrongAuthRes.status !== 401) {
-    console.log('  ✗ Failed: Allowed wrong Authorization header.');
-    passed = false;
-  }
-
-  // B. Submit webhook with wrong Digest-Method header
-  const wrongMethodRes = await testRequest('Webhook wrong Digest-Method (Expected: 401)', '/webhooks/selcom', {
-    method: 'POST',
-    headers: {
-      ...validWebhookHeaders.headers,
-      'Digest-Method': 'MD5'
-    },
-    body: JSON.stringify(webhookBody)
-  });
-  if (wrongMethodRes.status !== 401) {
-    console.log('  ✗ Failed: Allowed wrong Digest-Method.');
-    passed = false;
-  }
-
-  // C. Submit webhook with wrong Signed-Fields header
-  const wrongFieldsRes = await testRequest('Webhook wrong Signed-Fields (Expected: 401)', '/webhooks/selcom', {
-    method: 'POST',
-    headers: {
-      ...validWebhookHeaders.headers,
-      'Signed-Fields': 'transid,order_id'
-    },
-    body: JSON.stringify(webhookBody)
-  });
-  if (wrongFieldsRes.status !== 401) {
-    console.log('  ✗ Failed: Allowed wrong Signed-Fields.');
-    passed = false;
-  }
-
-  // D. Submit webhook with stale timestamp
-  const staleTimestamp = new Date(Date.now() - 600000).toISOString(); // 10 mins ago
-  const staleHeaders = generateSelcomHeaders(webhookBody, process.env.SELCOM_SIGNED_FIELDS_WEBHOOK, staleTimestamp);
-  const staleRes = await testRequest('Webhook stale timestamp (Expected: 400)', '/webhooks/selcom', {
-    method: 'POST',
-    headers: staleHeaders.headers,
-    body: JSON.stringify(webhookBody)
-  });
-  if (staleRes.status !== 400) {
-    console.log('  ✗ Failed: Allowed stale timestamp.');
-    passed = false;
-  }
-
-  // E. Submit webhook successfully and verify db & redaction
-  const successWebhookRes = await testRequest('Submit valid webhook', '/webhooks/selcom', {
-    method: 'POST',
-    headers: validWebhookHeaders.headers,
-    body: JSON.stringify(webhookBody)
-  });
-  console.log(`  Valid webhook response status (Expected: 200): ${successWebhookRes.status}`);
-  if (successWebhookRes.status !== 200) {
-    console.log('  ✗ Failed: Valid webhook was rejected.');
-    passed = false;
-  }
-
-  // Assert DB transitions
-  const updatedOrder = db.prepare('SELECT payment_status, order_status FROM orders WHERE id = ?').get(checkoutSessionRes.data.data.orderDraftReference);
-  console.log(`  Order payment_status in DB: "${updatedOrder.payment_status}" (Expected: Paid)`);
-  console.log(`  Order order_status in DB: "${updatedOrder.order_status}" (Expected: FulfilmentPending)`);
-  if (updatedOrder.payment_status !== 'Paid' || updatedOrder.order_status !== 'FulfilmentPending') {
-    console.log('  ✗ Failed: State transitions failed on webhook success.');
-    passed = false;
-  }
-
-  // Verify Paid status message mapping
-  const paidStatusRes = await testRequest('Check Paid status message', `/payments/status/${paymentRef}`);
-  console.log(`  Paid status customer message: "${paidStatusRes.data.data.customerMessage}"`);
-  if (paidStatusRes.data.data.customerMessage !== 'Payment confirmed successfully.') {
-    console.log('  ✗ Failed: Wrong Paid status message.');
-    passed = false;
-  } else {
-    console.log('  ✓ Success: Paid status message mapped correctly.');
-  }
-
-  // Assert payload redaction
-  const savedEvent = db.prepare('SELECT raw_payload_redacted FROM payment_events WHERE payment_reference = ?').get(paymentRef);
-  console.log(`  Saved Redacted Payload: ${savedEvent.raw_payload_redacted}`);
-  const hasRawPhone = savedEvent.raw_payload_redacted.includes('+255712345678');
-  if (hasRawPhone) {
-    console.log('  ✗ Failed: Sensitive phone numbers were not redacted.');
-    passed = false;
-  } else {
-    console.log('  ✓ Success: Sensitive payload fields redacted correctly before database inserts.');
-  }
-
-  // F. Webhook duplicate skipped
-  const duplicateWebhookRes = await testRequest('Submit duplicate webhook', '/webhooks/selcom', {
-    method: 'POST',
-    headers: validWebhookHeaders.headers,
-    body: JSON.stringify(webhookBody)
-  });
-  console.log(`  Duplicate webhook status (Expected: 200): ${duplicateWebhookRes.status}`);
-  console.log(`  Duplicate message: "${duplicateWebhookRes.data.message}"`);
-  if (duplicateWebhookRes.status !== 200 || !duplicateWebhookRes.data.message.includes('duplicate skipped')) {
-    console.log('  ✗ Failed: Webhook duplicate transaction check failed.');
-    passed = false;
-  } else {
-    console.log('  ✓ Success: Webhook idempotency skip verified.');
-  }
-
-  // 9. Status Polling Throttling Tests
-  console.log('\n--- 7. Testing Local Status Polling Throttling (Double-Interval Check) ---');
-  
-  // Create another order and initiate payment
-  db.prepare(`
-    INSERT INTO checkout_sessions (id, order_draft_reference, customer_name, customer_phone, customer_email, delivery_notes, delivery_region_id, payment_method, subtotal, shipping_fee, total, expires_at)
-    VALUES ('sess_test_poll', 'ord_test_poll', 'Test Customer', '+255712345678', 'test@example.com', 'Near clocktower', 'dar', 'mpesa', 45000, 5000, 50000, ?)
-  `).run(new Date(Date.now() + 3600000).toISOString());
-  db.prepare(`
-    INSERT INTO orders (id, checkout_session_id, customer_name, customer_phone, customer_email, delivery_region_id, delivery_notes, shipping_fee, total, payment_method, order_status, payment_status, fulfilment_status)
-    VALUES ('ord_test_poll', 'sess_test_poll', 'Test Customer', '+255712345678', 'test@example.com', 'dar', 'Near clocktower', 5000, 50000, 'mpesa', 'Draft', 'Draft', 'Pending')
-  `).run();
-
-  const initPollInit = await testRequest('Initiate payment for polling tests', '/payments/initiate', {
-    method: 'POST',
-    headers: { 'Idempotency-Key': 'idem_pay_init_polling_tests' },
-    body: JSON.stringify({
-      checkoutSessionId: 'sess_test_poll',
-      paymentMethod: 'mpesa',
-      amount: 50000,
-      customerPhone: '+255712345678'
-    })
-  });
-  const pollRef = initPollInit.data.data.paymentReference;
-
-  console.log('  Trigger first poll (must NOT trigger provider query because initiated_at is fresh):');
-  await testRequest('Poll Status 1', `/payments/status/${pollRef}`);
-
-  console.log('  Trigger second poll (must NOT trigger provider query because initiated_at is still fresh):');
-  await testRequest('Poll Status 2', `/payments/status/${pollRef}`);
-
-  // Artificially age both initiated_at and last_status_query_at to 40 seconds ago
-  const agedTime = new Date(Date.now() - 40000).toISOString();
-  db.prepare(`
-    UPDATE payments
-    SET initiated_at = ?,
-        last_status_query_at = ?
-    WHERE payment_reference = ?
-  `).run(agedTime, agedTime, pollRef);
-
-  console.log('  Trigger third poll (must trigger exactly one provider query, logging MOCK console):');
-  await testRequest('Poll Status 3', `/payments/status/${pollRef}`);
-
-  console.log('  Trigger fourth poll immediately (must NOT trigger provider query because last_status_query_at is fresh):');
-  await testRequest('Poll Status 4', `/payments/status/${pollRef}`);
-
-  console.log('  ✓ Success: Local status double-interval throttling verified.');
+  // Payment, webhook and status-polling tests were removed together with the
+  // Selcom and Stakaba integrations. They will be reinstated as part of the
+  // AzamPay integration, which owns those endpoints.
 
   // 10. Source Code Compliance Scanning
   console.log('\n--- 8. Running Source Code Compliance Scanning ---');

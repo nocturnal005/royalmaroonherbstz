@@ -7,7 +7,7 @@ import puppeteer from 'puppeteer-core';
 // Enforce isolated test environment variables
 process.env.PORT = '5999';
 process.env.NODE_ENV = 'test';
-process.env.SELCOM_MODE = 'mock';
+process.env.PAYMENTS_MODE = 'mock';
 process.env.DATABASE_PATH = './server/db/nature_alchemy_test.db';
 process.env.JWT_SECRET = 'test_secret_for_stage11_jwt_validation';
 process.env.CORS_ORIGIN = 'http://localhost:5999,http://127.0.0.1:5999,http://localhost:5000,http://127.0.0.1:5000';

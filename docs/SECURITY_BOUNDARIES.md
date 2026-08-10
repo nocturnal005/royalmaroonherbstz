@@ -11,12 +11,12 @@ This document defines the security boundaries, key isolation layers, request val
 - **Enforcement**: All data requests from the frontend must transition through the backend API gateway. The database credentials, ports, and configuration strings must reside strictly in private environment parameters hidden from the client browser.
 
 ### 2. Secret Key Isolation
-- **Rule**: Private API keys, webhook credentials, JWT signature keys, and Selcom integration secrets must **never** be transmitted to or stored in the frontend repository or code.
-- **Enforcement**: All Selcom API payloads must be constructed, signed, and transmitted solely from the backend server environment.
+- **Rule**: Private API keys, webhook credentials, JWT signature keys, and payment gateway integration secrets must **never** be transmitted to or stored in the frontend repository or code.
+- **Enforcement**: All payment gateway API payloads must be constructed, signed, and transmitted solely from the backend server environment.
 
-### 3. Selcom Gateway Isolation
-- **Rule**: The frontend must **never** issue direct HTTP requests to Selcom API endpoints.
-- **Enforcement**: Any checkout creation, payment request validation, or webhook notification must interface with the payment gateway via the backend. The backend acts as the single broker for Selcom integration.
+### 3. Payment Gateway Isolation
+- **Rule**: The frontend must **never** issue direct HTTP requests to payment gateway API endpoints.
+- **Enforcement**: Any checkout creation, payment request validation, or webhook notification must interface with the payment gateway via the backend. The backend acts as the single broker for the payment gateway integration.
 
 ---
 
@@ -33,7 +33,7 @@ This document defines the security boundaries, key isolation layers, request val
 ## 🔒 Request Validation & Sanitization
 
 - **Input Schemas**: Every incoming HTTP request body must be validated against its strict JSON Schema before parsing. Any payload violating formats, fields, types, or lengths must be rejected with an immediate `400 Bad Request` or `422 Unprocessable Entity` status.
-- **Sanitized Errors**: The backend must catch all internal exceptions (e.g., database connection drops, Selcom timeout exceptions, file access errors) and wrap them in a sanitized standard error model. Internal stack traces, raw query details, provider secrets, or server directory locations must never be returned to the client.
+- **Sanitized Errors**: The backend must catch all internal exceptions (e.g., database connection drops, payment gateway timeout exceptions, file access errors) and wrap them in a sanitized standard error model. Internal stack traces, raw query details, provider secrets, or server directory locations must never be returned to the client.
 - **XSS Prevention**: Customer inputs (e.g. Customer Name, Delivery Notes) rendered into templates or administrative dashboards must be escaped using HTML escaping filters to block Cross-Site Scripting (XSS).
 
 ---
@@ -45,7 +45,7 @@ This document defines the security boundaries, key isolation layers, request val
   - **Checkout Session API**: Max 10 requests per minute per IP.
   - **Payment Initiation API**: Max 5 requests per minute per IP.
   - **Admin Authentication API**: Max 5 attempts per minute per IP (with block timers).
-  - **Selcom Webhook Receiver**: Rate-limit warning logging if traffic exceeds expected transaction frequencies.
+  - **Payment Webhook Receiver**: Rate-limit warning logging if traffic exceeds expected transaction frequencies.
 
 ---
 

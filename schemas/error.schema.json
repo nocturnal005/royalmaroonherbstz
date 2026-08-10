@@ -1,7 +1,7 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
   "title": "ErrorResponse",
-  "description": "Standardized backend error response schema. Internal details (e.g. database errors, stack traces, raw Selcom keys) must never be returned in this schema.",
+  "description": "Standardized backend error response schema. Internal details (e.g. database errors, stack traces, raw payment gateway keys) must never be returned in this schema.",
   "type": "object",
   "properties": {
     "success": {
