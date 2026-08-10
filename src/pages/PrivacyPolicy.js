@@ -19,9 +19,9 @@ const SECTIONS = [
       <p>Royal Maroon Herbs ("Royal Maroon Herbs", "we", "us" or "our") is a business registered in the United Republic of Tanzania, trading in herbal and botanical wellness products through our website at royalmaroonherbstz.com and our retail shops in Dar es Salaam and Zanzibar.</p>
       <p>For the purposes of the Personal Data Protection Act, 2022 and the regulations made under it, Royal Maroon Herbs is the <strong>data controller</strong> responsible for the personal data described in this policy.</p>
       <ul>
-        <li><strong>Registered address:</strong> Palm Village, Mikocheni B &ndash; Mwai Kibaki Road, Kinondoni District, Dar es Salaam, Tanzania</li>
-        <li><strong>Company registration number:</strong> [Company Registration Number]</li>
-        <li><strong>Taxpayer Identification Number (TIN):</strong> [TIN]</li>
+        <li><strong>Physical address:</strong> Palm Village, Mikocheni B &ndash; Mwai Kibaki Road, Kinondoni District, Dar es Salaam, Tanzania</li>
+        <li><strong>Company registration number:</strong> P712025</li>
+        <li><strong>Taxpayer Identification Number (TIN):</strong> 188-509-355</li>
         <li><strong>Contact for privacy matters:</strong> <a href="mailto:sales@royalmaroonherbstz.com">sales@royalmaroonherbstz.com</a></li>
         <li><strong>Telephone:</strong> +255 793 306 987 &middot; +255 776 908 735</li>
       </ul>
