@@ -11,6 +11,7 @@ import { AboutUs } from './pages/AboutUs.js';
 import { Wholesale, setupWholesalePage } from './pages/Wholesale.js';
 import { Press } from './pages/Press.js';
 import { PrivacyPolicy } from './pages/PrivacyPolicy.js';
+import { PrivacyNotice, setupPrivacyNotice } from './components/PrivacyNotice.js';
 import { showProductDetailModal } from './components/ProductDetailModal.js';
 import { products } from './data/products.js';
 import { initCartDrawer, openCartDrawer, renderCartDrawer } from './components/CartDrawer.js';
@@ -61,10 +62,12 @@ function initApp() {
       ${Footer()}
       ${BackToTop()}
       ${SearchOverlay()}
+      ${PrivacyNotice()}
     `;
     setupHeaderScrollListener();
     setupBackToTop();
     setupSearch();
+    setupPrivacyNotice();
     if (window.location.pathname === '/wholesale') setupWholesalePage();
     initCartDrawer(() => initCheckoutWizard(document.getElementById('cart-btn')));
     document.getElementById('app').addEventListener('click', (e) => {
@@ -94,6 +97,7 @@ function initApp() {
     ${Footer()}
     ${BackToTop()}
     ${SearchOverlay()}
+    ${PrivacyNotice()}
   `;
 
   // Initialize UI interactive scripts (presentation-only)
@@ -102,6 +106,7 @@ function initApp() {
   setupProductGridFilters();
   setupBackToTop();
   setupSearch();
+  setupPrivacyNotice();
   setupFilterDetailsAdjuster();
   setupIngredientToggles();
 

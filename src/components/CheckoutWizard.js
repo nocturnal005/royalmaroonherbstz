@@ -196,7 +196,17 @@ function renderStepContent(cartItems, subtotal, shippingFee, estimatedTotal) {
           <div>
             <label for="checkout-notes" class="block font-label-md text-label-md text-primary uppercase tracking-wider mb-2 font-bold">Delivery Notes (Optional)</label>
             <textarea id="checkout-notes" class="w-full bg-surface-container-low border border-secondary-container focus:ring-2 focus:ring-primary focus:border-primary p-4 font-body-md text-primary h-24" placeholder="e.g. House color, directions, or special instructions">${escapeHTML(deliveryNotes)}</textarea>
+            <!-- Privacy Policy section 4 states we ask customers not to put health
+                 details in free-text fields; this is the site actually asking. -->
+            <p class="text-[10px] text-secondary opacity-60 italic mt-1 leading-relaxed">For delivery directions only, please don't include health or medical details.</p>
           </div>
+
+          <!-- Data-collection notice at the point of collection. The wizard is a
+               modal, so the footer's Privacy Policy link is unreachable from here. -->
+          <p class="text-xs text-secondary leading-relaxed border-t border-secondary-container/40 pt-4">
+            We use these details only to process and deliver your order. See our
+            <a href="/privacy" target="_blank" rel="noopener noreferrer" class="underline hover:text-primary">Privacy Policy</a>.
+          </p>
 
           <div class="flex justify-end pt-4">
             <button type="submit" class="bg-primary text-surface font-label-md text-label-md px-10 py-4 uppercase tracking-widest hover:bg-on-primary-container transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 flex items-center gap-2">
@@ -294,6 +304,7 @@ function renderStepContent(cartItems, subtotal, shippingFee, estimatedTotal) {
           <div class="p-4 bg-error-container/10 border border-error-container/30 text-xs text-secondary">
             <span class="font-bold text-error uppercase block mb-1">Secure checkout notice</span>
             Mobile money sends a USSD prompt to your phone; card payments open ${PAYMENT_PROVIDER_LABEL}'s PCI-DSS hosted checkout. Card details are never entered on or stored by this site.
+            <a href="/privacy" target="_blank" rel="noopener noreferrer" class="underline hover:text-primary block mt-2">How we handle your data</a>
           </div>
 
           <div class="flex justify-between pt-6 border-t border-secondary-container/30">

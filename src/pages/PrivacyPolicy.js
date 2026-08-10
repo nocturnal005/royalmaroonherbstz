@@ -123,7 +123,8 @@ const SECTIONS = [
     title: '8. Cookies and local storage',
     body: `
       <p>Our website does not set advertising or analytics cookies, and does not use tracking pixels or third-party profiling scripts.</p>
-      <p>Your shopping cart is held only in your browser's memory for the duration of your visit. It is not written to cookies, local storage or our servers, and it is discarded when you close the tab.</p>
+      <p>Your shopping cart is held only in your browser's memory for the duration of your visit. It is not written to cookies or to our servers, and it is discarded when you close the tab.</p>
+      <p>The only item we store in your browser is a single entry in local storage recording that you have dismissed our privacy notice, so that it is not shown to you on every visit. It contains no information about you, is not shared with anyone, and is not used to identify or track you. You can remove it at any time by clearing your browser's site data.</p>
       <p>If we introduce cookies or similar technologies that are not strictly necessary for the website to function, we will inform you and obtain your consent before they are used.</p>
     `
   },
