@@ -25,7 +25,7 @@ export function Footer() {
         <div class="mt-8">
           <span class="font-label-sm text-label-sm text-tertiary-fixed uppercase tracking-wider block mb-2">Tanzania Payments</span>
           <p class="font-body-sm text-label-sm text-on-primary-container opacity-60 leading-relaxed">
-            M-Pesa, Tigo Pesa, Airtel Money &amp; cards securely processed via Selcom.
+            M-Pesa, Tigo Pesa, Airtel Money &amp; cards securely processed via AzamPay.
           </p>
         </div>
       </div>
@@ -42,7 +42,7 @@ export function Footer() {
           <li><a class="text-on-primary-container opacity-80 hover:opacity-100 hover:text-tertiary-fixed transition-all font-body-md text-body-md" href="#">Shipping &amp; Returns</a></li>
           <li><a class="text-on-primary-container opacity-80 hover:opacity-100 hover:text-tertiary-fixed transition-all font-body-md text-body-md" href="/wholesale">Wholesale</a></li>
           <li><a class="text-on-primary-container opacity-80 hover:opacity-100 hover:text-tertiary-fixed transition-all font-body-md text-body-md" href="mailto:sales@royalmaroonherbstz.com">Contact Us</a></li>
-          <li><a class="text-on-primary-container opacity-80 hover:opacity-100 hover:text-tertiary-fixed transition-all font-body-md text-body-md" href="#">Privacy Policy</a></li>
+          <li><a class="text-on-primary-container opacity-80 hover:opacity-100 hover:text-tertiary-fixed transition-all font-body-md text-body-md" href="/privacy">Privacy Policy</a></li>
         </ul>
       </div>
       <div>

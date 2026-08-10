@@ -127,3 +127,74 @@
   text-align: justify;
   text-justify: inter-word;
 }
+
+/* Privacy Policy / legal pages: readable long-form prose with lists and a
+   lawful-basis table. Scoped to .legal-prose so it can't leak into the
+   storefront's utility-class layouts. */
+.legal-prose p,
+.legal-prose li {
+  color: #434843; /* on-surface-variant */
+  line-height: 1.75;
+}
+
+.legal-prose p {
+  margin-bottom: 1rem;
+}
+
+.legal-prose h3 {
+  color: #061b0e; /* primary */
+  font-weight: 600;
+  margin-top: 1.75rem;
+  margin-bottom: 0.75rem;
+}
+
+.legal-prose ul {
+  list-style: disc;
+  padding-left: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.legal-prose li {
+  margin-bottom: 0.5rem;
+}
+
+.legal-prose strong {
+  color: #061b0e; /* primary */
+  font-weight: 600;
+}
+
+.legal-prose a {
+  color: #cb8341; /* on-tertiary-container */
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.legal-prose a:hover {
+  color: #061b0e;
+}
+
+/* Lawful-basis table: scrolls horizontally on narrow screens rather than
+   forcing the page body to scroll sideways. */
+.legal-prose table {
+  display: block;
+  overflow-x: auto;
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 1.25rem;
+  font-size: 0.9375rem;
+}
+
+.legal-prose th,
+.legal-prose td {
+  border: 1px solid #c3c8c1; /* outline-variant */
+  padding: 0.75rem 1rem;
+  text-align: left;
+  vertical-align: top;
+  color: #434843;
+}
+
+.legal-prose th {
+  background-color: #f5ece7; /* surface-container */
+  color: #061b0e;
+  font-weight: 600;
+}
