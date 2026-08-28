@@ -13,7 +13,7 @@
         },
         "paymentMethod": {
           "type": "string",
-          "enum": ["mpesa", "tigo", "airtel", "card"]
+          "enum": ["mpesa", "tigo", "airtel"]
         },
         "amount": {
           "type": "integer",

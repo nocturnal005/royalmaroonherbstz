@@ -25,7 +25,7 @@ export function Footer() {
         <div class="mt-8">
           <span class="font-label-sm text-label-sm text-tertiary-fixed uppercase tracking-wider block mb-2">Tanzania Payments</span>
           <p class="font-body-sm text-label-sm text-on-primary-container opacity-60 leading-relaxed">
-            M-Pesa, Tigo Pesa, Airtel Money &amp; cards securely processed via AzamPay.
+            M-Pesa, Tigo Pesa &amp; Airtel Money securely processed via Selcom.
           </p>
         </div>
       </div>

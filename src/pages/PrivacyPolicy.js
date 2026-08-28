@@ -1,8 +1,8 @@
 // Privacy Policy — statutory notice under the Personal Data Protection Act, 2022
 // (Tanzania) and the Personal Data Protection (Personal Data Collection and
 // Processing) Regulations, 2023. Content is written to match what the site and
-// backend actually do: checkout collects name/phone/email/region/notes; card
-// details never reach our servers (hosted gateway checkout); there are no
+// backend actually do: checkout collects name/phone/email/region/notes; mobile
+// money PINs never reach our servers (approved on the handset); there are no
 // analytics or advertising scripts; the cart is in-memory only (no cookies or
 // localStorage); audit_logs records request IP addresses.
 //
@@ -59,7 +59,7 @@ const SECTIONS = [
       <p>Our website does <strong>not</strong> use advertising cookies, analytics scripts, tracking pixels or third-party profiling tools. See section&nbsp;8 for details.</p>
 
       <h3>3.3 Payment information we do not collect</h3>
-      <p>We do <strong>not</strong> collect, process or store your card number, card security code (CVV) or mobile money PIN. Card payments are completed on a secure payment page hosted by our licensed payment provider, and mobile money payments are authorised by you directly on your own handset. Our systems receive only a payment reference, the amount, the payment method, and whether the payment succeeded or failed.</p>
+      <p>We accept mobile money only. We do <strong>not</strong> collect, process or store your mobile money PIN: payments are authorised by you directly on your own handset, in response to a prompt sent to your phone. Our systems receive only a payment reference, the amount, the mobile money network used, and whether the payment succeeded or failed.</p>
     `
   },
   {
@@ -99,7 +99,7 @@ const SECTIONS = [
     body: `
       <p>We do not sell your personal data, and we do not share it with third parties for their own marketing purposes. We share it only with the following categories of recipient, and only to the extent necessary:</p>
       <ul>
-        <li><strong>Payment providers.</strong> AzamPay, our licensed payment gateway partner, processes payments on our behalf and receives the transaction details necessary to do so, including the amount and, for mobile money payments, the mobile number you are paying from. Card payments are processed through AzamPay's card-processing partner, CoralCommerce Limited, which operates the secure payment page on which you enter your card details.</li>
+        <li><strong>Payment provider.</strong> Selcom, our licensed payment gateway partner, processes mobile money payments on our behalf and receives the transaction details necessary to do so, including the amount and the mobile number you are paying from.</li>
         <li><strong>Delivery and courier partners.</strong> They receive the recipient name, telephone number, delivery region and delivery instructions needed to complete the delivery.</li>
         <li><strong>Technology and hosting providers.</strong> Providers who host our website, store our data, and supply our business email and messaging services, acting on our instructions.</li>
         <li><strong>Messaging platforms.</strong> Where you choose to contact us via WhatsApp, your message and telephone number are handled by that platform under its own terms and privacy practices.</li>
@@ -113,7 +113,7 @@ const SECTIONS = [
     id: 'transfers',
     title: '7. Transfers outside Tanzania',
     body: `
-      <p>Some of the service providers we rely on store or process data on servers located outside the United Republic of Tanzania. This includes our website hosting, business email and messaging platforms, and the card-processing infrastructure operated by CoralCommerce Limited, a company registered in England and Wales.</p>
+      <p>Some of the service providers we rely on store or process data on servers located outside the United Republic of Tanzania. This includes our website hosting, business email and messaging platforms. Our payment provider, Selcom, processes mobile money payments within Tanzania.</p>
       <p>Where personal data is transferred outside Tanzania, we take steps to ensure it continues to receive an appropriate level of protection, including by using providers who apply recognised security and data protection standards, and by putting contractual protections in place with them. Such transfers are made only where permitted under the Personal Data Protection Act, 2022 and the regulations made under it.</p>
       <p>You may contact us using the details in section&nbsp;1 to ask for further information about transfers relating to your data.</p>
     `
@@ -152,7 +152,7 @@ const SECTIONS = [
         <li>encrypted transmission of data between your browser and our website;</li>
         <li>restricting access to order and customer records to authorised personnel who need it;</li>
         <li>redacting sensitive values, such as telephone numbers and payment identifiers, from our internal system logs;</li>
-        <li>not storing card numbers, card security codes or mobile money PINs on our systems at any time; and</li>
+        <li>not storing mobile money PINs on our systems at any time; and</li>
         <li>keeping audit records of actions taken on orders and payments.</li>
       </ul>
       <p>While we take these measures seriously, no method of transmission or storage is completely secure, and we cannot guarantee absolute security. If a personal data breach occurs that is likely to affect you, we will notify the Personal Data Protection Commission and, where required, you, without undue delay.</p>

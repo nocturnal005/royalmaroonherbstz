@@ -12,12 +12,11 @@ function escapeHTML(value) {
     .replaceAll("'", '&#039;');
 }
 
-// Payment gateway = AzamPay. Provider-neutral endpoint paths: the backend
-// routes are not implemented yet (the previous Selcom/Stakaba integrations
-// were removed), so these will 404 until the AzamPay integration registers
-// them. Mobile money returns a status to poll; card payments return a
-// `checkoutUrl` to redirect to.
-const PAYMENT_PROVIDER_LABEL = 'AzamPay';
+// Payment gateway = Selcom, mobile money only. Selcom does not offer card
+// acceptance, so checkout presents no card option and there is no hosted
+// redirect: every payment is a USSD push the customer approves on their own
+// handset, and the frontend polls for the result.
+const PAYMENT_PROVIDER_LABEL = 'Selcom';
 const PAYMENT_API = {
   initiate: '/api/payments/initiate',
   status: (reference) => `/api/payments/status/${reference}`
@@ -292,18 +291,11 @@ function renderStepContent(cartItems, subtotal, shippingFee, estimatedTotal) {
               </div>
             </label>
 
-            <label class="border p-4 flex items-center gap-4 cursor-pointer hover:bg-surface-container-low transition-colors ${selectedPaymentMethod === 'card' ? 'border-primary bg-primary-container/10' : 'border-secondary-container'}" for="pay-card">
-              <input type="radio" id="pay-card" name="payment-method" value="card" ${selectedPaymentMethod === 'card' ? 'checked' : ''} class="form-radio text-primary border-secondary" />
-              <div>
-                <span class="font-label-md text-label-md text-primary uppercase block font-bold">Credit/Debit Card</span>
-                <span class="text-xs text-secondary">Processed via ${PAYMENT_PROVIDER_LABEL} secure checkout</span>
-              </div>
-            </label>
           </div>
 
           <div class="p-4 bg-error-container/10 border border-error-container/30 text-xs text-secondary">
             <span class="font-bold text-error uppercase block mb-1">Secure checkout notice</span>
-            Mobile money sends a USSD prompt to your phone; card payments open ${PAYMENT_PROVIDER_LABEL}'s PCI-DSS hosted checkout. Card details are never entered on or stored by this site.
+            ${PAYMENT_PROVIDER_LABEL} sends a USSD prompt to your phone. You approve the payment by entering your mobile money PIN on your own handset &mdash; your PIN is never entered on or stored by this site.
             <a href="/privacy" target="_blank" rel="noopener noreferrer" class="underline hover:text-primary block mt-2">How we handle your data</a>
           </div>
 
@@ -703,16 +695,6 @@ async function submitCheckout() {
       throw new Error(initiateData.error?.message || 'Payment initiation failed.');
     }
 
-    // Card payments use the provider's hosted PCI checkout — redirect the
-    // customer there. Mobile money returns no checkoutUrl and continues with
-    // polling.
-    if (initiateData.data.checkoutUrl) {
-      paymentReference = initiateData.data.paymentReference;
-      customerMessage = 'Redirecting you to the secure card checkout page…';
-      renderWizard();
-      window.location.assign(initiateData.data.checkoutUrl);
-      return;
-    }
 
     paymentReference = initiateData.data.paymentReference;
     paymentStatus = initiateData.data.paymentStatus;
@@ -757,13 +739,6 @@ async function retryCheckoutPayment(sessionId, amount) {
       throw new Error(initiateData.error?.message || 'Payment initiation failed.');
     }
 
-    if (initiateData.data.checkoutUrl) {
-      paymentReference = initiateData.data.paymentReference;
-      customerMessage = 'Redirecting you to the secure card checkout page…';
-      renderWizard();
-      window.location.assign(initiateData.data.checkoutUrl);
-      return;
-    }
 
     paymentReference = initiateData.data.paymentReference;
     paymentStatus = initiateData.data.paymentStatus;
