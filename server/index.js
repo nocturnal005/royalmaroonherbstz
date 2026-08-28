@@ -11,6 +11,17 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 5000;
 
+// In production the app sits behind an Nginx reverse proxy on the same host,
+// so the TCP peer is always 127.0.0.1. Trusting only loopback makes req.ip
+// resolve to the real client address from X-Forwarded-For, which the Selcom
+// webhook IP allowlist depends on — without this every webhook would appear
+// to come from the proxy and the allowlist could never match.
+//
+// Only loopback is trusted, and Nginx is configured to SET (not append)
+// X-Forwarded-For to the real peer address, so a client-supplied header
+// cannot reach Express and the allowlist is not spoofable.
+app.set('trust proxy', 'loopback');
+
 // Apply Helmet and CORS security middleware
 app.use(configureHelmet());
 app.use(configureCors());
