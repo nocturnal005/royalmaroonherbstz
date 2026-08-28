@@ -113,7 +113,12 @@ const SECTIONS = [
     id: 'transfers',
     title: '7. Transfers outside Tanzania',
     body: `
-      <p>Some of the service providers we rely on store or process data on servers located outside the United Republic of Tanzania. This includes our website hosting, business email and messaging platforms. Our payment provider, Selcom, processes mobile money payments within Tanzania.</p>
+      <p>Some of the personal data we hold is stored or processed on servers located outside the United Republic of Tanzania:</p>
+      <ul>
+        <li><strong>Order records</strong> &mdash; including your name, telephone number, email address, delivery details and purchase history &mdash; are stored on a server located in the <strong>United Kingdom</strong>, which we control and which is protected by the measures described in section&nbsp;10.</li>
+        <li><strong>Website hosting, business email and messaging platforms</strong> are provided by service providers who may store data outside Tanzania.</li>
+      </ul>
+      <p>Our payment provider, Selcom, processes mobile money payments within Tanzania.</p>
       <p>Where personal data is transferred outside Tanzania, we take steps to ensure it continues to receive an appropriate level of protection, including by using providers who apply recognised security and data protection standards, and by putting contractual protections in place with them. Such transfers are made only where permitted under the Personal Data Protection Act, 2022 and the regulations made under it.</p>
       <p>You may contact us using the details in section&nbsp;1 to ask for further information about transfers relating to your data.</p>
     `
