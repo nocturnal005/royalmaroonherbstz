@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 Disallow: /admin/
-Sitemap: https://naturesalchemy.co/sitemap.xml
+Sitemap: https://www.royalmaroonherbstz.com/sitemap.xml
