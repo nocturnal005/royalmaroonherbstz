@@ -102,7 +102,7 @@ const SECTIONS = [
         <li><strong>Payment provider.</strong> Selcom, our licensed payment gateway partner, processes mobile money payments on our behalf and receives the transaction details necessary to do so, including the amount and the mobile number you are paying from.</li>
         <li><strong>Delivery and courier partners.</strong> They receive the recipient name, telephone number, delivery region and delivery instructions needed to complete the delivery.</li>
         <li><strong>Technology and hosting providers.</strong> Providers who host our website, store our data, and supply our business email and messaging services, acting on our instructions.</li>
-        <li><strong>Messaging platforms.</strong> Where you choose to contact us via WhatsApp, your message and telephone number are handled by that platform under its own terms and privacy practices.</li>
+        <li><strong>Messaging platforms.</strong> Where you choose to contact us via WhatsApp, your message and telephone number are handled by that platform under its own terms and privacy practices. This includes completing an order: when you choose to continue on WhatsApp at checkout, your device opens WhatsApp with a message containing your order reference, name, delivery region and order total, which you send to us yourself. You can edit or discard that message before sending it.</li>
         <li><strong>Professional advisers.</strong> Accountants, auditors and lawyers, where they need access to provide their services to us.</li>
         <li><strong>Public authorities.</strong> Where we are required to disclose information by law, by a court, or by a competent regulator.</li>
       </ul>

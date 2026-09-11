@@ -522,6 +522,120 @@ router.patch('/orders/:id/status', requireAuth, requireRole(['owner', 'admin', '
 });
 
 /**
+ * POST /api/admin/orders/:id/record-payment
+ *
+ * Records a payment the shop collected by hand - the WhatsApp ordering route,
+ * where staff confirm the order in chat and take mobile money or cash directly.
+ *
+ * The PATCH /orders/:id/status handler above treats payment state as read-only
+ * because only Selcom may write it. That is correct for the gateway flow, but
+ * it leaves manually-collected orders permanently undispatchable, since nothing
+ * else can ever set payment_status to 'Paid'. This handler is the deliberate,
+ * audited exception: a named operator asserts the money arrived.
+ *
+ * Restricted to owner and admin - taking payment is not an editor's call.
+ */
+router.post('/orders/:id/record-payment', requireAuth, requireRole(['owner', 'admin']), csrfProtection, (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const { amountPaid, method, reference } = req.body;
+
+    const validMethods = ['mpesa', 'tigo', 'airtel', 'cash'];
+    if (!validMethods.includes(method)) {
+      return res.status(400).json({
+        success: false,
+        error: {
+          code: 'VALIDATION_ERROR',
+          message: `Invalid payment method. Must be one of: ${validMethods.join(', ')}.`
+        }
+      });
+    }
+
+    if (!Number.isInteger(amountPaid) || amountPaid <= 0) {
+      return res.status(400).json({
+        success: false,
+        error: {
+          code: 'VALIDATION_ERROR',
+          message: 'Amount paid must be a positive whole number of shillings.'
+        }
+      });
+    }
+
+    const order = db.prepare(
+      'SELECT id, total, order_status, payment_status FROM orders WHERE id = ?'
+    ).get(id);
+
+    if (!order) {
+      return res.status(404).json({
+        success: false,
+        error: { code: 'NOT_FOUND', message: 'Order could not be found.' }
+      });
+    }
+
+    if (order.payment_status === 'Paid') {
+      return res.status(409).json({
+        success: false,
+        error: { code: 'CONFLICT', message: 'This order is already marked as paid.' }
+      });
+    }
+
+    if (['Cancelled', 'Refunded'].includes(order.payment_status)) {
+      return res.status(409).json({
+        success: false,
+        error: {
+          code: 'CONFLICT',
+          message: `Cannot record payment against a ${order.payment_status.toLowerCase()} order.`
+        }
+      });
+    }
+
+    // A short payment is a real situation (part payment, agreed discount), but
+    // it must be a conscious act rather than a typo slipping through silently.
+    if (amountPaid !== order.total && req.body.confirmMismatch !== true) {
+      return res.status(409).json({
+        success: false,
+        error: {
+          code: 'AMOUNT_MISMATCH',
+          message: `Amount does not match the order total of ${order.total}. Resend with confirmMismatch set to true to record it anyway.`,
+          details: [{ field: 'amountPaid', issue: `Expected ${order.total}, received ${amountPaid}.` }]
+        }
+      });
+    }
+
+    db.prepare(`
+      UPDATE orders
+      SET payment_status = 'Paid',
+          order_status = 'FulfilmentPending',
+          fulfilment_status = 'FulfilmentPending',
+          updated_at = CURRENT_TIMESTAMP
+      WHERE id = ?
+    `).run(id);
+
+    logAuditEvent('ORDER_PAYMENT_RECORDED_MANUALLY', req.user.id, id, {
+      amountPaid,
+      orderTotal: order.total,
+      method,
+      reference: reference || null,
+      mismatchConfirmed: amountPaid !== order.total,
+      previousPaymentStatus: order.payment_status
+    }, req);
+
+    res.json({
+      success: true,
+      message: 'Payment recorded. The order is now ready for fulfilment.',
+      data: {
+        id,
+        paymentStatus: 'Paid',
+        orderStatus: 'FulfilmentPending',
+        fulfilmentStatus: 'FulfilmentPending'
+      }
+    });
+  } catch (error) {
+    next(error);
+  }
+});
+
+/**
  * GET /api/admin/audit-logs
  * Retrieves system audit logs. Requires owner or admin roles.
  */
