@@ -4,7 +4,7 @@ export function Header() {
   return `
     <header class="sticky top-0 left-0 right-0 w-full z-50 flex justify-between items-center px-margin-mobile md:px-margin-desktop h-20 max-w-container-max mx-auto bg-surface dark:bg-surface-container border-b border-secondary-container transition-all duration-300">
       <div class="flex items-center gap-4 xl:gap-8">
-        <a href="#" class="flex items-center focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 rounded" aria-label="Royal Maroon Herbs Home">
+        <a href="/" class="flex items-center focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 rounded" aria-label="Royal Maroon Herbs Home">
           <img src="/images/brand/logo.png" alt="Royal Maroon Herbs Logo" class="h-20 w-auto object-contain" />
         </a>
         <nav class="hidden lg:flex items-center gap-4 xl:gap-6" aria-label="Main Navigation">
