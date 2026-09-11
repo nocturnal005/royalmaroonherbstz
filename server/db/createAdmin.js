@@ -47,13 +47,49 @@ function askPassword(query) {
 }
 
 // Password strength validator
-function isPasswordStrong(pwd) {
-  if (pwd.length < 8) return false;
-  const hasUppercase = /[A-Z]/.test(pwd);
-  const hasLowercase = /[a-z]/.test(pwd);
-  const hasNumbers = /\d/.test(pwd);
-  const hasSpecial = /[^A-Za-z0-9]/.test(pwd);
-  return hasUppercase && hasLowercase && hasNumbers && hasSpecial;
+const MIN_PASSWORD_DIGITS = 8;
+
+// Shop staff sign in from the counter and on phones, so passwords are numeric
+// by request. Digits alone shrink the keyspace enormously compared with mixed
+// characters, so length and obvious-pattern rejection now carry the weight that
+// character variety used to. The login route is rate limited to 5 attempts per
+// minute, which is what makes an 8 digit PIN defensible rather than reckless.
+// Returns a message explaining the problem, or null when the password is fine.
+function describePasswordWeakness(pwd) {
+  if (!/^[0-9]+$/.test(pwd)) {
+    return 'Password must contain numbers only.';
+  }
+  if (pwd.length < MIN_PASSWORD_DIGITS) {
+    return `Password must be at least ${MIN_PASSWORD_DIGITS} digits. Longer is materially safer.`;
+  }
+  if (new Set(pwd).size === 1) {
+    return 'Password cannot be the same digit repeated.';
+  }
+
+  // Runs like 12345678 or 87654321 are the first thing anyone guesses.
+  let ascending = true;
+  let descending = true;
+  for (let i = 1; i < pwd.length; i++) {
+    const step = Number(pwd[i]) - Number(pwd[i - 1]);
+    if (step !== 1) ascending = false;
+    if (step !== -1) descending = false;
+  }
+  if (ascending || descending) {
+    return 'Password cannot be a sequence of consecutive digits.';
+  }
+
+  // A short list of PINs that turn up at the top of every breach corpus.
+  const COMMON = ['12345678', '00000000', '11223344', '12341234', '11112222', '12121212', '10203040'];
+  if (COMMON.includes(pwd)) {
+    return 'That is one of the most commonly used PINs. Choose another.';
+  }
+
+  // A birth year or date is the usual fallback once letters are off the table.
+  if (/^(19|20)[0-9]{2}$/.test(pwd.slice(0, 4)) && new Set(pwd.slice(4)).size === 1) {
+    return 'Password looks like a year followed by a repeated digit. Choose something less guessable.';
+  }
+
+  return null;
 }
 
 async function main() {
@@ -86,9 +122,10 @@ async function main() {
     }
 
     const password = await askPassword('Enter Password (input will be hidden): ');
-    if (!isPasswordStrong(password)) {
-      console.error('✗ Error: Password is too weak.');
-      console.error('  Requirements: Minimum 8 characters, at least 1 uppercase letter, 1 lowercase letter, 1 number, and 1 special character.');
+    const weakness = describePasswordWeakness(password);
+    if (weakness) {
+      console.error(`✗ Error: ${weakness}`);
+      console.error(`  Requirements: numbers only, at least ${MIN_PASSWORD_DIGITS} digits, not a repeat or a run.`);
       process.exit(1);
     }
 
