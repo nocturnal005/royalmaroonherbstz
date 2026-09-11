@@ -62,23 +62,26 @@ async function main() {
   console.log('========================================\n');
 
   try {
-    const username = await ask('Enter Username: ');
+    // Username and role may be passed as arguments so that creating several
+    // staff accounts in a row is quick:  npm run server:create-admin sales_1
+    const [argUsername, argRole] = process.argv.slice(2);
+
+    const username = argUsername || await ask('Enter Username: ');
     if (!username || username.length < 3) {
       console.error('✗ Error: Username must be at least 3 characters.');
       process.exit(1);
     }
 
-    const email = await ask('Enter Email: ');
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!email || !emailRegex.test(email)) {
-      console.error('✗ Error: Invalid email format.');
-      process.exit(1);
-    }
+    // Staff sign in with a username and password only - no email is involved
+    // anywhere in the login flow. The column is still UNIQUE NOT NULL in the
+    // schema, so a value derived from the username satisfies it without
+    // asking for an address nobody uses.
+    const email = `${username.toLowerCase()}@staff.local`;
 
-    const role = await ask('Enter Role (owner, admin, editor, viewer): ');
+    const role = argRole || await ask('Enter Role [admin]: ') || 'admin';
     const validRoles = ['owner', 'admin', 'editor', 'viewer'];
     if (!validRoles.includes(role)) {
-      console.error('✗ Error: Invalid role. Must be owner, admin, editor, or viewer.');
+      console.error(`✗ Error: Invalid role '${role}'. Must be owner, admin, editor, or viewer.`);
       process.exit(1);
     }
 
@@ -129,7 +132,6 @@ async function main() {
     console.log('\n✓ Success: Administrative account created successfully.');
     console.log(`  User ID:  ${id}`);
     console.log(`  Username: ${username}`);
-    console.log(`  Email:    ${email}`);
     console.log(`  Role:     ${role}`);
     console.log(`  Status:   Active\n`);
 
