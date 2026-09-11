@@ -199,4 +199,161 @@ router.post('/session', checkIdempotency, validateBody('checkout'), (req, res, n
   }
 });
 
+/**
+ * Formats an integer TZS amount for display in a WhatsApp message.
+ * Tanzanian Shilling transactions carry no cents, so no decimals are shown.
+ */
+function formatTZS(amount) {
+  return `TZS ${amount.toLocaleString('en-US')}`;
+}
+
+/**
+ * Builds the message the customer sends to the shop's sales line.
+ * Kept compact deliberately: the customer can edit this text before sending,
+ * so it is a convenience for staff, never the source of truth. Staff confirm
+ * against the order reference in the admin panel.
+ */
+function buildHandoffMessage(order, items, regionName) {
+  const lines = [
+    'Hello Royal Maroon Herbs, I would like to confirm this order.',
+    '',
+    `Order: ${order.id}`,
+    `Name: ${order.customer_name}`,
+    `Delivery: ${regionName}`,
+    `Preferred payment: ${order.payment_method.toUpperCase()}`,
+    ''
+  ];
+
+  const shown = items.slice(0, 15);
+  for (const item of shown) {
+    lines.push(`- ${item.name} x${item.quantity}`);
+  }
+  if (items.length > shown.length) {
+    lines.push(`- ...and ${items.length - shown.length} more item(s)`);
+  }
+
+  lines.push('');
+  lines.push(`Total: ${formatTZS(order.total)} (incl. ${formatTZS(order.shipping_fee)} delivery)`);
+
+  return lines.join('\n');
+}
+
+/**
+ * POST /api/checkout/:sessionId/whatsapp
+ *
+ * Hands a draft order off to the shop's WhatsApp sales line, where staff
+ * confirm it and collect payment manually. This is the interim route to
+ * market while Selcom credentials are outstanding; it is additive and does
+ * not touch any Selcom write path, so it can be removed by deleting this
+ * handler and the client branch that calls it.
+ *
+ * Idempotent: tapping through twice returns the same link rather than erroring.
+ */
+router.post('/:sessionId/whatsapp', (req, res, next) => {
+  try {
+    const { sessionId } = req.params;
+
+    const session = db.prepare(`
+      SELECT s.id, s.order_draft_reference, s.expires_at, r.name AS region_name
+      FROM checkout_sessions s
+      JOIN shipping_regions r ON r.id = s.delivery_region_id
+      WHERE s.id = ?
+    `).get(sessionId);
+
+    if (!session) {
+      return res.status(404).json({
+        success: false,
+        error: { code: 'NOT_FOUND', message: 'Checkout session could not be found.' }
+      });
+    }
+
+    const order = db.prepare(`
+      SELECT id, customer_name, customer_phone, payment_method, shipping_fee, total,
+             order_status, payment_status
+      FROM orders WHERE id = ?
+    `).get(session.order_draft_reference);
+
+    if (!order) {
+      return res.status(404).json({
+        success: false,
+        error: { code: 'NOT_FOUND', message: 'Order could not be found for this session.' }
+      });
+    }
+
+    // Payment already settled, or the order was cancelled: handing off again
+    // would invite staff to collect a second time.
+    if (['Paid', 'Refunded', 'Cancelled'].includes(order.payment_status)) {
+      return res.status(409).json({
+        success: false,
+        error: {
+          code: 'CONFLICT',
+          message: 'This order is no longer awaiting confirmation.'
+        }
+      });
+    }
+
+    // Expiry only blocks the first handoff. Once an order is already with the
+    // sales team the session clock is irrelevant - staff own it from there.
+    if (order.order_status === 'Draft' && new Date(session.expires_at) < new Date()) {
+      return res.status(410).json({
+        success: false,
+        error: {
+          code: 'GONE',
+          message: 'This checkout session has expired. Please start again.'
+        }
+      });
+    }
+
+    const salesNumber = process.env.WHATSAPP_SALES_NUMBER;
+    if (!salesNumber) {
+      console.error('[WhatsApp handoff] WHATSAPP_SALES_NUMBER is not set; cannot hand off order ' + order.id);
+      return res.status(503).json({
+        success: false,
+        error: {
+          code: 'SERVICE_UNAVAILABLE',
+          message: 'WhatsApp ordering is temporarily unavailable. Please call us to complete your order.'
+        }
+      });
+    }
+
+    const items = db.prepare(
+      'SELECT name, quantity, unit_price FROM order_items WHERE order_id = ?'
+    ).all(order.id);
+
+    if (order.order_status === 'Draft') {
+      db.prepare(`
+        UPDATE orders
+        SET order_status = 'AwaitingPayment',
+            payment_status = 'AwaitingPayment',
+            updated_at = CURRENT_TIMESTAMP
+        WHERE id = ?
+      `).run(order.id);
+
+      logAuditEvent(
+        'WHATSAPP_HANDOFF',
+        null,
+        order.id,
+        { sessionId, total: order.total, phone: order.customer_phone },
+        req
+      );
+    }
+
+    const message = buildHandoffMessage(order, items, session.region_name);
+    // wa.me expects digits only - no plus sign, no spaces.
+    const dialable = salesNumber.replace(/[^0-9]/g, '');
+
+    res.status(200).json({
+      success: true,
+      data: {
+        orderReference: order.id,
+        salesNumber,
+        message,
+        whatsappUrl: `https://wa.me/${dialable}?text=${encodeURIComponent(message)}`
+      }
+    });
+  } catch (error) {
+    next(error);
+  }
+});
+
 export default router;

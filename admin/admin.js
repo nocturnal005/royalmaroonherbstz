@@ -468,6 +468,9 @@ function renderOrderDetailModal() {
   const isDraft = o.order_status === 'Draft';
   const isUnpaid = o.payment_status !== 'Paid';
   const canUpdateFulfilment = !isDraft && !isUnpaid;
+  // Only owner/admin may assert money arrived, matching the API's role gate.
+  const canRecordPayment = ['owner', 'admin'].includes(adminState.user.role)
+    && !['Paid', 'Cancelled', 'Refunded'].includes(o.payment_status);
 
   return `
     <div class="fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-4 backdrop-blur-sm">
@@ -526,8 +529,31 @@ function renderOrderDetailModal() {
         <div class="grid grid-cols-2 gap-6 border-t border-stone-200 pt-6 mb-6">
           <div>
             <h4 class="text-xs font-bold text-stone-400 uppercase tracking-wider">Payment Status</h4>
-            <p class="text-sm font-medium mt-1 text-stone-900">${o.payment_status} <span class="text-xs text-stone-500">(Read-Only)</span></p>
+            <p class="text-sm font-medium mt-1 text-stone-900">${o.payment_status}${canRecordPayment ? '' : ' <span class="text-xs text-stone-500">(Read-Only)</span>'}</p>
             ${o.payment ? `<p class="text-xs text-stone-500 font-mono mt-0.5">Reference: ${o.payment.payment_reference}</p>` : ''}
+            ${canRecordPayment ? `
+              <div class="mt-3 border border-emerald-200 bg-emerald-50 rounded-lg p-3 space-y-2">
+                <p class="text-xs font-semibold text-emerald-900 uppercase tracking-wider">Record payment taken by hand</p>
+                <p class="text-[11px] text-emerald-800 leading-snug">For orders confirmed on WhatsApp or in the shop. Only do this once the money has actually arrived &mdash; it is recorded against your account.</p>
+                <div class="grid grid-cols-2 gap-2">
+                  <input type="number" id="record-payment-amount" value="${o.total}" min="1" step="1"
+                         class="px-2 py-1.5 rounded border border-stone-300 text-sm outline-none" placeholder="Amount (TZS)" />
+                  <select id="record-payment-method" class="px-2 py-1.5 rounded border border-stone-300 bg-white text-sm outline-none">
+                    <option value="mpesa" ${o.payment_method === 'mpesa' ? 'selected' : ''}>M-Pesa</option>
+                    <option value="tigo" ${o.payment_method === 'tigo' ? 'selected' : ''}>Tigo Pesa</option>
+                    <option value="airtel" ${o.payment_method === 'airtel' ? 'selected' : ''}>Airtel Money</option>
+                    <option value="cash">Cash</option>
+                  </select>
+                </div>
+                <input type="text" id="record-payment-reference" maxlength="100"
+                       class="w-full px-2 py-1.5 rounded border border-stone-300 text-sm outline-none"
+                       placeholder="Transaction reference (optional)" />
+                <button id="record-payment-btn" data-id="${o.id}" data-total="${o.total}"
+                        class="w-full px-3 py-2 rounded-lg bg-emerald-700 text-white text-sm font-semibold hover:bg-emerald-800 transition-colors">
+                  Mark as paid
+                </button>
+              </div>
+            ` : ''}
           </div>
           <div>
             <h4 class="text-xs font-bold text-stone-400 uppercase tracking-wider">Fulfilment Control</h4>
@@ -923,6 +949,65 @@ function bindOrderModalEvents() {
     closeBtn.addEventListener('click', () => {
       adminState.selectedOrder = null;
       renderApp();
+    });
+  }
+
+  const recordBtn = document.getElementById('record-payment-btn');
+  if (recordBtn) {
+    recordBtn.addEventListener('click', async () => {
+      const id = recordBtn.dataset.id;
+      const orderTotal = Number(recordBtn.dataset.total);
+      const amountPaid = parseInt(document.getElementById('record-payment-amount').value, 10);
+      const method = document.getElementById('record-payment-method').value;
+      const reference = document.getElementById('record-payment-reference').value.trim();
+
+      adminState.errorMsg = '';
+      adminState.successMsg = '';
+
+      if (!Number.isInteger(amountPaid) || amountPaid <= 0) {
+        adminState.errorMsg = 'Enter the amount received, in whole shillings.';
+        renderApp();
+        return;
+      }
+
+      // A short or over payment is legitimate but must be deliberate, so make
+      // the operator say so out loud before it reaches the audit log.
+      let confirmMismatch = false;
+      if (amountPaid !== orderTotal) {
+        const proceed = window.confirm(
+          `This order totals ${orderTotal.toLocaleString()} TZS but you entered ${amountPaid.toLocaleString()} TZS.
+
+` +
+          'Record it anyway? The difference will be saved in the audit log.'
+        );
+        if (!proceed) return;
+        confirmMismatch = true;
+      }
+
+      recordBtn.disabled = true;
+      recordBtn.textContent = 'Recording...';
+
+      try {
+        const res = await apiRequest(`/admin/orders/${id}/record-payment`, {
+          method: 'POST',
+          body: JSON.stringify({ amountPaid, method, reference: reference || undefined, confirmMismatch })
+        });
+
+        const data = await res.json();
+        if (res.status === 200) {
+          adminState.successMsg = data.message;
+          adminState.selectedOrder = null;
+          await loadData();
+        } else {
+          adminState.errorMsg = data.error.message;
+          adminState.selectedOrder = null;
+          renderApp();
+        }
+      } catch (err) {
+        adminState.errorMsg = 'Failed to record payment.';
+        adminState.selectedOrder = null;
+        renderApp();
+      }
     });
   }
 

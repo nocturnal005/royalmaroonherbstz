@@ -16,6 +16,13 @@ function escapeHTML(value) {
 // acceptance, so checkout presents no card option and there is no hosted
 // redirect: every payment is a USSD push the customer approves on their own
 // handset, and the frontend polls for the result.
+// Interim checkout route while Selcom credentials are outstanding. In
+// 'whatsapp' mode the wizard still creates a real, stock-checked, server-priced
+// order, then hands it to the shop's sales line instead of charging the card.
+// Flip this back to 'gateway' to restore the Selcom USSD flow; the gateway code
+// below is left intact and untouched for that reason.
+const CHECKOUT_MODE = 'whatsapp'; // 'whatsapp' | 'gateway'
+
 const PAYMENT_PROVIDER_LABEL = 'Selcom';
 const PAYMENT_API = {
   initiate: '/api/payments/initiate',
@@ -41,6 +48,10 @@ let pollIntervalId = null;
 let errorMessage = '';
 let checkoutSessionId = '';
 let validatedEstimatedTotal = 0;
+
+// WhatsApp handoff state (CHECKOUT_MODE === 'whatsapp')
+let whatsappUrl = '';
+let orderReference = '';
 
 // Form inputs
 let customerName = '';
@@ -140,7 +151,7 @@ function renderWizard() {
         <div class="mb-8">
           <span class="text-label-sm font-label-sm text-tertiary-fixed uppercase tracking-widest block mb-2">Secure Checkout</span>
           <h3 id="wizard-title" class="font-headline-md text-headline-md text-primary uppercase">
-            ${currentStep < 5 ? `Checkout — Step ${currentStep} of 5` : 'Step 5 of 5: Payment Status'}
+            ${currentStep < 5 ? `Checkout — Step ${currentStep} of 5` : (CHECKOUT_MODE === 'whatsapp' ? 'Step 5 of 5: Order Confirmation' : 'Step 5 of 5: Payment Status')}
           </h3>
           
           <!-- Step indicator dots -->
@@ -264,14 +275,14 @@ function renderStepContent(cartItems, subtotal, shippingFee, estimatedTotal) {
     case 3:
       return `
         <div class="space-y-6">
-          <span class="block font-label-md text-label-md text-primary uppercase tracking-wider font-bold mb-4">Choose Payment Method *</span>
+          <span class="block font-label-md text-label-md text-primary uppercase tracking-wider font-bold mb-4">${CHECKOUT_MODE === 'whatsapp' ? 'Preferred Payment Method *' : 'Choose Payment Method *'}</span>
           
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <label class="border p-4 flex items-center gap-4 cursor-pointer hover:bg-surface-container-low transition-colors ${selectedPaymentMethod === 'mpesa' ? 'border-primary bg-primary-container/10' : 'border-secondary-container'}" for="pay-mpesa">
               <input type="radio" id="pay-mpesa" name="payment-method" value="mpesa" ${selectedPaymentMethod === 'mpesa' ? 'checked' : ''} class="form-radio text-primary border-secondary" />
               <div>
                 <span class="font-label-md text-label-md text-primary uppercase block font-bold">Vodacom M-Pesa</span>
-                <span class="text-xs text-secondary">Pay via mobile money prompt</span>
+                <span class="text-xs text-secondary">${CHECKOUT_MODE === 'whatsapp' ? 'Arranged with our team' : 'Pay via mobile money prompt'}</span>
               </div>
             </label>
 
@@ -279,7 +290,7 @@ function renderStepContent(cartItems, subtotal, shippingFee, estimatedTotal) {
               <input type="radio" id="pay-tigo" name="payment-method" value="tigo" ${selectedPaymentMethod === 'tigo' ? 'checked' : ''} class="form-radio text-primary border-secondary" />
               <div>
                 <span class="font-label-md text-label-md text-primary uppercase block font-bold">Tigo Pesa</span>
-                <span class="text-xs text-secondary">Pay via mobile money prompt</span>
+                <span class="text-xs text-secondary">${CHECKOUT_MODE === 'whatsapp' ? 'Arranged with our team' : 'Pay via mobile money prompt'}</span>
               </div>
             </label>
 
@@ -287,15 +298,17 @@ function renderStepContent(cartItems, subtotal, shippingFee, estimatedTotal) {
               <input type="radio" id="pay-airtel" name="payment-method" value="airtel" ${selectedPaymentMethod === 'airtel' ? 'checked' : ''} class="form-radio text-primary border-secondary" />
               <div>
                 <span class="font-label-md text-label-md text-primary uppercase block font-bold">Airtel Money</span>
-                <span class="text-xs text-secondary">Pay via mobile money prompt</span>
+                <span class="text-xs text-secondary">${CHECKOUT_MODE === 'whatsapp' ? 'Arranged with our team' : 'Pay via mobile money prompt'}</span>
               </div>
             </label>
 
           </div>
 
           <div class="p-4 bg-error-container/10 border border-error-container/30 text-xs text-secondary">
-            <span class="font-bold text-error uppercase block mb-1">Secure checkout notice</span>
-            ${PAYMENT_PROVIDER_LABEL} sends a USSD prompt to your phone. You approve the payment by entering your mobile money PIN on your own handset &mdash; your PIN is never entered on or stored by this site.
+            <span class="font-bold text-error uppercase block mb-1">${CHECKOUT_MODE === 'whatsapp' ? 'How payment works' : 'Secure checkout notice'}</span>
+            ${CHECKOUT_MODE === 'whatsapp'
+              ? `Nothing is charged now. Our team confirms your order on WhatsApp and arranges payment on the network you choose here. You never enter a PIN on this site.`
+              : `${PAYMENT_PROVIDER_LABEL} sends a USSD prompt to your phone. You approve the payment by entering your mobile money PIN on your own handset &mdash; your PIN is never entered on or stored by this site.`}
             <a href="/privacy" target="_blank" rel="noopener noreferrer" class="underline hover:text-primary block mt-2">How we handle your data</a>
           </div>
 
@@ -367,19 +380,19 @@ function renderStepContent(cartItems, subtotal, shippingFee, estimatedTotal) {
               Back
             </button>
             <button id="submit-checkout-wizard" class="bg-primary text-surface font-label-md text-label-md px-10 py-5 uppercase tracking-widest hover:bg-on-primary-container transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 flex items-center gap-2">
-              <span>Continue to Payment</span>
-              <span class="material-symbols-outlined text-[18px]">verified</span>
+              <span>${CHECKOUT_MODE === 'whatsapp' ? 'Continue on WhatsApp' : 'Continue to Payment'}</span>
+              <span class="material-symbols-outlined text-[18px]">${CHECKOUT_MODE === 'whatsapp' ? 'chat' : 'verified'}</span>
             </button>
           </div>
         </div>
       `;    case 5:
       let contentHtml = '';
       
-      if (paymentStatus === 'CreatingSession' || paymentStatus === 'InitiatingPayment') {
+      if (paymentStatus === 'CreatingSession' || paymentStatus === 'InitiatingPayment' || paymentStatus === 'HandingOff') {
         contentHtml = `
           <div class="space-y-4 py-8">
             <div class="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin mx-auto"></div>
-            <h4 class="font-headline-sm text-headline-sm text-primary uppercase">${paymentStatus === 'CreatingSession' ? 'Creating Order Session' : 'Initiating Payment'}</h4>
+            <h4 class="font-headline-sm text-headline-sm text-primary uppercase">${paymentStatus === 'CreatingSession' ? 'Creating Order Session' : (paymentStatus === 'HandingOff' ? 'Preparing WhatsApp' : 'Initiating Payment')}</h4>
             <p class="text-body-md text-secondary max-w-md mx-auto leading-relaxed">${customerMessage}</p>
           </div>
         `;
@@ -397,6 +410,30 @@ function renderStepContent(cartItems, subtotal, shippingFee, estimatedTotal) {
               Prompt expires in: <span id="payment-countdown">${timeRemaining}</span>s
             </p>
             <p class="text-xs text-secondary italic opacity-75">${customerMessage}</p>
+          </div>
+        `;
+      } else if (paymentStatus === 'HandedOff') {
+        contentHtml = `
+          <div class="space-y-4 py-8">
+            <span class="material-symbols-outlined text-green-700 text-5xl">chat</span>
+            <h4 class="font-headline-sm text-headline-sm text-primary uppercase">Order Received</h4>
+            <p class="text-body-md text-secondary max-w-md mx-auto leading-relaxed">
+              Thank you, <strong class="text-primary">${escapeHTML(customerName)}</strong>. Your order is saved and our team is ready to confirm it with you on WhatsApp.
+            </p>
+
+            <a href="${escapeHTML(whatsappUrl)}" target="_blank" rel="noopener noreferrer"
+               class="bg-green-700 text-white font-label-md text-label-md px-8 py-4 uppercase tracking-widest hover:bg-green-800 transition-colors focus:outline-none focus:ring-2 focus:ring-green-700 focus:ring-offset-2 inline-flex items-center gap-2">
+              <span class="material-symbols-outlined text-[18px]">open_in_new</span>
+              <span>Open WhatsApp</span>
+            </a>
+            <p class="text-xs text-secondary opacity-80">If WhatsApp did not open automatically, tap the button above.</p>
+
+            <div class="border border-green-200 bg-green-50 p-4 rounded text-xs text-green-800 text-left max-w-md mx-auto space-y-1 font-mono">
+              <p>Order Reference: ${escapeHTML(orderReference)}</p>
+              <p>Total: ${formatTZS(validatedEstimatedTotal)}</p>
+              <p>Order Status: Awaiting confirmation</p>
+            </div>
+            <p class="text-xs text-secondary opacity-80">Nothing has been charged yet. Quote your order reference and our team will arrange payment and delivery with you.</p>
           </div>
         `;
       } else if (paymentStatus === 'Paid') {
@@ -441,7 +478,7 @@ function renderStepContent(cartItems, subtotal, shippingFee, estimatedTotal) {
 
           <!-- Wizard Completion Footer -->
           <div class="flex justify-end pt-6 border-t border-secondary-container/30">
-            ${paymentStatus === 'Paid' ? `
+            ${(paymentStatus === 'Paid' || paymentStatus === 'HandedOff') ? `
               <button id="close-wizard-success-btn" class="bg-primary text-surface font-label-md text-label-md px-10 py-5 uppercase tracking-widest hover:bg-on-primary-container transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2">
                 Finish Order
               </button>
@@ -668,6 +705,35 @@ async function submitCheckout() {
     }
 
     checkoutSessionId = sessionData.data.checkoutSessionId;
+    orderReference = sessionData.data.orderDraftReference;
+
+    // 2a. WhatsApp route: hand the order to the sales team instead of charging.
+    if (CHECKOUT_MODE === 'whatsapp') {
+      paymentStatus = 'HandingOff';
+      customerMessage = 'Preparing your order for our sales team...';
+      renderWizard();
+
+      const handoffRes = await fetch(`/api/checkout/${checkoutSessionId}/whatsapp`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' }
+      });
+
+      const handoffData = await handoffRes.json();
+      if (!handoffRes.ok || !handoffData.success) {
+        throw new Error(handoffData.error?.message || 'Could not open WhatsApp for this order.');
+      }
+
+      whatsappUrl = handoffData.data.whatsappUrl;
+      orderReference = handoffData.data.orderReference;
+      paymentStatus = 'HandedOff';
+      renderWizard();
+
+      // Opening after an await is outside the original tap, so browsers may
+      // block it. The confirmation screen always shows a link the customer can
+      // tap directly, which is the reliable path; this is a convenience only.
+      window.open(whatsappUrl, '_blank', 'noopener,noreferrer');
+      return;
+    }
 
     // 2. Initiate Payment Prompt on backend
     paymentStatus = 'InitiatingPayment';
